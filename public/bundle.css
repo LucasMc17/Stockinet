@@ -1,0 +1,52 @@
+@font-face {
+  font-family: "Parkinsans";
+  src: url("Parkinsans-VariableFont_wght.ttf") format("truetype");
+}
+body {
+  font-family: Parkinsans;
+  margin: 0;
+}
+
+h1 {
+  font-size: 34px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
+}
+
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
+}

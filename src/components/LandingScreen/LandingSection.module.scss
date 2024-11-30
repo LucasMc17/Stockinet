@@ -1,0 +1,15 @@
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+
+  & > section {
+    text-align: center;
+  }
+
+  & > div {
+    flex: 0.75;
+  }
+}
