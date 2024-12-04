@@ -13,21 +13,11 @@ app.use(express.json());
 
 app.use(cors({ origin: "*" }));
 
-app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "..", "public/index.html")),
-);
-
 app.use("/public", express.static(path.join(__dirname, "..", "public")));
 
-// any remaining requests with an extension (.js, .css, etc.) send 404
+// any remaining requests just return the html, let reacthandle 404 messages
 app.use((req, res, next) => {
-  if (path.extname(req.path).length) {
-    const err = new Error("Not found");
-    err.status = 404;
-    next(err);
-  } else {
-    next();
-  }
+  res.sendFile(path.join(__dirname, "..", "public/index.html"));
 });
 
 // error handling endware

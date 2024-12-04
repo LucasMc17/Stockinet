@@ -1,0 +1,12 @@
+.interactive-pattern-holder {
+  width: 50%;
+  min-width: 350px;
+}
+
+.interactive-pattern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}

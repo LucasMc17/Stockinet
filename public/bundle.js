@@ -40098,9 +40098,664 @@ function LandingScreen() {
   });
 }
 
+function PatternCell({
+  cell,
+  rowWidth
+}) {
+  const symbolMap = {
+      K: "",
+      P: "-"
+    },
+    baseWidth = 100 / rowWidth;
+  let width = baseWidth;
+  if (cell.width) {
+    width = width * cell.width;
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "cell-holder",
+    style: {
+      width: width + "%"
+    },
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "interactive-pattern-cell-symbols",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: symbolMap[cell.type] || ""
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: cell.width > 1 && cell.width
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-pattern-cell",
+      style: {
+        paddingTop: "calc(100% / " + cell.width + ")"
+      }
+    })]
+  });
+}
+
+function PatternRow({
+  row,
+  rowWidth
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "interactive-pattern-row",
+    children: row.map((cell, i) => {
+      return /*#__PURE__*/jsxRuntimeExports.jsx(PatternCell, {
+        cell: cell,
+        rowWidth: rowWidth
+      }, i);
+    })
+  });
+}
+
+function getRowWidth(row) {
+  return row.reduce((a, b) => a + b.width, 0);
+}
+function InteractivePattern({
+  data
+}) {
+  const maxWidth = data.reduce((a, b) => {
+    const width = getRowWidth(b);
+    return width > a ? width : a;
+  }, 1);
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "interactive-pattern-holder",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-pattern",
+      children: data.map((row, i) => {
+        return /*#__PURE__*/jsxRuntimeExports.jsx(PatternRow, {
+          row: row,
+          rowWidth: maxWidth
+        }, i);
+      })
+    })
+  });
+}
+
+const exampleData = [[{
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}],
+//   [
+//     { type: "P" },
+//     { type: "P" },
+//     { type: "CF", connectedR: true },
+//     { type: "CF", connectedR: true, connectedL: true },
+//     { type: "CF", connectedR: true, connectedL: true },
+//     { type: "CF", connectedL: true },
+//     { type: "CB", connectedR: true },
+//     { type: "CB", connectedR: true, connectedL: true },
+//     { type: "CB", connectedR: true, connectedL: true },
+//     { type: "CB", connectedL: true },
+//     { type: "P" },
+//     { type: "P" },
+//   ],
+[{
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "CF",
+  width: 4
+}, {
+  type: "CB",
+  width: 4
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}], [{
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}], [{
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}]];
+const exampleDataTwo = [[{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "CB",
+  width: 6
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "CF",
+  width: 6
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}], [{
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "P",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}, {
+  type: "K",
+  width: 1
+}]];
+function PatternScreen() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
+      data: exampleData
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
+      data: exampleDataTwo
+    })]
+  });
+}
+
 const router = createBrowserRouter([{
   path: "/",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LandingScreen, {})
+}, {
+  path: "pattern",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})
 }]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/jsxRuntimeExports.jsx(React.StrictMode, {

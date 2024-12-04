@@ -31,6 +31,29 @@ h6 {
   font-size: 16px;
 }
 
+p {
+  font-size: 12px;
+}
+
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.interactive-pattern-holder {
+  width: 50%;
+  min-width: 350px;
+}
+
+.interactive-pattern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
 .landing-section {
   border: 1px solid lightblue;
   border-radius: 1rem;
@@ -45,8 +68,33 @@ h6 {
   flex: 0.75;
 }
 
-.landing-screen {
-  padding: 4rem 6rem;
+.interactive-pattern-row {
   display: flex;
-  justify-content: space-between;
+}
+
+.interactive-pattern-cell {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  position: relative;
+  margin: -1px 0 0 -1px;
+  height: 0px;
+}
+
+.cell-holder {
+  position: relative;
+}
+
+.cell-aspect {
+  padding-top: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.interactive-pattern-cell-symbols {
+  position: absolute;
+  width: 100%;
+  margin: auto;
+  text-align: center;
 }
