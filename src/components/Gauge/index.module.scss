@@ -1,0 +1,23 @@
+.gauge-flex {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+
+  & > .gauge-holder,
+  > .gauge-sts {
+    flex-basis: 66%;
+  }
+
+  & > div.gauge-rows {
+    flex-basis: 33%;
+    position: relative;
+
+    & > p {
+      position: absolute;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      width: 100%;
+    }
+  }
+}

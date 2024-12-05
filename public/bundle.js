@@ -40171,6 +40171,43 @@ function InteractivePattern({
   });
 }
 
+function GaugeSquare({
+  width,
+  height
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "gauge-square",
+    style: {
+      paddingTop: height / width * 100 + "%"
+    }
+  });
+}
+
+function Gauge({
+  data
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "gauge-flex",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-holder",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx(GaugeSquare, {
+        width: data.widthInches,
+        height: data.heightInches
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-rows",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.rows, " rows = ", data.heightInches, "\""]
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-sts",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.stitches, " sts = ", data.widthInches, "\""]
+      })
+    })]
+  });
+}
+
 const exampleData = [[{
   type: "P",
   width: 1
@@ -40740,12 +40777,107 @@ const exampleDataTwo = [[{
   type: "K",
   width: 1
 }]];
+
+/*
+- name
+- lead image
+- other images
+- difficulty
+- description
+- materials
+- sizes (?)
+- gauge size
+- written instructions
+- grids
+*/
+
+const data = {
+  title: "Cable Knit Candle Cozies",
+  description: "Keep your candles cozy with these simple but beautiful cable knits!",
+  leadImage: "public/candle-cozies.png",
+  author: "Yarnspirations",
+  images: [],
+  difficulty: "INTERMEDIATE",
+  materials: [{
+    type: "yarn",
+    name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
+    quantity: "1 skein",
+    toMake: "12 small cozies or 8 large cozies"
+  }, {
+    type: "needle",
+    name: "US 7 (4.5mm) knitting needles"
+  }, {
+    type: "needle",
+    name: "US 8 (5mm) knitting needles"
+  }],
+  sizes: ["S", "L"],
+  gauge: {
+    stitches: 18,
+    rows: 24,
+    widthInches: 4,
+    heightInches: 4
+  },
+  instructions: [],
+  grids: [exampleData, exampleDataTwo]
+};
 function PatternScreen() {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
-      data: exampleData
-    }), /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
-      data: exampleDataTwo
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    id: "pattern",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-header card",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: data.title
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+          children: ["by ", data.author]
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+          children: ["Skill Level: ", data.difficulty]
+        })]
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-splashscreen",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("img", {
+          src: data.leadImage
+        }), data.images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link, {
+          to: "",
+          children: "See more Photos!"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: data.description
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: "What you'll need"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+          children: data.materials.map(mat => /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
+            children: [mat.name, mat.quantity && `: ${mat.quantity}`]
+          }))
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: "The gauge"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Gauge, {
+          data: data.gauge
+        })]
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-instructions",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card",
+        children: data.instructions.map(step => /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: step
+        }))
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
+          data: exampleData
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
+          data: exampleDataTwo
+        })]
+      })]
     })]
   });
 }
