@@ -40,4 +40,9 @@ p {
   border-radius: 1rem;
   border: 2px solid red;
   padding: 0.5rem;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
 }

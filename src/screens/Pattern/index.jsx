@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InteractivePattern from "../../components/InteractivePattern/index.jsx";
 import Gauge from "../../components/Gauge/index.jsx";
 import "./index.module.scss";
+import Slider from "../../components/Slider/index.jsx";
+import { loadPatterns } from "../../@redux/reducers/Patterns/PatternSlice.js";
 
 const exampleData = [
   [
@@ -244,79 +248,149 @@ const exampleDataTwo = [
 - grids
 */
 
-const data = {
-  title: "Cable Knit Candle Cozies",
-  description:
-    "Keep your candles cozy with these simple but beautiful cable knits!",
-  leadImage: "public/candle-cozies.png",
-  author: "Yarnspirations",
-  images: [],
-  difficulty: "INTERMEDIATE",
-  materials: [
-    {
-      type: "yarn",
-      name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
-      quantity: "1 skein",
-      toMake: "12 small cozies or 8 large cozies",
-    },
-    {
-      type: "needle",
-      name: "US 7 (4.5mm) knitting needles",
-    },
-    {
-      type: "needle",
-      name: "US 8 (5mm) knitting needles",
-    },
-  ],
-  sizes: ["S", "L"],
-  gauge: { stitches: 18, rows: 24, widthInches: 4, heightInches: 4 },
-  instructions: [],
-  grids: [exampleData, exampleDataTwo],
-};
+const data = [
+  {
+    id: 2,
+    title: "Cable Knit Candle Cozies",
+    description:
+      "Keep your candles cozy with these simple but beautiful cable knits!",
+    leadImage: "public/candle-cozies.png",
+    author: "Yarnspirations",
+    images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
+    difficulty: "INTERMEDIATE",
+    materials: [
+      {
+        type: "yarn",
+        name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
+        quantity: "1 skein",
+        toMake: "12 small cozies or 8 large cozies",
+      },
+      {
+        type: "needle",
+        name: "US 7 (4.5mm) knitting needles",
+      },
+      {
+        type: "needle",
+        name: "US 8 (5mm) knitting needles",
+      },
+    ],
+    sizes: ["S", "L"],
+    gauge: { stitches: 18, rows: 24, widthInches: 4, heightInches: 4 },
+    instructions: [],
+    grids: [
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+    ],
+  },
+  {
+    id: 1,
+    title: "Cable Knit Candle Cozies 2",
+    description:
+      "Keep your candles cozy with these simple but beautiful cable knits!",
+    leadImage: "public/candle-cozies.png",
+    author: "Yarnspirations",
+    images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
+    difficulty: "INTERMEDIATE",
+    materials: [
+      {
+        type: "yarn",
+        name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
+        quantity: "1 skein",
+        toMake: "12 small cozies or 8 large cozies",
+      },
+      {
+        type: "needle",
+        name: "US 7 (4.5mm) knitting needles",
+      },
+      {
+        type: "needle",
+        name: "US 8 (5mm) knitting needles",
+      },
+    ],
+    sizes: ["S", "L"],
+    gauge: { stitches: 18, rows: 24, widthInches: 4, heightInches: 4 },
+    instructions: [],
+    grids: [
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+      { name: "Large Cozy", data: exampleData },
+      { name: "Small Cozy", data: exampleDataTwo },
+    ],
+  },
+];
 
 export default function PatternScreen() {
-  return (
-    <section id="pattern">
-      <div className="pattern-header card">
-        <h1>{data.title}</h1>
-        <div>
-          <h3>by {data.author}</h3>
-          <h3>Skill Level: {data.difficulty}</h3>
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadPatterns(data));
+  });
+
+  const pattern = useSelector((s) => s.patterns.currentPattern);
+
+  if (pattern) {
+    const images = [pattern.leadImage, ...pattern.images];
+
+    return (
+      <section id="pattern">
+        <div className="pattern-header card">
+          <h1>{pattern.title}</h1>
+          <div>
+            <h3>by {pattern.author}</h3>
+            <h3>Skill Level: {data.difficulty}</h3>
+          </div>
         </div>
-      </div>
-      <div className="pattern-splashscreen">
-        <div className="card">
-          <img src={data.leadImage} />
-          {data.images.length > 0 && <Link to="">See more Photos!</Link>}
-          <p>{data.description}</p>
+        <div className="pattern-splashscreen">
+          <div className="card">
+            <Slider>
+              {images.map((image) => (
+                <img src={image} />
+              ))}
+            </Slider>
+            {images.length > 0 && <Link to="">Enlarge</Link>}
+            <p>{pattern.description}</p>
+          </div>
+          <div className="card">
+            <h3>What you'll need</h3>
+            <ul>
+              {pattern.materials.map((mat) => (
+                <li>
+                  {mat.name}
+                  {mat.quantity && `: ${mat.quantity}`}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="card">
+            <h3>The gauge</h3>
+            <Gauge data={pattern.gauge} />
+          </div>
         </div>
-        <div className="card">
-          <h3>What you'll need</h3>
-          <ul>
-            {data.materials.map((mat) => (
-              <li>
-                {mat.name}
-                {mat.quantity && `: ${mat.quantity}`}
-              </li>
+        <div className="pattern-instructions">
+          <div className="card">
+            {pattern.instructions.map((step) => (
+              <p>{step}</p>
             ))}
-          </ul>
+          </div>
+          <div className="card">
+            <Slider>
+              {pattern.grids.map((grid) => (
+                <InteractivePattern data={grid.data} gridName={grid.name} />
+              ))}
+            </Slider>
+            {/* <InteractivePattern data={exampleData} />
+            <InteractivePattern data={exampleDataTwo} /> */}
+          </div>
         </div>
-        <div className="card">
-          <h3>The gauge</h3>
-          <Gauge data={data.gauge} />
-        </div>
-      </div>
-      <div className="pattern-instructions">
-        <div className="card">
-          {data.instructions.map((step) => (
-            <p>{step}</p>
-          ))}
-        </div>
-        <div className="card">
-          <InteractivePattern data={exampleData} />
-          <InteractivePattern data={exampleDataTwo} />
-        </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  }
+
+  return <></>;
 }
