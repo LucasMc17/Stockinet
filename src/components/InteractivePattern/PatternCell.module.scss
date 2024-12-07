@@ -1,0 +1,26 @@
+.interactive-pattern-cell {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  position: relative;
+  margin: -1px 0 0 -1px;
+  height: 0px;
+}
+
+.cell-holder {
+  position: relative;
+}
+
+.cell-aspect {
+  padding-top: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.interactive-pattern-cell-symbols {
+  position: absolute;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}

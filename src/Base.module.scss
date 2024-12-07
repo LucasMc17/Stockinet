@@ -31,3 +31,18 @@ h5 {
 h6 {
   font-size: 16px;
 }
+
+p {
+  font-size: 12px;
+}
+
+.card {
+  border-radius: 1rem;
+  border: 2px solid red;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}
