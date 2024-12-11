@@ -5,6 +5,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import replace from "@rollup/plugin-replace";
 import scss from "rollup-plugin-scss";
+import dotenv from "rollup-plugin-dotenv";
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -21,6 +22,7 @@ export default {
       preventAssignment: false,
       "process.env.NODE_ENV": devMode ? '"development"' : '"production"',
     }),
+    dotenv(),
     commonjs(),
     babel({
       babelHelpers: "bundled",

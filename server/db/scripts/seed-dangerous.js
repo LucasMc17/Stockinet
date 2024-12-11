@@ -2,17 +2,237 @@
 
 const {
   db,
-  models: { Pattern },
+  models: { Pattern, Grid, GridRow, GridStitch },
 } = require("..");
+
+const exampleGrid = {
+  name: "Large Cozy",
+  data: [
+    [
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+    ],
+    [
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+      { type: "CF", width: 4 },
+      { type: "CB", width: 4 },
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+    ],
+    [
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+    ],
+    [
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "P", width: 1 },
+    ],
+  ],
+};
+
+const exampleGridTwo = {
+  name: "Small COzy",
+  data: [
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "CB", width: 6 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "CF", width: 6 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+    [
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "P", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+      { type: "K", width: 1 },
+    ],
+  ],
+};
 
 const testData = [
   {
     title: "Cable Knit Candle Cozies",
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
-    leadImage: "public/candle-cozies.png",
+    leadImage: "/public/candle-cozies.png",
     author: "Yarnspirations",
-    images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
+    images: ["/public/candle-cozies-2.png", "/public/candle-cozies-3.png"],
     difficulty: "INTERMEDIATE",
     materials: [
       {
@@ -30,29 +250,20 @@ const testData = [
         name: "US 8 (5mm) knitting needles",
       },
     ],
-    // sizes: ["S", "L"],
-    // gauge: { stitches: 18, rows: 24, widthInches: 4, heightInches: 4 },
     gaugeStitches: 18,
     gaugeRows: 24,
     gaugeWidthInches: 4,
     gaugeHeightInches: 4,
     instructions: [],
-    // grids: [
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    // ],
+    grids: [exampleGrid, exampleGridTwo],
   },
   {
     title: "Cable Knit Candle Cozies 2",
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
-    leadImage: "public/candle-cozies.png",
+    leadImage: "/public/candle-cozies.png",
     author: "Yarnspirations",
-    images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
+    images: ["/public/candle-cozies-2.png", "/public/candle-cozies-3.png"],
     difficulty: "INTERMEDIATE",
     materials: [
       {
@@ -70,21 +281,12 @@ const testData = [
         name: "US 8 (5mm) knitting needles",
       },
     ],
-    sizes: ["S", "L"],
-    // gauge: { stitches: 18, rows: 24, widthInches: 4, heightInches: 4 },
     gaugeStitches: 18,
     gaugeRows: 24,
     gaugeWidthInches: 4,
     gaugeHeightInches: 4,
     instructions: [],
-    // grids: [
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    //   { name: "Large Cozy", data: exampleData },
-    //   { name: "Small Cozy", data: exampleDataTwo },
-    // ],
+    grids: [exampleGrid, exampleGridTwo],
   },
 ];
 
@@ -105,6 +307,33 @@ const testData = [
 
 async function createPattern(data) {
   const dbPattern = await Pattern.create(data);
+  // data.grids.forEach(async (obj) => {
+  //   const dbGrid = await Grid.create({ name: obj.name });
+  //   obj.data.forEach(async (row, i) => {
+  //     const dbRow = await GridRow.create({ order: i });
+  //     await dbRow.setGrid(dbGrid);
+  //     row.forEach(async (stitch, i) => {
+  //       const dbStitch = await GridStitch.create({ order: i, ...stitch });
+  //       await dbStitch.setGridRow(dbRow);
+  //     });
+  //   });
+  //   await dbGrid.setPattern(dbPattern);
+  // });
+  for (let i = 0; i < data.grids.length; i++) {
+    const obj = data.grids[i];
+    const dbGrid = await Grid.create({ name: obj.name });
+    for (let y = 0; y < obj.data.length; y++) {
+      const row = obj.data[y];
+      const dbRow = await GridRow.create({ order: y });
+      await dbRow.setGrid(dbGrid);
+      for (let x = 0; x < row.length; x++) {
+        const stitch = row[x];
+        const dbStitch = await GridStitch.create({ order: x, ...stitch });
+        await dbStitch.setGridRow(dbRow);
+      }
+    }
+    await dbGrid.setPattern(dbPattern);
+  }
 }
 
 async function seed() {

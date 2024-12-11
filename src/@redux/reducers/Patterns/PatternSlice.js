@@ -1,14 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import initialState from "./_initialState.js";
+import Adapter from "../../utils/Adapter.js";
+
+const fetchAllPatterns = createAsyncThunk(
+  "patterns/fetchAllPatterns",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const patterns = await Adapter.getAllPatterns();
+
+    if (patterns?.errorStatus) {
+      return rejectWithValue(patterns);
+    }
+
+    return patterns;
+  },
+);
 
 const patternSlice = createSlice({
   name: "patterns",
   initialState: initialState,
   reducers: {
-    loadPatterns: (state, action) => {
-      state.patternList = action.payload;
-      state.currentPattern = action.payload[0];
-    },
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
     },
@@ -26,7 +36,34 @@ const patternSlice = createSlice({
     //   },
   },
   extraReducers: (builder) => {
-    builder;
+    builder
+      .addCase(fetchAllPatterns.pending, (state, action) => {
+        const { requestId } = action.meta;
+        if (!state.loading) {
+          state.loading = true;
+          state.currentRequestId = requestId;
+        }
+      })
+      .addCase(fetchAllPatterns.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (state.loading && state.currentRequestId === requestId) {
+          state.loading = false;
+          state.currentRequestId = undefined;
+          const list = {};
+          action.payload.forEach((item) => {
+            list[item.id] = item;
+          });
+          state.patternList = list;
+          state.currentPattern = action.payload[0];
+        }
+      })
+      .addCase(fetchAllPatterns.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        state.loading = false;
+        state.error = action.error;
+        state.currentRequestId = undefined;
+        console.error(action.error);
+      });
     //   .addCase(postConversation.pending, (state, action) => {
     //     const { requestId } = action.meta;
     //     if (!state.loading) {
@@ -53,6 +90,6 @@ const patternSlice = createSlice({
   },
 });
 
-export const { loadPatterns, selectPattern } = patternSlice.actions;
-// export { fetchConversationById, postConversation };
+export const { selectPattern } = patternSlice.actions;
+export { fetchAllPatterns };
 export default patternSlice.reducer;

@@ -6,6 +6,10 @@ const Pattern = db.define("pattern", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  author: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   description: {
     type: Sequelize.STRING,
     allowNull: false,
