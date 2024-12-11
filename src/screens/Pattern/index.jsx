@@ -10,19 +10,6 @@ import {
   selectPattern,
 } from "../../@redux/reducers/Patterns/PatternSlice.js";
 
-/*
-- name
-- lead image
-- other images
-- difficulty
-- description
-- materials
-- sizes (?)
-- gauge size
-- written instructions
-- grids
-*/
-
 export default function PatternScreen() {
   const dispatch = useDispatch();
   const { patternId } = useParams();
