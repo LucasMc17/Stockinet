@@ -6,7 +6,7 @@ import Gauge from "../../components/Gauge/index.jsx";
 import "./index.module.scss";
 import Slider from "../../components/Slider/index.jsx";
 import {
-  fetchAllPatterns,
+  fetchOnePattern,
   selectPattern,
 } from "../../@redux/reducers/Patterns/PatternSlice.js";
 
@@ -17,10 +17,19 @@ export default function PatternScreen() {
   const { currentPattern, patternList } = useSelector((s) => s.patterns);
 
   useEffect(() => {
-    if (!patternList) {
-      dispatch(fetchAllPatterns());
-    } else {
+    console.log(
+      patternList,
+      patternList?.[patternId],
+      patternList?.[patternId]?.fullyLoaded,
+    );
+    if (
+      patternList &&
+      patternList[patternId] &&
+      patternList[patternId].fullyLoaded
+    ) {
       dispatch(selectPattern(patternList[patternId]));
+    } else {
+      dispatch(fetchOnePattern(patternId));
     }
   }, [patternList]);
 
@@ -87,6 +96,8 @@ export default function PatternScreen() {
         </div>
       </section>
     );
+  } else {
+    return <h1>404</h1>;
   }
 
   return <></>;

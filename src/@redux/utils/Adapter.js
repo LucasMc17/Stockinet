@@ -47,6 +47,13 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
+  async getOnePattern(id) {
+    const url = `${BASE_API_URL}/patterns/${id}`;
+
+    const res = await get(url);
+    const pattern = await res.json();
+    return pattern;
+  },
 };
 
 export default Adapter;

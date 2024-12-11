@@ -15,6 +15,19 @@ const fetchAllPatterns = createAsyncThunk(
   },
 );
 
+const fetchOnePattern = createAsyncThunk(
+  "patterns/fetchOnePattern",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const pattern = await Adapter.getOnePattern(payload);
+
+    if (pattern?.errorStatus) {
+      return rejectWithValue(pattern);
+    }
+
+    return pattern;
+  },
+);
+
 const patternSlice = createSlice({
   name: "patterns",
   initialState: initialState,
@@ -22,21 +35,36 @@ const patternSlice = createSlice({
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
     },
-    //   selectConversation: (state, action) => {
-    //     state.currentConversation = action.payload;
-    //   },
-    //   readChunk: (state, action) => {
-    //     state.currentConversation.messages[0].replicant_message += action.payload;
-    //   },
-    //   newUserMessage: (state, action) => {
-    //     state.currentConversation.messages.unshift({
-    //       user_message: action.payload,
-    //       replicant_message: "",
-    //     });
-    //   },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchOnePattern.pending, (state, action) => {
+        const { requestId } = action.meta;
+        if (!state.loading) {
+          state.loading = true;
+          state.currentRequestId = requestId;
+        }
+      })
+      .addCase(fetchOnePattern.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (state.loading && state.currentRequestId === requestId) {
+          const result = { ...action.payload, fullyLoaded: true };
+          state.loading = false;
+          state.currentRequestId = undefined;
+          state.currentPattern = result;
+          if (state.patternList) {
+            state.patternList[String(action.payload.id)] = result;
+          }
+        }
+      })
+      .addCase(fetchOnePattern.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        state.loading = false;
+        state.error = action.error;
+        state.currentRequestId = undefined;
+        console.error(action.error);
+      })
+
       .addCase(fetchAllPatterns.pending, (state, action) => {
         const { requestId } = action.meta;
         if (!state.loading) {
@@ -51,10 +79,11 @@ const patternSlice = createSlice({
           state.currentRequestId = undefined;
           const list = {};
           action.payload.forEach((item) => {
-            list[item.id] = item;
+            list[item.id] = state.patternList[item.id]
+              ? { ...state.patternList[item.id], ...item }
+              : item;
           });
           state.patternList = list;
-          state.currentPattern = action.payload[0];
         }
       })
       .addCase(fetchAllPatterns.rejected, (state, action) => {
@@ -91,5 +120,5 @@ const patternSlice = createSlice({
 });
 
 export const { selectPattern } = patternSlice.actions;
-export { fetchAllPatterns };
+export { fetchAllPatterns, fetchOnePattern };
 export default patternSlice.reducer;

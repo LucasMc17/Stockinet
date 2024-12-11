@@ -5,9 +5,10 @@ const {
 module.exports = router;
 // const {requireToken} = require('./requireToken');
 
-router.get("/", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const patterns = await Pattern.findAll({
+    const { id } = req.params;
+    const pattern = await Pattern.findByPk(id, {
       include: {
         model: Grid,
         include: {
@@ -21,6 +22,18 @@ router.get("/", async (req, res, next) => {
           order: [["order", "ASC"]],
         },
       },
+    });
+    res.json(pattern);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/", async (req, res, next) => {
+  console.log("HITTING");
+  try {
+    const patterns = await Pattern.findAll({
+      attributes: ["title", "id"],
     });
     res.json(patterns);
   } catch (err) {

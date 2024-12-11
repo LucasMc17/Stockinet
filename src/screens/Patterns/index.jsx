@@ -12,6 +12,7 @@ export default function Patterns() {
 
   useEffect(() => {
     dispatch(fetchAllPatterns());
+    dispatch(selectPattern(null));
   }, []);
 
   if (!patterns) {
