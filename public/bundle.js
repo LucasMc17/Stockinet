@@ -37175,6 +37175,11 @@ function useNavigateUnstable() {
   return navigate;
 }
 reactExports.createContext(null);
+function useParams() {
+  let { matches } = reactExports.useContext(RouteContext);
+  let routeMatch = matches[matches.length - 1];
+  return routeMatch ? routeMatch.params : {};
+}
 function useResolvedPath(to, { relative } = {}) {
   let { matches } = reactExports.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
@@ -40644,7 +40649,7 @@ function PatternRow({
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
     className: "interactive-pattern-row",
-    children: row.map((cell, i) => {
+    children: row.gridStitches.map((cell, i) => {
       return /*#__PURE__*/jsxRuntimeExports.jsx(PatternCell, {
         cell: cell,
         rowWidth: rowWidth
@@ -40661,7 +40666,7 @@ function InteractivePattern({
   data
 }) {
   const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b);
+    const width = getRowWidth(b.gridStitches);
     return width > a ? width : a;
   }, 1);
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
@@ -43807,6 +43812,213 @@ function createReducer(initialState, mapOrBuilderCallback) {
   return reducer;
 }
 
+// src/matchers.ts
+var matches = (matcher, action) => {
+  if (hasMatchFunction(matcher)) {
+    return matcher.match(action);
+  } else {
+    return matcher(action);
+  }
+};
+function isAnyOf(...matchers) {
+  return (action) => {
+    return matchers.some((matcher) => matches(matcher, action));
+  };
+}
+
+// src/nanoid.ts
+var urlAlphabet = "ModuleSymbhasOwnPr-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW";
+var nanoid = (size = 21) => {
+  let id = "";
+  let i = size;
+  while (i--) {
+    id += urlAlphabet[Math.random() * 64 | 0];
+  }
+  return id;
+};
+
+// src/createAsyncThunk.ts
+var commonProperties = ["name", "message", "stack", "code"];
+var RejectWithValue = class {
+  constructor(payload, meta) {
+    this.payload = payload;
+    this.meta = meta;
+  }
+  /*
+  type-only property to distinguish between RejectWithValue and FulfillWithMeta
+  does not exist at runtime
+  */
+  _type;
+};
+var FulfillWithMeta = class {
+  constructor(payload, meta) {
+    this.payload = payload;
+    this.meta = meta;
+  }
+  /*
+  type-only property to distinguish between RejectWithValue and FulfillWithMeta
+  does not exist at runtime
+  */
+  _type;
+};
+var miniSerializeError = (value) => {
+  if (typeof value === "object" && value !== null) {
+    const simpleError = {};
+    for (const property of commonProperties) {
+      if (typeof value[property] === "string") {
+        simpleError[property] = value[property];
+      }
+    }
+    return simpleError;
+  }
+  return {
+    message: String(value)
+  };
+};
+var createAsyncThunk = /* @__PURE__ */ (() => {
+  function createAsyncThunk2(typePrefix, payloadCreator, options) {
+    const fulfilled = createAction(typePrefix + "/fulfilled", (payload, requestId, arg, meta) => ({
+      payload,
+      meta: {
+        ...meta || {},
+        arg,
+        requestId,
+        requestStatus: "fulfilled"
+      }
+    }));
+    const pending = createAction(typePrefix + "/pending", (requestId, arg, meta) => ({
+      payload: void 0,
+      meta: {
+        ...meta || {},
+        arg,
+        requestId,
+        requestStatus: "pending"
+      }
+    }));
+    const rejected = createAction(typePrefix + "/rejected", (error, requestId, arg, payload, meta) => ({
+      payload,
+      error: (options && options.serializeError || miniSerializeError)(error || "Rejected"),
+      meta: {
+        ...meta || {},
+        arg,
+        requestId,
+        rejectedWithValue: !!payload,
+        requestStatus: "rejected",
+        aborted: error?.name === "AbortError",
+        condition: error?.name === "ConditionError"
+      }
+    }));
+    function actionCreator(arg) {
+      return (dispatch, getState, extra) => {
+        const requestId = options?.idGenerator ? options.idGenerator(arg) : nanoid();
+        const abortController = new AbortController();
+        let abortHandler;
+        let abortReason;
+        function abort(reason) {
+          abortReason = reason;
+          abortController.abort();
+        }
+        const promise = async function() {
+          let finalAction;
+          try {
+            let conditionResult = options?.condition?.(arg, {
+              getState,
+              extra
+            });
+            if (isThenable(conditionResult)) {
+              conditionResult = await conditionResult;
+            }
+            if (conditionResult === false || abortController.signal.aborted) {
+              throw {
+                name: "ConditionError",
+                message: "Aborted due to condition callback returning false."
+              };
+            }
+            const abortedPromise = new Promise((_, reject) => {
+              abortHandler = () => {
+                reject({
+                  name: "AbortError",
+                  message: abortReason || "Aborted"
+                });
+              };
+              abortController.signal.addEventListener("abort", abortHandler);
+            });
+            dispatch(pending(requestId, arg, options?.getPendingMeta?.({
+              requestId,
+              arg
+            }, {
+              getState,
+              extra
+            })));
+            finalAction = await Promise.race([abortedPromise, Promise.resolve(payloadCreator(arg, {
+              dispatch,
+              getState,
+              extra,
+              requestId,
+              signal: abortController.signal,
+              abort,
+              rejectWithValue: (value, meta) => {
+                return new RejectWithValue(value, meta);
+              },
+              fulfillWithValue: (value, meta) => {
+                return new FulfillWithMeta(value, meta);
+              }
+            })).then((result) => {
+              if (result instanceof RejectWithValue) {
+                throw result;
+              }
+              if (result instanceof FulfillWithMeta) {
+                return fulfilled(result.payload, requestId, arg, result.meta);
+              }
+              return fulfilled(result, requestId, arg);
+            })]);
+          } catch (err) {
+            finalAction = err instanceof RejectWithValue ? rejected(null, requestId, arg, err.payload, err.meta) : rejected(err, requestId, arg);
+          } finally {
+            if (abortHandler) {
+              abortController.signal.removeEventListener("abort", abortHandler);
+            }
+          }
+          const skipDispatch = options && !options.dispatchConditionRejection && rejected.match(finalAction) && finalAction.meta.condition;
+          if (!skipDispatch) {
+            dispatch(finalAction);
+          }
+          return finalAction;
+        }();
+        return Object.assign(promise, {
+          abort,
+          requestId,
+          arg,
+          unwrap() {
+            return promise.then(unwrapResult);
+          }
+        });
+      };
+    }
+    return Object.assign(actionCreator, {
+      pending,
+      rejected,
+      fulfilled,
+      settled: isAnyOf(rejected, fulfilled),
+      typePrefix
+    });
+  }
+  createAsyncThunk2.withTypes = () => createAsyncThunk2;
+  return createAsyncThunk2;
+})();
+function unwrapResult(action) {
+  if (action.meta && action.meta.rejectedWithValue) {
+    throw action.payload;
+  }
+  if (action.error) {
+    throw action.error;
+  }
+  return action.payload;
+}
+function isThenable(value) {
+  return value !== null && typeof value === "object" && typeof value.then === "function";
+}
+
 // src/createSlice.ts
 var asyncThunkSymbol = /* @__PURE__ */ Symbol.for("rtk-slice-createasyncthunk");
 function getType(slice, actionKey) {
@@ -44089,31 +44301,150 @@ var initialState = {
   currentRequestId: null
 };
 
+//NOTHING HERE HAS BEEN TESTED. This will become relevent once we have a db set up
+
+const baseHeaders = {
+  "Content-Type": "application/json",
+  Accept: "application/json"
+};
+const authHeaders = token => ({
+  Authorization: `Bearer ${token}`
+});
+const fetchApi = method => (url, headers = {}, body = null) => fetch(url, {
+  body,
+  headers: {
+    ...baseHeaders,
+    ...headers
+  },
+  method
+});
+const get = fetchApi("get");
+const post = fetchApi("post");
+let BASE_API_URL;
+{
+  BASE_API_URL = "http://localhost:8000/api";
+}
+const Adapter = {
+  async getUser({
+    subId,
+    token
+  }) {
+    const url = `${BASE_API_URL}/user`;
+    const body = JSON.stringify({
+      subId: `${subId}`
+    });
+    const headers = authHeaders(token);
+    const res = await post(url, headers, body);
+    const userResponse = await res.json();
+    return userResponse;
+  },
+  async getAllPatterns() {
+    // TEMPORARY ADAOTER PATH FOR TESTING
+    const url = `${BASE_API_URL}/patterns`;
+    const res = await get(url);
+    const patterns = await res.json();
+    return patterns;
+  },
+  async getOnePattern(id) {
+    const url = `${BASE_API_URL}/patterns/${id}`;
+    const res = await get(url);
+    const pattern = await res.json();
+    return pattern;
+  }
+};
+
+const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const patterns = await Adapter.getAllPatterns();
+  if (patterns?.errorStatus) {
+    return rejectWithValue(patterns);
+  }
+  return patterns;
+});
+const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const pattern = await Adapter.getOnePattern(payload);
+  if (pattern?.errorStatus) {
+    return rejectWithValue(pattern);
+  }
+  return pattern;
+});
 const patternSlice = createSlice({
   name: "patterns",
   initialState: initialState,
   reducers: {
-    loadPatterns: (state, action) => {
-      state.patternList = action.payload;
-      state.currentPattern = action.payload[0];
-    },
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
     }
-    //   selectConversation: (state, action) => {
-    //     state.currentConversation = action.payload;
-    //   },
-    //   readChunk: (state, action) => {
-    //     state.currentConversation.messages[0].replicant_message += action.payload;
-    //   },
-    //   newUserMessage: (state, action) => {
-    //     state.currentConversation.messages.unshift({
-    //       user_message: action.payload,
-    //       replicant_message: "",
-    //     });
-    //   },
   },
   extraReducers: builder => {
+    builder.addCase(fetchOnePattern.pending, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (!state.loading) {
+        state.loading = true;
+        state.currentRequestId = requestId;
+      }
+    }).addCase(fetchOnePattern.fulfilled, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (state.loading && state.currentRequestId === requestId) {
+        const result = {
+          ...action.payload,
+          fullyLoaded: true
+        };
+        state.loading = false;
+        state.currentRequestId = undefined;
+        state.currentPattern = result;
+        if (state.patternList) {
+          state.patternList[String(action.payload.id)] = result;
+        }
+      }
+    }).addCase(fetchOnePattern.rejected, (state, action) => {
+      action.meta;
+      state.loading = false;
+      state.error = action.error;
+      state.currentRequestId = undefined;
+      console.error(action.error);
+    }).addCase(fetchAllPatterns.pending, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (!state.loading) {
+        state.loading = true;
+        state.currentRequestId = requestId;
+      }
+    }).addCase(fetchAllPatterns.fulfilled, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (state.loading && state.currentRequestId === requestId) {
+        state.loading = false;
+        state.currentRequestId = undefined;
+        const list = {};
+        action.payload.forEach(item => {
+          list[item.id] = state.patternList[item.id] ? {
+            ...state.patternList[item.id],
+            ...item
+          } : item;
+        });
+        state.patternList = list;
+      }
+    }).addCase(fetchAllPatterns.rejected, (state, action) => {
+      action.meta;
+      state.loading = false;
+      state.error = action.error;
+      state.currentRequestId = undefined;
+      console.error(action.error);
+    });
     //   .addCase(postConversation.pending, (state, action) => {
     //     const { requestId } = action.meta;
     //     if (!state.loading) {
@@ -44140,709 +44471,40 @@ const patternSlice = createSlice({
   }
 });
 const {
-  loadPatterns,
   selectPattern
 } = patternSlice.actions;
-// export { fetchConversationById, postConversation };
 var PatternSlice = patternSlice.reducer;
 
-const exampleData = [[{
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}],
-//   [
-//     { type: "P" },
-//     { type: "P" },
-//     { type: "CF", connectedR: true },
-//     { type: "CF", connectedR: true, connectedL: true },
-//     { type: "CF", connectedR: true, connectedL: true },
-//     { type: "CF", connectedL: true },
-//     { type: "CB", connectedR: true },
-//     { type: "CB", connectedR: true, connectedL: true },
-//     { type: "CB", connectedR: true, connectedL: true },
-//     { type: "CB", connectedL: true },
-//     { type: "P" },
-//     { type: "P" },
-//   ],
-[{
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "CF",
-  width: 4
-}, {
-  type: "CB",
-  width: 4
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}], [{
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}], [{
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}]];
-const exampleDataTwo = [[{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "CB",
-  width: 6
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "CF",
-  width: 6
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}], [{
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "P",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}, {
-  type: "K",
-  width: 1
-}]];
-
-/*
-- name
-- lead image
-- other images
-- difficulty
-- description
-- materials
-- sizes (?)
-- gauge size
-- written instructions
-- grids
-*/
-
-const data = [{
-  id: 2,
-  title: "Cable Knit Candle Cozies",
-  description: "Keep your candles cozy with these simple but beautiful cable knits!",
-  leadImage: "public/candle-cozies.png",
-  author: "Yarnspirations",
-  images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
-  difficulty: "INTERMEDIATE",
-  materials: [{
-    type: "yarn",
-    name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
-    quantity: "1 skein",
-    toMake: "12 small cozies or 8 large cozies"
-  }, {
-    type: "needle",
-    name: "US 7 (4.5mm) knitting needles"
-  }, {
-    type: "needle",
-    name: "US 8 (5mm) knitting needles"
-  }],
-  sizes: ["S", "L"],
-  gauge: {
-    stitches: 18,
-    rows: 24,
-    widthInches: 4,
-    heightInches: 4
-  },
-  instructions: [],
-  grids: [{
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }, {
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }, {
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }]
-}, {
-  id: 1,
-  title: "Cable Knit Candle Cozies 2",
-  description: "Keep your candles cozy with these simple but beautiful cable knits!",
-  leadImage: "public/candle-cozies.png",
-  author: "Yarnspirations",
-  images: ["public/candle-cozies-2.png", "public/candle-cozies-3.png"],
-  difficulty: "INTERMEDIATE",
-  materials: [{
-    type: "yarn",
-    name: "Red Heart Super Saver (7oz/197g; 426yds/389m)",
-    quantity: "1 skein",
-    toMake: "12 small cozies or 8 large cozies"
-  }, {
-    type: "needle",
-    name: "US 7 (4.5mm) knitting needles"
-  }, {
-    type: "needle",
-    name: "US 8 (5mm) knitting needles"
-  }],
-  sizes: ["S", "L"],
-  gauge: {
-    stitches: 18,
-    rows: 24,
-    widthInches: 4,
-    heightInches: 4
-  },
-  instructions: [],
-  grids: [{
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }, {
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }, {
-    name: "Large Cozy",
-    data: exampleData
-  }, {
-    name: "Small Cozy",
-    data: exampleDataTwo
-  }]
-}];
 function PatternScreen() {
   const dispatch = useDispatch();
+  const {
+    patternId
+  } = useParams();
+  const {
+    currentPattern,
+    patternList
+  } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
-    dispatch(loadPatterns(data));
-  });
-  const pattern = useSelector(s => s.patterns.currentPattern);
-  if (pattern) {
-    const images = [pattern.leadImage, ...pattern.images];
+    console.log(patternList, patternList?.[patternId], patternList?.[patternId]?.fullyLoaded);
+    if (patternList && patternList[patternId] && patternList[patternId].fullyLoaded) {
+      dispatch(selectPattern(patternList[patternId]));
+    } else {
+      dispatch(fetchOnePattern(patternId));
+    }
+  }, [patternList]);
+  if (currentPattern) {
+    const images = [currentPattern.leadImage, ...currentPattern.images];
     return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
       id: "pattern",
       children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         className: "pattern-header card",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-          children: pattern.title
+          children: currentPattern.title
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
           children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-            children: ["by ", pattern.author]
+            children: ["by ", currentPattern.author]
           }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-            children: ["Skill Level: ", data.difficulty]
+            children: ["Skill Level: ", currentPattern.difficulty]
           })]
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
@@ -44857,45 +44519,46 @@ function PatternScreen() {
             to: "",
             children: "Enlarge"
           }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-            children: pattern.description
+            children: currentPattern.description
           })]
-        }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "card",
-          children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
             children: "What you'll need"
-          }), /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
-            children: pattern.materials.map(mat => /*#__PURE__*/jsxRuntimeExports.jsxs("li", {
-              children: [mat.name, mat.quantity && `: ${mat.quantity}`]
-            }))
-          })]
+          })
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
           className: "card",
           children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
             children: "The gauge"
           }), /*#__PURE__*/jsxRuntimeExports.jsx(Gauge, {
-            data: pattern.gauge
+            data: {
+              widthInches: currentPattern.gaugeWidthInches,
+              heightInches: currentPattern.gaugeHeightInches,
+              rows: currentPattern.gaugeRows,
+              stitches: currentPattern.gaugeStitches
+            }
           })]
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         className: "pattern-instructions",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "card",
-          children: pattern.instructions.map(step => /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-            children: step
-          }))
+          className: "card"
         }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "card",
           children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-            children: pattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
-              data: grid.data,
+            children: currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
+              data: grid.gridRows,
               gridName: grid.name
             }))
           })
         })]
       })]
     });
+  } else {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: "404"
+    });
   }
-  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
 }
 
 var reduxLogger$1 = {exports: {}};
@@ -44929,11 +44592,35 @@ const store = configureStore({
   // enhancers: [batchedSubscribe(debounceNotify)],
 });
 
+function Patterns() {
+  const dispatch = useDispatch();
+  const patterns = useSelector(s => s.patterns.patternList);
+  reactExports.useEffect(() => {
+    dispatch(fetchAllPatterns());
+    dispatch(selectPattern(null));
+  }, []);
+  if (!patterns) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "card",
+    children: Object.keys(patterns).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link, {
+      to: `/pattern/${patternId}`,
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: patterns[patternId].title
+      })
+    }))
+  });
+}
+
 const router = createBrowserRouter([{
   path: "/",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LandingScreen, {})
 }, {
-  path: "pattern",
+  path: "patterns",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(Patterns, {})
+}, {
+  path: "pattern/:patternId",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})
 }]);
 const root = ReactDOM.createRoot(document.getElementById("root"));

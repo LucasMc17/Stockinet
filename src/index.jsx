@@ -6,6 +6,7 @@ import PatternScreen from "./screens/Pattern/index.jsx";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
 import "./Base.module.scss";
+import Patterns from "./screens/Patterns/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,11 @@ const router = createBrowserRouter([
     element: <LandingScreen />,
   },
   {
-    path: "pattern",
+    path: "patterns",
+    element: <Patterns />,
+  },
+  {
+    path: "pattern/:patternId",
     element: <PatternScreen />,
   },
 ]);
