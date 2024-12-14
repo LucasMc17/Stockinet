@@ -46,12 +46,6 @@ p {
   display: none;
 }
 
-.landing-screen {
-  padding: 4rem 6rem;
-  display: flex;
-  justify-content: space-between;
-}
-
 #pattern {
   padding: 1rem;
   display: flex;
@@ -82,6 +76,12 @@ p {
 }
 .pattern-instructions > div {
   flex-basis: 45%;
+}
+
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .landing-section {
@@ -132,6 +132,14 @@ p {
   border-right-width: 0;
 }
 
+.interactive-pattern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
 .gauge-flex {
   display: flex;
   flex-wrap: wrap;
@@ -153,20 +161,12 @@ p {
   width: 100%;
 }
 
-.interactive-pattern {
-  width: 100%;
+.interactive-pattern-row {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
 }
 
 .gauge-square {
   border: 3px solid black;
-}
-
-.interactive-pattern-row {
-  display: flex;
 }
 
 .interactive-pattern-cell {
