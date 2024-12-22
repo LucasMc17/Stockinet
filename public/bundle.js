@@ -44613,9 +44613,75 @@ function Patterns() {
   });
 }
 
+function LoginSignup({
+  login
+}) {
+  const [state, setState] = reactExports.useState({
+    username: "",
+    password: ""
+  });
+  function onSubmit(e) {
+    e.preventDefault();
+    console.log(state);
+  }
+  function onChange(e) {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value
+    });
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: login ? "Log in to get the most out of your Stockinette account" : "Sign up to start using Stockinette"
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+      onSubmit: onSubmit,
+      onChange: onChange,
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
+        children: "Username:"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+        name: "username",
+        value: state.username,
+        type: "text"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+        children: "Password:"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+        name: "password",
+        value: state.password,
+        type: "password"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        type: "submit",
+        children: login ? "Log in" : "Sign up"
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: login ? /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+        children: ["New to Stockinette? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link, {
+          to: "/signup",
+          children: "Make an account!"
+        })]
+      }) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+        children: ["Already have an account? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link, {
+          to: "/login",
+          children: "Log in now!"
+        })]
+      })
+    })]
+  });
+}
+
 const router = createBrowserRouter([{
   path: "/",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LandingScreen, {})
+}, {
+  path: "login",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignup, {
+    login: true
+  })
+}, {
+  path: "signup",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignup, {
+    login: false
+  })
 }, {
   path: "patterns",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(Patterns, {})

@@ -7,11 +7,20 @@ import { Provider } from "react-redux";
 import { store } from "./@redux/store";
 import "./Base.module.scss";
 import Patterns from "./screens/Patterns/index.jsx";
+import LoginSignup from "./screens/LoginSignup/index.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LandingScreen />,
+  },
+  {
+    path: "login",
+    element: <LoginSignup login={true} />,
+  },
+  {
+    path: "signup",
+    element: <LoginSignup login={false} />,
   },
   {
     path: "patterns",
