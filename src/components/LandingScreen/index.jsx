@@ -4,11 +4,10 @@ import Globe from "../../icons/Globe.jsx";
 import Dollar from "../../icons/Dollar.jsx";
 import GradCap from "../../icons/GradCap.jsx";
 import "./index.module.scss";
-import { useStytchUser } from "@stytch/react";
+import UseLoginStatus from "../../hooks/UseLoginStatus.js";
 
 export default function LandingScreen() {
-  const { user } = useStytchUser();
-  console.log(user);
+  console.log(UseLoginStatus());
   return (
     <>
       <LandingHeader />

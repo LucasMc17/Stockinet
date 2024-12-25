@@ -11,6 +11,8 @@ import {
 } from "../../@redux/reducers/Patterns/PatternSlice.js";
 
 export default function PatternScreen() {
+  UseLoggedOutRedirect();
+
   const dispatch = useDispatch();
   const { patternId } = useParams();
 

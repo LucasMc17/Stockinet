@@ -40252,11 +40252,15 @@ const StytchProvider = ({ stytch, children }) => {
             React$1.createElement(StytchSessionContext.Provider, { value: session }, children))));
 };
 
-function LandingScreen() {
+function UseLoginStatus() {
   const {
     user
   } = useStytchUser();
-  console.log(user);
+  return !!user;
+}
+
+function LandingScreen() {
+  console.log(UseLoginStatus());
   return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "landing-screen",
@@ -44647,6 +44651,7 @@ const {
 var PatternSlice = patternSlice.reducer;
 
 function PatternScreen() {
+  UseLoggedOutRedirect();
   const dispatch = useDispatch();
   const {
     patternId
@@ -44780,7 +44785,10 @@ const fetchUser = createAsyncThunk("user/fetchUser", async (payload, {
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    clearUser: (state, action) => {
+    }
+  },
   extraReducers: builder => {
     builder.addCase(fetchUser.pending, (state, action) => {
       const {
@@ -44833,6 +44841,9 @@ const userSlice = createSlice({
     // });
   }
 });
+const {
+  clearUser
+} = userSlice.actions;
 var UserSlice = userSlice.reducer;
 
 var reducer$1 = combineReducers({
@@ -44849,7 +44860,18 @@ const store = configureStore({
   // enhancers: [batchedSubscribe(debounceNotify)],
 });
 
+function UseLoggedOutRedirect$1(destination = "/login") {
+  const dispatch = useDispatch(),
+    navigate = useNavigate(),
+    isLoggedIn = UseLoginStatus();
+  if (!isLoggedIn) {
+    dispatch(clearUser());
+    navigate(destination);
+  }
+}
+
 function Patterns() {
+  UseLoggedOutRedirect$1();
   const dispatch = useDispatch();
   const patterns = useSelector(s => s.patterns.patternList);
   reactExports.useEffect(() => {

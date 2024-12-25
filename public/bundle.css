@@ -46,6 +46,12 @@ p {
   display: none;
 }
 
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
+}
+
 #pattern {
   padding: 1rem;
   display: flex;
@@ -76,12 +82,6 @@ p {
 }
 .pattern-instructions > div {
   flex-basis: 45%;
-}
-
-.landing-screen {
-  padding: 4rem 6rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 .landing-section {
