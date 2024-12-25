@@ -1,4 +1,7 @@
 const stytch = require("stytch");
+const {
+  models: { User },
+} = require("../db");
 
 const devMode = process.env.NODE_ENV === "development";
 
@@ -15,4 +18,21 @@ const client = new stytch.Client({
   secret: stytchSecret,
 });
 
-module.exports = client;
+async function isAuthenticated(req, res, next) {
+  try {
+    const sessionJWT = req.cookies.stytch_session_jwt;
+    const resp = await client.sessions.authenticateJwt({
+      session_jwt: sessionJWT,
+    });
+    const user = await User.findOne({
+      where: { stytchId: resp.session.user_id },
+    });
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(401).send("Authentication failed");
+  }
+}
+
+module.exports = { client, isAuthenticated };

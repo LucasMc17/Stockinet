@@ -16,7 +16,9 @@ GridRow.hasMany(GridStitch);
 GridStitch.belongsTo(GridRow);
 
 Pattern.belongsTo(User, { as: "author" });
+
 Pattern.belongsToMany(User, { through: "purchasers" });
+User.belongsToMany(Pattern, { through: "purchasers" });
 
 module.exports = {
   db,

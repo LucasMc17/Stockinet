@@ -15,6 +15,19 @@ const fetchAllPatterns = createAsyncThunk(
   },
 );
 
+const fetchPatternsByUser = createAsyncThunk(
+  "patterns/fetchPatternsByUser",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const patterns = await Adapter.getPatternsByUser(userId);
+
+    if (patterns?.errorStatus) {
+      return rejectWithValue(patterns);
+    }
+
+    return patterns;
+  },
+);
+
 const fetchOnePattern = createAsyncThunk(
   "patterns/fetchOnePattern",
   async (payload, { getState, requestId, rejectWithValue }) => {

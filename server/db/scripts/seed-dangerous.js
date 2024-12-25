@@ -1,7 +1,7 @@
 "use strict";
 
 require("dotenv").config();
-const client = require("../../backendUtils/stytchClient");
+const { client } = require("../../backendUtils/stytchClient");
 
 const {
   db,
@@ -370,6 +370,8 @@ async function seed() {
 
   await testPattern1.addUser(testUser2);
   await testPattern2.addUser(testUser2);
+  await testPattern1.addUser(testUser1);
+  await testPattern2.addUser(testUser1);
 
   console.log(`seeded successfully`);
 }

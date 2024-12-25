@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const client = require("../backendUtils/stytchClient");
+const { client } = require("../backendUtils/stytchClient");
 
 module.exports = router;
 

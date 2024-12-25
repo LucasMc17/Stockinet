@@ -3,7 +3,20 @@ const {
   models: { Pattern, Grid, GridRow, GridStitch },
 } = require("../db");
 module.exports = router;
-// const {requireToken} = require('./requireToken');
+const { isAuthenticated } = require("../backendUtils/stytchClient");
+
+router.get("/by-user", isAuthenticated, async (req, res, next) => {
+  try {
+    // const patterns = await Pattern.findAll({ where: { userId: req.user.id } });
+    console.log(req.user);
+    const patterns = await req.user.getPatterns({
+      attributes: ["title", "id"],
+    });
+    res.json(patterns);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get("/:id", async (req, res, next) => {
   try {

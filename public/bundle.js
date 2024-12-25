@@ -44507,6 +44507,12 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
+  async getPatternsByUser(userId) {
+    const url = `${BASE_API_URL}/patterns/by-user/${userId}`;
+    const res = await get$1(url);
+    const patterns = await res.json();
+    return patterns;
+  },
   async getOnePattern(id) {
     const url = `${BASE_API_URL}/patterns/${id}`;
     const res = await get$1(url);
@@ -44534,6 +44540,17 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
   rejectWithValue
 }) => {
   const patterns = await Adapter.getAllPatterns();
+  if (patterns?.errorStatus) {
+    return rejectWithValue(patterns);
+  }
+  return patterns;
+});
+createAsyncThunk("patterns/fetchPatternsByUser", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const patterns = await Adapter.getPatternsByUser(userId);
   if (patterns?.errorStatus) {
     return rejectWithValue(patterns);
   }
@@ -44907,7 +44924,7 @@ function LoginSignup({
       console.log(state);
       const res = await stytch.passwords.authenticate({
         ...state,
-        session_duration_minutes: 10
+        session_duration_minutes: 60
       });
       const {
         user_id

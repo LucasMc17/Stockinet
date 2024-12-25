@@ -19,7 +19,7 @@ export default function LoginSignup({ login }) {
       console.log(state);
       const res = await stytch.passwords.authenticate({
         ...state,
-        session_duration_minutes: 10,
+        session_duration_minutes: 60,
       });
       const { user_id } = res?.user;
       dispatch(fetchUser(user_id));

@@ -47,6 +47,13 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
+  async getPatternsByUser(userId) {
+    const url = `${BASE_API_URL}/patterns/by-user/${userId}`;
+
+    const res = await get(url);
+    const patterns = await res.json();
+    return patterns;
+  },
   async getOnePattern(id) {
     const url = `${BASE_API_URL}/patterns/${id}`;
 
