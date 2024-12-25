@@ -1,15 +1,31 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useStytch } from "@stytch/react";
+import { fetchUser } from "../../@redux/reducers/User/UserSlice";
 
 export default function LoginSignup({ login }) {
+  const dispatch = useDispatch();
+  const stytch = useStytch();
+
   const [state, setState] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
-    console.log(state);
+    if (login) {
+      console.log(state);
+      const res = await stytch.passwords.authenticate({
+        ...state,
+        session_duration_minutes: 10,
+      });
+      const { user_id } = res?.user;
+      dispatch(fetchUser(user_id));
+    } else {
+      // dispatch(fetchUser());
+    }
   }
 
   function onChange(e) {
@@ -24,8 +40,8 @@ export default function LoginSignup({ login }) {
           : "Sign up to start using Stockinette"}
       </h2>
       <form onSubmit={onSubmit} onChange={onChange}>
-        <label>Username:</label>
-        <input name="username" value={state.username} type="text" />
+        <label>Email:</label>
+        <input name="email" value={state.email} type="text" />
         <label>Password:</label>
         <input name="password" value={state.password} type="password" />
         <button type="submit">{login ? "Log in" : "Sign up"}</button>
@@ -41,6 +57,7 @@ export default function LoginSignup({ login }) {
           </>
         )}
       </p>
+      <Link to="/">Back to Home</Link>
     </div>
   );
 }

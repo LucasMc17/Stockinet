@@ -4,8 +4,11 @@ import Globe from "../../icons/Globe.jsx";
 import Dollar from "../../icons/Dollar.jsx";
 import GradCap from "../../icons/GradCap.jsx";
 import "./index.module.scss";
+import { useStytchUser } from "@stytch/react";
 
 export default function LandingScreen() {
+  const { user } = useStytchUser();
+  console.log(user);
   return (
     <>
       <LandingHeader />

@@ -54,6 +54,20 @@ const Adapter = {
     const pattern = await res.json();
     return pattern;
   },
+  async getUser(stytchId) {
+    const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;
+
+    const res = await get(url);
+    const user = await res.json();
+    return user;
+  },
+  // async authenticate(data) {
+  //   const url = `${BASE_API_URL}/auth`;
+
+  //   const body = JSON.stringify({ ...data, session_duration_minutes: 10 });
+  //   const res = await post(url, baseHeaders, body);
+  //   console.log(res.json());
+  // },
 };
 
 export default Adapter;
