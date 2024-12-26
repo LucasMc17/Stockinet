@@ -161,12 +161,12 @@ p {
   border-right-width: 0;
 }
 
-.gauge-square {
-  border: 3px solid black;
-}
-
 .interactive-pattern-row {
   display: flex;
+}
+
+.gauge-square {
+  border: 3px solid black;
 }
 
 .interactive-pattern-cell {

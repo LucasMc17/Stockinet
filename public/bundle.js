@@ -44534,6 +44534,51 @@ const Adapter = {
   // },
 };
 
+const pendingBase = (state, action, callback) => {
+  const {
+    requestId
+  } = action.meta;
+  if (!state.loading) {
+    state.loading = true;
+    state.currentRequestId = requestId;
+    if (typeof callback === "function") {
+      callback(state, action);
+    }
+  }
+};
+const fulfilledBase = (state, action, callback) => {
+  const {
+    requestId
+  } = action.meta;
+  if (state.loading && state.currentRequestId === requestId) {
+    state.loading = false;
+    state.currentRequestId = undefined;
+    if (typeof callback === "function") {
+      callback(state, action);
+    }
+  }
+};
+const rejectedBase = (state, action, callback) => {
+  state.loading = false;
+  state.error = action.error;
+  state.currentRequestId = undefined;
+  if (typeof callback === "function") {
+    callback(state, action);
+  }
+  console.error(action.error);
+};
+function thunkBaseCases(builder, thunk, config) {
+  builder.addCase(thunk.pending, (state, action) => {
+    pendingBase(state, action, config.pendingCallback);
+  });
+  builder.addCase(thunk.fulfilled, (state, action) => {
+    fulfilledBase(state, action, config.fulfilledCallback);
+  });
+  builder.addCase(thunk.rejected, (state, action) => {
+    rejectedBase(state, action, config.rejectedCallback);
+  });
+}
+
 const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (payload, {
   getState,
   requestId,
@@ -44576,120 +44621,42 @@ const patternSlice = createSlice({
     }
   },
   extraReducers: builder => {
-    builder.addCase(fetchOnePattern.pending, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (!state.loading) {
-        state.loading = true;
-        state.currentRequestId = requestId;
-      }
-    }).addCase(fetchOnePattern.fulfilled, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (state.loading && state.currentRequestId === requestId) {
+    thunkBaseCases(builder, fetchOnePattern, {
+      fulfilledCallback: (state, action) => {
         const result = {
           ...action.payload,
           fullyLoaded: true
         };
-        state.loading = false;
-        state.currentRequestId = undefined;
         state.currentPattern = result;
         if (state.patternList) {
           state.patternList[String(action.payload.id)] = result;
         }
       }
-    }).addCase(fetchOnePattern.rejected, (state, action) => {
-      action.meta;
-      state.loading = false;
-      state.error = action.error;
-      state.currentRequestId = undefined;
-      console.error(action.error);
-    }).addCase(fetchAllPatterns.pending, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (!state.loading) {
-        state.loading = true;
-        state.currentRequestId = requestId;
-      }
-    }).addCase(fetchPatternsByUser.pending, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (!state.loading) {
-        state.loading = true;
-        state.currentRequestId = requestId;
-      }
-    }).addCase(fetchAllPatterns.fulfilled, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (state.loading && state.currentRequestId === requestId) {
-        state.loading = false;
-        state.currentRequestId = undefined;
-        const list = {};
-        action.payload.forEach(item => {
-          list[item.id] = state.patternList[item.id] ? {
-            ...state.patternList[item.id],
-            ...item
-          } : item;
-        });
-        state.patternList = list;
-      }
-    }).addCase(fetchPatternsByUser.fulfilled, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (state.loading && state.currentRequestId === requestId) {
-        state.loading = false;
-        state.currentRequestId = undefined;
-        const list = {};
-        action.payload.forEach(item => {
-          list[item.id] = state.patternList[item.id] ? {
-            ...state.patternList[item.id],
-            ...item
-          } : item;
-        });
-        state.patternList = list;
-      }
-    }).addCase(fetchAllPatterns.rejected, (state, action) => {
-      action.meta;
-      state.loading = false;
-      state.error = action.error;
-      state.currentRequestId = undefined;
-      console.error(action.error);
-    }).addCase(fetchPatternsByUser.rejected, (state, action) => {
-      action.meta;
-      state.loading = false;
-      state.error = action.error;
-      state.currentRequestId = undefined;
-      console.error(action.error);
     });
-    //   .addCase(postConversation.pending, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (!state.loading) {
-    //       state.loading = true;
-    //       state.currentRequestId = requestId;
-    //     }
-    //   })
-    //   .addCase(postConversation.fulfilled, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (state.loading && state.currentRequestId === requestId) {
-    //       state.loading = false;
-    //       state.currentRequestId = undefined;
-    //       state.currentConversation = action.payload;
-    //     }
-    //   })
-    //   .addCase(postConversation.rejected, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (state.loading && state.currentRequestId === requestId) {
-    //       state.loading = false;
-    //       state.error = action.error;
-    //       state.currentRequestId = undefined;
-    //     }
-    //   })
+    thunkBaseCases(builder, fetchAllPatterns, {
+      fulfilledCallback: (state, action) => {
+        const list = {};
+        action.payload.forEach(item => {
+          list[item.id] = state.patternList[item.id] ? {
+            ...state.patternList[item.id],
+            ...item
+          } : item;
+        });
+        state.patternList = list;
+      }
+    });
+    thunkBaseCases(builder, fetchPatternsByUser, {
+      fulfilledCallback: (state, action) => {
+        const list = {};
+        action.payload.forEach(item => {
+          list[item.id] = state.patternList[item.id] ? {
+            ...state.patternList[item.id],
+            ...item
+          } : item;
+        });
+        state.patternList = list;
+      }
+    });
   }
 });
 const {
@@ -44810,14 +44777,6 @@ var initialState = {
   currentRequestId: null
 };
 
-// const authenticate = createAsyncThunk(
-//   "user/authenticate",
-//   async (payload, { getState, requestId, rejectWithValue }) => {
-//     await Adapter.authenticate(payload);
-//     return true;
-//   },
-// );
-
 const fetchUser = createAsyncThunk("user/fetchUser", async (payload, {
   getState,
   requestId,
@@ -44837,55 +44796,12 @@ const userSlice = createSlice({
     }
   },
   extraReducers: builder => {
-    builder.addCase(fetchUser.pending, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (!state.loading) {
-        state.loading = true;
-        state.currentRequestId = requestId;
-      }
-    }).addCase(fetchUser.fulfilled, (state, action) => {
-      const {
-        requestId
-      } = action.meta;
-      if (state.loading && state.currentRequestId === requestId) {
+    thunkBaseCases(builder, fetchUser, {
+      fulfilledCallback: (state, action) => {
         state.id = action.payload.id;
         state.stytchId = action.payload.stytchId;
-        state.loading = false;
-        state.currentRequestId = undefined;
       }
-    }).addCase(fetchUser.rejected, (state, action) => {
-      action.meta;
-      state.loading = false;
-      state.currentRequestId = undefined;
-      state.error = action.error;
-      state.currentRequestId = undefined;
-      console.error(action.error);
     });
-    // .addCase(authenticate.pending, (state, action) => {
-    //   const { requestId } = action.meta;
-    //   if (!state.loading) {
-    //     state.loading = true;
-    //     state.currentRequestId = requestId;
-    //   }
-    // })
-    // .addCase(authenticate.fulfilled, (state, action) => {
-    //   const { requestId } = action.meta;
-    //   if (state.loading && state.currentRequestId === requestId) {
-    //     // const result = { ...action.payload, fullyLoaded: true };
-    //     state.id = 1;
-    //     state.loading = false;
-    //     state.currentRequestId = undefined;
-    //   }
-    // })
-    // .addCase(authenticate.rejected, (state, action) => {
-    //   const { requestId } = action.meta;
-    //   state.loading = false;
-    //   state.error = action.error;
-    //   state.currentRequestId = undefined;
-    //   console.error(action.error);
-    // });
   }
 });
 const {
