@@ -10,6 +10,7 @@ import Patterns from "./screens/Patterns/index.jsx";
 import LoginSignup from "./screens/LoginSignup/index.jsx";
 import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
+import Header from "./components/Header/index.jsx";
 
 const stytch = new StytchUIClient(
   "public-token-test-ef6d0a44-36d8-4ab6-b69f-3d6a2a47dbb7",
@@ -18,7 +19,12 @@ const stytch = new StytchUIClient(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingScreen />,
+    element: (
+      <>
+        <Header />
+        <LandingScreen />
+      </>
+    ),
   },
   {
     path: "login",

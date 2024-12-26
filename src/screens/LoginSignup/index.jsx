@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useStytch } from "@stytch/react";
 import { fetchUser } from "../../@redux/reducers/User/UserSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginSignup({ login }) {
   const dispatch = useDispatch();
   const stytch = useStytch();
+  const navigate = useNavigate();
 
   const [state, setState] = useState({
     email: "",
@@ -23,6 +25,7 @@ export default function LoginSignup({ login }) {
       });
       const { user_id } = res?.user;
       dispatch(fetchUser(user_id));
+      navigate("/");
     } else {
       // dispatch(fetchUser());
     }
