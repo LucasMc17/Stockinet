@@ -44507,8 +44507,8 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
-  async getPatternsByUser(userId) {
-    const url = `${BASE_API_URL}/patterns/by-user/${userId}`;
+  async getPatternsByUser() {
+    const url = `${BASE_API_URL}/patterns/by-user`;
     const res = await get$1(url);
     const patterns = await res.json();
     return patterns;
@@ -44545,12 +44545,12 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
   }
   return patterns;
 });
-createAsyncThunk("patterns/fetchPatternsByUser", async (payload, {
+const fetchPatternsByUser = createAsyncThunk("patterns/fetchPatternsByUser", async (payload, {
   getState,
   requestId,
   rejectWithValue
 }) => {
-  const patterns = await Adapter.getPatternsByUser(userId);
+  const patterns = await Adapter.getPatternsByUser();
   if (patterns?.errorStatus) {
     return rejectWithValue(patterns);
   }
@@ -44614,6 +44614,14 @@ const patternSlice = createSlice({
         state.loading = true;
         state.currentRequestId = requestId;
       }
+    }).addCase(fetchPatternsByUser.pending, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (!state.loading) {
+        state.loading = true;
+        state.currentRequestId = requestId;
+      }
     }).addCase(fetchAllPatterns.fulfilled, (state, action) => {
       const {
         requestId
@@ -44630,7 +44638,29 @@ const patternSlice = createSlice({
         });
         state.patternList = list;
       }
+    }).addCase(fetchPatternsByUser.fulfilled, (state, action) => {
+      const {
+        requestId
+      } = action.meta;
+      if (state.loading && state.currentRequestId === requestId) {
+        state.loading = false;
+        state.currentRequestId = undefined;
+        const list = {};
+        action.payload.forEach(item => {
+          list[item.id] = state.patternList[item.id] ? {
+            ...state.patternList[item.id],
+            ...item
+          } : item;
+        });
+        state.patternList = list;
+      }
     }).addCase(fetchAllPatterns.rejected, (state, action) => {
+      action.meta;
+      state.loading = false;
+      state.error = action.error;
+      state.currentRequestId = undefined;
+      console.error(action.error);
+    }).addCase(fetchPatternsByUser.rejected, (state, action) => {
       action.meta;
       state.loading = false;
       state.error = action.error;
@@ -44892,7 +44922,7 @@ function Patterns() {
   const dispatch = useDispatch();
   const patterns = useSelector(s => s.patterns.patternList);
   reactExports.useEffect(() => {
-    dispatch(fetchAllPatterns());
+    dispatch(fetchPatternsByUser());
     dispatch(selectPattern(null));
   }, []);
   if (!patterns) {

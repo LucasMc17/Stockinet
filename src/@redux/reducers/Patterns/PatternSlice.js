@@ -18,7 +18,7 @@ const fetchAllPatterns = createAsyncThunk(
 const fetchPatternsByUser = createAsyncThunk(
   "patterns/fetchPatternsByUser",
   async (payload, { getState, requestId, rejectWithValue }) => {
-    const patterns = await Adapter.getPatternsByUser(userId);
+    const patterns = await Adapter.getPatternsByUser();
 
     if (patterns?.errorStatus) {
       return rejectWithValue(patterns);
@@ -85,6 +85,13 @@ const patternSlice = createSlice({
           state.currentRequestId = requestId;
         }
       })
+      .addCase(fetchPatternsByUser.pending, (state, action) => {
+        const { requestId } = action.meta;
+        if (!state.loading) {
+          state.loading = true;
+          state.currentRequestId = requestId;
+        }
+      })
       .addCase(fetchAllPatterns.fulfilled, (state, action) => {
         const { requestId } = action.meta;
         if (state.loading && state.currentRequestId === requestId) {
@@ -99,7 +106,28 @@ const patternSlice = createSlice({
           state.patternList = list;
         }
       })
+      .addCase(fetchPatternsByUser.fulfilled, (state, action) => {
+        const { requestId } = action.meta;
+        if (state.loading && state.currentRequestId === requestId) {
+          state.loading = false;
+          state.currentRequestId = undefined;
+          const list = {};
+          action.payload.forEach((item) => {
+            list[item.id] = state.patternList[item.id]
+              ? { ...state.patternList[item.id], ...item }
+              : item;
+          });
+          state.patternList = list;
+        }
+      })
       .addCase(fetchAllPatterns.rejected, (state, action) => {
+        const { requestId } = action.meta;
+        state.loading = false;
+        state.error = action.error;
+        state.currentRequestId = undefined;
+        console.error(action.error);
+      })
+      .addCase(fetchPatternsByUser.rejected, (state, action) => {
         const { requestId } = action.meta;
         state.loading = false;
         state.error = action.error;
@@ -133,5 +161,5 @@ const patternSlice = createSlice({
 });
 
 export const { selectPattern } = patternSlice.actions;
-export { fetchAllPatterns, fetchOnePattern };
+export { fetchAllPatterns, fetchOnePattern, fetchPatternsByUser };
 export default patternSlice.reducer;
