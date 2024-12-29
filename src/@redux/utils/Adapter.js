@@ -47,12 +47,35 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
+  async getPatternsByUser() {
+    const url = `${BASE_API_URL}/patterns/by-user`;
+
+    const res = await get(url);
+    const patterns = await res.json();
+    return patterns;
+  },
   async getOnePattern(id) {
     const url = `${BASE_API_URL}/patterns/${id}`;
 
     const res = await get(url);
     const pattern = await res.json();
     return pattern;
+  },
+  async getUser(stytchId) {
+    const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;
+
+    const res = await get(url);
+    const user = await res.json();
+    return user;
+  },
+  async signUp(data) {
+    const url = `${BASE_API_URL}/user`;
+
+    const body = JSON.stringify(data);
+
+    const res = await post(url, baseHeaders, body);
+    const user = await res.json();
+    return user;
   },
 };
 

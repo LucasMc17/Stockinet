@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
 const path = require("path");
+const cookieParser = require("cookie-parser");
 module.exports = app;
 
 // logging middleware
@@ -10,6 +11,9 @@ app.use(morgan("dev"));
 
 // body parsing middleware
 app.use(express.json());
+
+// cookie parsing middleware for auth
+app.use(cookieParser());
 
 app.use(cors({ origin: "*" }));
 

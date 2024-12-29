@@ -4,21 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"rollup -c --watch --environment NODE_ENV:development\" \"nodemon server\"",
+    "start": "concurrently \"rollup -c --watch --environment NODE_ENV:development\" \"NODE_ENV=development nodemon server\"",
     "build:dev": "rollup -c --environment NODE_ENV:development",
     "build": "rollup -c --environment NODE_ENV:production",
     "test": "node scripts/test.js",
-    "seed:danger": "node server/db/scripts/seed-dangerous.js"
+    "seed:danger": "NODE_ENV=development node server/db/scripts/seed-dangerous.js",
+    "scrap:danger": "NODE_ENV=development node server/db/scripts/scrap.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^2.4.0",
     "@rollup/plugin-replace": "^6.0.1",
+    "@stytch/react": "^19.1.1",
+    "@stytch/vanilla-js": "^5.10.1",
     "animejs": "^3.2.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "morgan": "^1.10.0",
     "path": "^0.12.7",
     "pg": "^8.13.1",
@@ -31,6 +36,7 @@
     "rollup-plugin-dotenv": "^0.5.1",
     "rollup-plugin-scss": "^4.0.0",
     "sequelize": "^6.37.5",
+    "stytch": "^11.10.0",
     "tailwind": "^4.0.0"
   },
   "devDependencies": {

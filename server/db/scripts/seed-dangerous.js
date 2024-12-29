@@ -1,8 +1,11 @@
 "use strict";
 
+require("dotenv").config();
+const { client } = require("../../backendUtils/stytchClient");
+
 const {
   db,
-  models: { Pattern, Grid, GridRow, GridStitch },
+  models: { Pattern, Grid, GridRow, GridStitch, User },
 } = require("..");
 
 const exampleGrid = {
@@ -225,6 +228,16 @@ const exampleGridTwo = {
   ],
 };
 
+async function createUser({ email, username, password }) {
+  const { user } = await client.passwords.create({
+    email,
+    password,
+    name: { first_name: username },
+  });
+  const dbUser = await User.create({ username, stytchId: user.user_id });
+  return dbUser;
+}
+
 const testData = [
   {
     title: "Cable Knit Candle Cozies",
@@ -290,35 +303,8 @@ const testData = [
   },
 ];
 
-/*
-  title,
-  description,
-  leadImage,
-  author,
-  images,
-  difficulty,
-  materials,
-  gaugeStitches,
-  gaugeRows,
-  gaugeWidthInches,
-  gaugeHeightInches,
-  instructions
-*/
-
 async function createPattern(data) {
   const dbPattern = await Pattern.create(data);
-  // data.grids.forEach(async (obj) => {
-  //   const dbGrid = await Grid.create({ name: obj.name });
-  //   obj.data.forEach(async (row, i) => {
-  //     const dbRow = await GridRow.create({ order: i });
-  //     await dbRow.setGrid(dbGrid);
-  //     row.forEach(async (stitch, i) => {
-  //       const dbStitch = await GridStitch.create({ order: i, ...stitch });
-  //       await dbStitch.setGridRow(dbRow);
-  //     });
-  //   });
-  //   await dbGrid.setPattern(dbPattern);
-  // });
   for (let i = 0; i < data.grids.length; i++) {
     const obj = data.grids[i];
     const dbGrid = await Grid.create({ name: obj.name });
@@ -334,14 +320,58 @@ async function createPattern(data) {
     }
     await dbGrid.setPattern(dbPattern);
   }
+  return dbPattern;
 }
 
 async function seed() {
   await db.sync({ force: true }); // THIS IS A HARD RESET
   console.log("db synced!");
 
-  await createPattern(testData[0]);
-  await createPattern(testData[1]);
+  const { results } = await client.users.search({
+    // limit: 2,
+    // query: {
+    //   operator: "OR",
+    //   operands: [
+    //     {
+    //       filter_name: "email_address",
+    //       filter_value: ["test@stockinette.co"],
+    //     },
+    //     {
+    //       filter_name: "email_address",
+    //       filter_value: ["test2@stockinette.co"],
+    //     },
+    //   ],
+    // },
+  });
+
+  for (let i = 0; i < results.length; i++) {
+    const { user_id } = results[i];
+    await client.users.delete({ user_id });
+    console.log("Stytch user deleted");
+  }
+
+  const testUser1 = await createUser({
+    email: "test@stockinette.co",
+    username: "Test",
+    password: "uirefhnnj34u45h4unfjs",
+  });
+
+  const testUser2 = await createUser({
+    email: "test2@stockinette.co",
+    username: "Test 2",
+    password: "u4t39o3i9rfjeiewifj932",
+  });
+
+  const testPattern1 = await createPattern(testData[0]);
+  const testPattern2 = await createPattern(testData[1]);
+
+  await testPattern1.setAuthor(testUser1);
+  await testPattern2.setAuthor(testUser1);
+
+  await testPattern1.addUser(testUser2);
+  await testPattern2.addUser(testUser2);
+  await testPattern1.addUser(testUser1);
+  await testPattern2.addUser(testUser1);
 
   console.log(`seeded successfully`);
 }

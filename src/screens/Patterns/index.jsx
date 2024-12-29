@@ -3,15 +3,19 @@ import { useEffect } from "react";
 import {
   fetchAllPatterns,
   selectPattern,
+  fetchPatternsByUser,
 } from "../../@redux/reducers/Patterns/PatternSlice";
 import { Link } from "react-router-dom";
+import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect";
 
 export default function Patterns() {
+  UseLoggedOutRedirect();
+
   const dispatch = useDispatch();
   const patterns = useSelector((s) => s.patterns.patternList);
 
   useEffect(() => {
-    dispatch(fetchAllPatterns());
+    dispatch(fetchPatternsByUser());
     dispatch(selectPattern(null));
   }, []);
 

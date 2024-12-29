@@ -1,11 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import initialState from "./_initialState.js";
 import Adapter from "../../utils/Adapter.js";
+import thunkBaseCases from "../../utils/thunkBaseCases.js";
 
 const fetchAllPatterns = createAsyncThunk(
   "patterns/fetchAllPatterns",
   async (payload, { getState, requestId, rejectWithValue }) => {
     const patterns = await Adapter.getAllPatterns();
+
+    if (patterns?.errorStatus) {
+      return rejectWithValue(patterns);
+    }
+
+    return patterns;
+  },
+);
+
+const fetchPatternsByUser = createAsyncThunk(
+  "patterns/fetchPatternsByUser",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const patterns = await Adapter.getPatternsByUser();
 
     if (patterns?.errorStatus) {
       return rejectWithValue(patterns);
@@ -37,88 +51,42 @@ const patternSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchOnePattern.pending, (state, action) => {
-        const { requestId } = action.meta;
-        if (!state.loading) {
-          state.loading = true;
-          state.currentRequestId = requestId;
+    thunkBaseCases(builder, fetchOnePattern, {
+      fulfilledCallback: (state, action) => {
+        const result = { ...action.payload, fullyLoaded: true };
+        state.currentPattern = result;
+        if (state.patternList) {
+          state.patternList[String(action.payload.id)] = result;
         }
-      })
-      .addCase(fetchOnePattern.fulfilled, (state, action) => {
-        const { requestId } = action.meta;
-        if (state.loading && state.currentRequestId === requestId) {
-          const result = { ...action.payload, fullyLoaded: true };
-          state.loading = false;
-          state.currentRequestId = undefined;
-          state.currentPattern = result;
-          if (state.patternList) {
-            state.patternList[String(action.payload.id)] = result;
-          }
-        }
-      })
-      .addCase(fetchOnePattern.rejected, (state, action) => {
-        const { requestId } = action.meta;
-        state.loading = false;
-        state.error = action.error;
-        state.currentRequestId = undefined;
-        console.error(action.error);
-      })
+      },
+    });
 
-      .addCase(fetchAllPatterns.pending, (state, action) => {
-        const { requestId } = action.meta;
-        if (!state.loading) {
-          state.loading = true;
-          state.currentRequestId = requestId;
-        }
-      })
-      .addCase(fetchAllPatterns.fulfilled, (state, action) => {
-        const { requestId } = action.meta;
-        if (state.loading && state.currentRequestId === requestId) {
-          state.loading = false;
-          state.currentRequestId = undefined;
-          const list = {};
-          action.payload.forEach((item) => {
-            list[item.id] = state.patternList[item.id]
-              ? { ...state.patternList[item.id], ...item }
-              : item;
-          });
-          state.patternList = list;
-        }
-      })
-      .addCase(fetchAllPatterns.rejected, (state, action) => {
-        const { requestId } = action.meta;
-        state.loading = false;
-        state.error = action.error;
-        state.currentRequestId = undefined;
-        console.error(action.error);
-      });
-    //   .addCase(postConversation.pending, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (!state.loading) {
-    //       state.loading = true;
-    //       state.currentRequestId = requestId;
-    //     }
-    //   })
-    //   .addCase(postConversation.fulfilled, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (state.loading && state.currentRequestId === requestId) {
-    //       state.loading = false;
-    //       state.currentRequestId = undefined;
-    //       state.currentConversation = action.payload;
-    //     }
-    //   })
-    //   .addCase(postConversation.rejected, (state, action) => {
-    //     const { requestId } = action.meta;
-    //     if (state.loading && state.currentRequestId === requestId) {
-    //       state.loading = false;
-    //       state.error = action.error;
-    //       state.currentRequestId = undefined;
-    //     }
-    //   })
+    thunkBaseCases(builder, fetchAllPatterns, {
+      fulfilledCallback: (state, action) => {
+        const list = {};
+        action.payload.forEach((item) => {
+          list[item.id] = state.patternList[item.id]
+            ? { ...state.patternList[item.id], ...item }
+            : item;
+        });
+        state.patternList = list;
+      },
+    });
+
+    thunkBaseCases(builder, fetchPatternsByUser, {
+      fulfilledCallback: (state, action) => {
+        const list = {};
+        action.payload.forEach((item) => {
+          list[item.id] = state.patternList[item.id]
+            ? { ...state.patternList[item.id], ...item }
+            : item;
+        });
+        state.patternList = list;
+      },
+    });
   },
 });
 
 export const { selectPattern } = patternSlice.actions;
-export { fetchAllPatterns, fetchOnePattern };
+export { fetchAllPatterns, fetchOnePattern, fetchPatternsByUser };
 export default patternSlice.reducer;

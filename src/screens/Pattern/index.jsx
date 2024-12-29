@@ -9,19 +9,17 @@ import {
   fetchOnePattern,
   selectPattern,
 } from "../../@redux/reducers/Patterns/PatternSlice.js";
+import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect.js";
 
 export default function PatternScreen() {
+  UseLoggedOutRedirect();
+
   const dispatch = useDispatch();
   const { patternId } = useParams();
 
   const { currentPattern, patternList } = useSelector((s) => s.patterns);
 
   useEffect(() => {
-    console.log(
-      patternList,
-      patternList?.[patternId],
-      patternList?.[patternId]?.fullyLoaded,
-    );
     if (
       patternList &&
       patternList[patternId] &&
