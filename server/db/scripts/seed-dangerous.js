@@ -328,20 +328,20 @@ async function seed() {
   console.log("db synced!");
 
   const { results } = await client.users.search({
-    limit: 2,
-    query: {
-      operator: "OR",
-      operands: [
-        {
-          filter_name: "email_address",
-          filter_value: ["test@stockinette.co"],
-        },
-        {
-          filter_name: "email_address",
-          filter_value: ["test2@stockinette.co"],
-        },
-      ],
-    },
+    // limit: 2,
+    // query: {
+    //   operator: "OR",
+    //   operands: [
+    //     {
+    //       filter_name: "email_address",
+    //       filter_value: ["test@stockinette.co"],
+    //     },
+    //     {
+    //       filter_name: "email_address",
+    //       filter_value: ["test2@stockinette.co"],
+    //     },
+    //   ],
+    // },
   });
 
   for (let i = 0; i < results.length; i++) {

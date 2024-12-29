@@ -8,7 +8,8 @@
     "build:dev": "rollup -c --environment NODE_ENV:development",
     "build": "rollup -c --environment NODE_ENV:production",
     "test": "node scripts/test.js",
-    "seed:danger": "NODE_ENV=development node server/db/scripts/seed-dangerous.js"
+    "seed:danger": "NODE_ENV=development node server/db/scripts/seed-dangerous.js",
+    "scrap:danger": "NODE_ENV=development node server/db/scripts/scrap.js"
   },
   "author": "",
   "license": "ISC",

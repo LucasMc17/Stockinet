@@ -98,6 +98,14 @@ p {
   flex: 0.75;
 }
 
+.interactive-pattern {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
 .slider-holder {
   position: relative;
   padding: 30px;
@@ -130,14 +138,6 @@ p {
   right: 0px;
   border-radius: 999px 0 0 999px;
   border-right-width: 0;
-}
-
-.interactive-pattern {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
 }
 
 .gauge-flex {

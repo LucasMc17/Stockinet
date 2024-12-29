@@ -44721,7 +44721,7 @@ const {
 } = userSlice.actions;
 var UserSlice = userSlice.reducer;
 
-// There's stuff to clean up here. Using a useEffect for one, see if we can avoid repeating the useauth steps in instancesd with a log out redirect AND a log in status header
+// See if we can avoid repeating the useauth steps in instancesd with a log out redirect AND a log in status header
 
 function UseLoginStatus() {
   const dispatch = useDispatch();
@@ -44732,20 +44732,28 @@ function UseLoginStatus() {
   const {
     user
   } = useStytchUser();
-  if (user?.user_id && !id && !loading) {
-    dispatch(fetchUser(user.user_id));
-  } else if (!user && !loading) {
-    dispatch(clearUser());
-  }
+  reactExports.useEffect(() => {
+    if (!loading) {
+      // if stytch session, but no redux user, fetch the user from our db
+      if (user?.user_id && !id) {
+        dispatch(fetchUser(user.user_id));
+        // otherwise, if there's no stytch session, clear the redux user
+      } else if (!user) {
+        dispatch(clearUser());
+      }
+    }
+  }, [loading, id, user]);
   return user;
 }
 
 function UseLoggedOutRedirect(destination = "/login") {
-  const navigate = useNavigate(),
-    user = UseLoginStatus();
-  if (!user) {
-    navigate(destination);
-  }
+  const navigate = useNavigate();
+  const user = UseLoginStatus();
+  reactExports.useEffect(() => {
+    if (!user) {
+      navigate(destination);
+    }
+  }, [user]);
 }
 
 function PatternScreen() {
