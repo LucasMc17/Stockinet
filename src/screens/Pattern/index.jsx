@@ -85,11 +85,12 @@ export default function PatternScreen() {
           <div className="card">
             <Slider>
               {currentPattern.grids.map((grid) => (
-                <InteractivePattern data={grid.gridRows} gridName={grid.name} />
+                <InteractivePattern
+                  data={JSON.parse(grid.data)}
+                  gridName={grid.name}
+                />
               ))}
             </Slider>
-            {/* <InteractivePattern data={exampleData} />
-            <InteractivePattern data={exampleDataTwo} /> */}
           </div>
         </div>
       </section>

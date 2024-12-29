@@ -16,22 +16,22 @@ router.get("/by-user", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isAuthenticated, async (req, res, next) => {
   try {
     const { id } = req.params;
     const pattern = await Pattern.findByPk(id, {
       include: {
         model: Grid,
-        include: {
-          model: GridRow,
-          include: {
-            model: GridStitch,
-            separate: true,
-            order: [["order", "ASC"]],
-          },
-          separate: true,
-          order: [["order", "ASC"]],
-        },
+        // include: {
+        //   model: GridRow,
+        //   include: {
+        //     model: GridStitch,
+        //     separate: true,
+        //     order: [["order", "ASC"]],
+        //   },
+        //   separate: true,
+        //   order: [["order", "ASC"]],
+        // },
       },
     });
     res.json(pattern);

@@ -4,7 +4,7 @@ import "./PatternRow.module.scss";
 export default function PatternRow({ row, rowWidth }) {
   return (
     <div className="interactive-pattern-row">
-      {row.gridStitches.map((cell, i) => {
+      {row.map((cell, i) => {
         return <PatternCell cell={cell} key={i} rowWidth={rowWidth} />;
       })}
     </div>

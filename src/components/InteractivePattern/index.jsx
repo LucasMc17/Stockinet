@@ -7,7 +7,7 @@ function getRowWidth(row) {
 
 export default function InteractivePattern({ gridName, data }) {
   const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b.gridStitches);
+    const width = getRowWidth(b);
     return width > a ? width : a;
   }, 1);
   return (

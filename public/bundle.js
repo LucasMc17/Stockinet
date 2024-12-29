@@ -40649,7 +40649,7 @@ function PatternRow({
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
     className: "interactive-pattern-row",
-    children: row.gridStitches.map((cell, i) => {
+    children: row.map((cell, i) => {
       return /*#__PURE__*/jsxRuntimeExports.jsx(PatternCell, {
         cell: cell,
         rowWidth: rowWidth
@@ -40666,7 +40666,7 @@ function InteractivePattern({
   data
 }) {
   const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b.gridStitches);
+    const width = getRowWidth(b);
     return width > a ? width : a;
   }, 1);
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
@@ -44828,7 +44828,7 @@ function PatternScreen() {
           className: "card",
           children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
             children: currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractivePattern, {
-              data: grid.gridRows,
+              data: JSON.parse(grid.data),
               gridName: grid.name
             }))
           })

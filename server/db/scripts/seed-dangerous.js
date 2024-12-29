@@ -5,7 +5,7 @@ const { client } = require("../../backendUtils/stytchClient");
 
 const {
   db,
-  models: { Pattern, Grid, GridRow, GridStitch, User },
+  models: { Pattern, Grid, User },
 } = require("..");
 
 const exampleGrid = {
@@ -307,17 +307,20 @@ async function createPattern(data) {
   const dbPattern = await Pattern.create(data);
   for (let i = 0; i < data.grids.length; i++) {
     const obj = data.grids[i];
-    const dbGrid = await Grid.create({ name: obj.name });
-    for (let y = 0; y < obj.data.length; y++) {
-      const row = obj.data[y];
-      const dbRow = await GridRow.create({ order: y });
-      await dbRow.setGrid(dbGrid);
-      for (let x = 0; x < row.length; x++) {
-        const stitch = row[x];
-        const dbStitch = await GridStitch.create({ order: x, ...stitch });
-        await dbStitch.setGridRow(dbRow);
-      }
-    }
+    const dbGrid = await Grid.create({
+      name: obj.name,
+      data: JSON.stringify(obj.data),
+    });
+    // for (let y = 0; y < obj.data.length; y++) {
+    //   const row = obj.data[y];
+    //   const dbRow = await GridRow.create({ order: y });
+    //   await dbRow.setGrid(dbGrid);
+    //   for (let x = 0; x < row.length; x++) {
+    //     const stitch = row[x];
+    //     const dbStitch = await GridStitch.create({ order: x, ...stitch });
+    //     await dbStitch.setGridRow(dbRow);
+    //   }
+    // }
     await dbGrid.setPattern(dbPattern);
   }
   return dbPattern;
