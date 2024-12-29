@@ -68,13 +68,15 @@ const Adapter = {
     const user = await res.json();
     return user;
   },
-  // async authenticate(data) {
-  //   const url = `${BASE_API_URL}/auth`;
+  async signUp(data) {
+    const url = `${BASE_API_URL}/user`;
 
-  //   const body = JSON.stringify({ ...data, session_duration_minutes: 10 });
-  //   const res = await post(url, baseHeaders, body);
-  //   console.log(res.json());
-  // },
+    const body = JSON.stringify(data);
+
+    const res = await post(url, baseHeaders, body);
+    const user = await res.json();
+    return user;
+  },
 };
 
 export default Adapter;

@@ -16,12 +16,29 @@ const fetchUser = createAsyncThunk(
   },
 );
 
+const signUp = createAsyncThunk(
+  "user/signUp",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const user = await Adapter.signUp(payload);
+
+    if (user?.errorStatus) {
+      return rejectWithValue(user);
+    }
+
+    return user;
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
     clearUser: (state, action) => {
-      state = initialState;
+      state.error = null;
+      state.id = null;
+      state.stytchId = null;
+      state.currentRequestId = null;
+      state.username = null;
     },
   },
   extraReducers: (builder) => {
@@ -29,11 +46,19 @@ const userSlice = createSlice({
       fulfilledCallback: (state, action) => {
         state.id = action.payload.id;
         state.stytchId = action.payload.stytchId;
+        state.username = action.payload.username;
+      },
+    });
+    thunkBaseCases(builder, signUp, {
+      fulfilledCallback: (state, action) => {
+        state.id = action.payload.id;
+        state.stytchId = action.payload.stytchId;
+        state.username = action.payload.username;
       },
     });
   },
 });
 
 export const { clearUser } = userSlice.actions;
-export { fetchUser };
+export { fetchUser, signUp };
 export default userSlice.reducer;

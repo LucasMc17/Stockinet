@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useStytch } from "@stytch/react";
-import { fetchUser } from "../../@redux/reducers/User/UserSlice";
+import { fetchUser, signUp } from "../../@redux/reducers/User/UserSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginSignup({ login }) {
@@ -13,21 +13,38 @@ export default function LoginSignup({ login }) {
   const [state, setState] = useState({
     email: "",
     password: "",
+    username: "",
   });
 
   async function onSubmit(e) {
     e.preventDefault();
     if (login) {
-      console.log(state);
       const res = await stytch.passwords.authenticate({
-        ...state,
+        email: state.email,
+        password: state.password,
         session_duration_minutes: 60,
       });
       const { user_id } = res?.user;
       dispatch(fetchUser(user_id));
       navigate("/");
     } else {
-      // dispatch(fetchUser());
+      const res = await stytch.passwords.create({
+        email: state.email,
+        password: state.password,
+        name: {
+          first_name: state.username,
+        },
+        session_duration_minutes: 60,
+      });
+      const { user_id } = res?.user;
+      dispatch(
+        signUp({
+          stytchId: user_id,
+          email: state.email,
+          username: state.username,
+        }),
+      );
+      navigate("/");
     }
   }
 
@@ -45,6 +62,12 @@ export default function LoginSignup({ login }) {
       <form onSubmit={onSubmit} onChange={onChange}>
         <label>Email:</label>
         <input name="email" value={state.email} type="text" />
+        {!login && (
+          <>
+            <label>Username:</label>
+            <input name="username" value={state.username} type="text" />
+          </>
+        )}
         <label>Password:</label>
         <input name="password" value={state.password} type="password" />
         <button type="submit">{login ? "Log in" : "Sign up"}</button>

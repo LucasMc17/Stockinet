@@ -7,8 +7,6 @@ const { isAuthenticated } = require("../backendUtils/stytchClient");
 
 router.get("/by-user", isAuthenticated, async (req, res, next) => {
   try {
-    // const patterns = await Pattern.findAll({ where: { userId: req.user.id } });
-    console.log(req.user);
     const patterns = await req.user.getPatterns({
       attributes: ["title", "id"],
     });
@@ -43,7 +41,6 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-  console.log("HITTING");
   try {
     const patterns = await Pattern.findAll({
       attributes: ["title", "id"],

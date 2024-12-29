@@ -4,4 +4,5 @@ export default {
   id: null,
   stytchId: null,
   currentRequestId: null,
+  username: null,
 };

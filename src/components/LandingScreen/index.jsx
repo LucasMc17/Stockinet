@@ -4,10 +4,8 @@ import Globe from "../../icons/Globe.jsx";
 import Dollar from "../../icons/Dollar.jsx";
 import GradCap from "../../icons/GradCap.jsx";
 import "./index.module.scss";
-import UseLoginStatus from "../../hooks/UseLoginStatus.js";
 
 export default function LandingScreen() {
-  console.log(UseLoginStatus());
   return (
     <>
       <LandingHeader />
