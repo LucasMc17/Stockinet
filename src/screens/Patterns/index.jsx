@@ -7,29 +7,37 @@ import {
 } from "../../@redux/reducers/Patterns/PatternSlice";
 import { Link } from "react-router-dom";
 import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect";
+import LoadingScreen from "../../components/LoadingScreen/index.jsx";
+import ErrorScreen from "../../components/ErrorScreen/index.jsx";
 
 export default function Patterns() {
   UseLoggedOutRedirect();
 
   const dispatch = useDispatch();
-  const patterns = useSelector((s) => s.patterns.patternList);
+  const { patternList, loading, error } = useSelector((s) => s.patterns);
 
   useEffect(() => {
     dispatch(fetchPatternsByUser());
     dispatch(selectPattern(null));
   }, []);
 
-  if (!patterns) {
-    return <></>;
+  if (loading) {
+    return <LoadingScreen />;
   }
 
-  return (
-    <div className="card">
-      {Object.keys(patterns).map((patternId) => (
-        <Link to={`/pattern/${patternId}`}>
-          <h1>{patterns[patternId].title}</h1>
-        </Link>
-      ))}
-    </div>
-  );
+  if (error) {
+    return <ErrorScreen />;
+  }
+
+  if (patternList) {
+    return (
+      <div className="card">
+        {Object.keys(patternList).map((patternId) => (
+          <Link to={`/pattern/${patternId}`}>
+            <h1>{patternList[patternId].title}</h1>
+          </Link>
+        ))}
+      </div>
+    );
+  }
 }

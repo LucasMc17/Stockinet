@@ -1,0 +1,10 @@
+.loading-screen {
+  margin: auto;
+  width: 80%;
+  min-width: 600px;
+
+  & .pinwheel {
+    margin: auto;
+    width: 100px;
+  }
+}

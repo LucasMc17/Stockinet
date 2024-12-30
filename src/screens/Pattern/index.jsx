@@ -10,6 +10,8 @@ import {
   selectPattern,
 } from "../../@redux/reducers/Patterns/PatternSlice.js";
 import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect.js";
+import LoadingScreen from "../../components/LoadingScreen/index.jsx";
+import ErrorScreen from "../../components/ErrorScreen/index.jsx";
 
 export default function PatternScreen() {
   UseLoggedOutRedirect();
@@ -17,7 +19,9 @@ export default function PatternScreen() {
   const dispatch = useDispatch();
   const { patternId } = useParams();
 
-  const { currentPattern, patternList } = useSelector((s) => s.patterns);
+  const { currentPattern, patternList, loading, error } = useSelector(
+    (s) => s.patterns,
+  );
 
   useEffect(() => {
     if (
@@ -30,6 +34,14 @@ export default function PatternScreen() {
       dispatch(fetchOnePattern(patternId));
     }
   }, [patternList]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return <ErrorScreen />;
+  }
 
   if (currentPattern) {
     const images = [currentPattern.leadImage, ...currentPattern.images];
@@ -98,6 +110,4 @@ export default function PatternScreen() {
   } else {
     return <h1>404</h1>;
   }
-
-  return <></>;
 }

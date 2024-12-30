@@ -44756,6 +44756,50 @@ function UseLoggedOutRedirect(destination = "/login") {
   }, [user]);
 }
 
+function LoadingWheel() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 -960 960 960",
+    fill: "currentColor",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      d: "M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z"
+    })
+  });
+}
+
+function LoadingScreen({
+  header,
+  text
+}) {
+  const wheel = reactExports.useRef(null);
+  function spin() {
+    anime({
+      targets: wheel.current,
+      rotateZ: "1turn",
+      easing: "linear",
+      duration: 1000,
+      loop: true
+    });
+  }
+  reactExports.useEffect(() => {
+    spin();
+  }, [wheel]);
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "card loading-screen",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      ref: wheel,
+      className: "pinwheel",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx(LoadingWheel, {})
+    })
+  });
+}
+
+function ErrorScreen() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
+    children: "OOPS!"
+  });
+}
+
 function PatternScreen() {
   UseLoggedOutRedirect();
   const dispatch = useDispatch();
@@ -44764,7 +44808,9 @@ function PatternScreen() {
   } = useParams();
   const {
     currentPattern,
-    patternList
+    patternList,
+    loading,
+    error
   } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
     if (patternList && patternList[patternId] && patternList[patternId].fullyLoaded) {
@@ -44773,6 +44819,12 @@ function PatternScreen() {
       dispatch(fetchOnePattern(patternId));
     }
   }, [patternList]);
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
   if (currentPattern) {
     const images = [currentPattern.leadImage, ...currentPattern.images];
     return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
@@ -44877,23 +44929,32 @@ const store = configureStore({
 function Patterns() {
   UseLoggedOutRedirect();
   const dispatch = useDispatch();
-  const patterns = useSelector(s => s.patterns.patternList);
+  const {
+    patternList,
+    loading,
+    error
+  } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
     dispatch(fetchPatternsByUser());
     dispatch(selectPattern(null));
   }, []);
-  if (!patterns) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "card",
-    children: Object.keys(patterns).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-      to: `/pattern/${patternId}`,
-      children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-        children: patterns[patternId].title
-      })
-    }))
-  });
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
+  if (patternList) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "card",
+      children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: `/pattern/${patternId}`,
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+          children: patternList[patternId].title
+        })
+      }))
+    });
+  }
 }
 
 function LoginSignup({

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {
-  models: { Pattern, Grid, GridRow, GridStitch },
+  models: { Pattern, Grid, GridRow, GridStitch, User },
 } = require("../db");
 module.exports = router;
 const { isAuthenticated } = require("../backendUtils/stytchClient");
@@ -22,19 +22,21 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     const pattern = await Pattern.findByPk(id, {
       include: {
         model: Grid,
-        // include: {
-        //   model: GridRow,
-        //   include: {
-        //     model: GridStitch,
-        //     separate: true,
-        //     order: [["order", "ASC"]],
-        //   },
-        //   separate: true,
-        //   order: [["order", "ASC"]],
-        // },
       },
     });
-    res.json(pattern);
+    if (!pattern) {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
+    const associated = await pattern.hasUser(req.user);
+    if (associated) {
+      res.json(pattern);
+    } else {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
   } catch (err) {
     next(err);
   }
