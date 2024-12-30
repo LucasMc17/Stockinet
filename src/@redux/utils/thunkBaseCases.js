@@ -14,6 +14,7 @@ const fulfilledBase = (state, action, callback) => {
   if (state.loading && state.currentRequestId === requestId) {
     state.loading = false;
     state.currentRequestId = undefined;
+    state.error = null;
     if (typeof callback === "function") {
       callback(state, action);
     }

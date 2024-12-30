@@ -20,9 +20,14 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
   try {
     const { id } = req.params;
     const pattern = await Pattern.findByPk(id, {
-      include: {
-        model: Grid,
-      },
+      include: [
+        {
+          model: Grid,
+        },
+        {
+          association: "author",
+        },
+      ],
     });
     if (!pattern) {
       const error = new Error("Not found");
@@ -42,10 +47,30 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
   }
 });
 
+router.get("/preview/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const pattern = await Pattern.findByPk(id, {
+      include: { association: "author" },
+      attributes: [
+        "id",
+        "title",
+        "description",
+        "leadImage",
+        "images",
+        "difficulty",
+      ],
+    });
+    res.json(pattern);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const patterns = await Pattern.findAll({
-      attributes: ["title", "id"],
+      attributes: ["title", "id", "leadImage", "difficulty"],
     });
     res.json(patterns);
   } catch (err) {

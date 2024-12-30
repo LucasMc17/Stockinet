@@ -20,7 +20,9 @@ export default function Header() {
 
   return (
     <header>
-      <h2>Stockinette</h2>
+      <h2>
+        <Link to="/">Stockinette</Link>
+      </h2>
       {loggedIn ? (
         <>
           <h3>Welcome back, {username}!</h3>

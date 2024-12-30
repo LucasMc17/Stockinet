@@ -51,7 +51,12 @@ export default function PatternScreen() {
         <div className="pattern-header card">
           <h1>{currentPattern.title}</h1>
           <div>
-            <h3>by {currentPattern.author}</h3>
+            <h3>
+              by{" "}
+              <Link to={`/authors/${currentPattern.author.id}`}>
+                {currentPattern.author.username}
+              </Link>
+            </h3>
             <h3>Skill Level: {currentPattern.difficulty}</h3>
           </div>
         </div>

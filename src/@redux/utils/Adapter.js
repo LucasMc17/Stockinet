@@ -40,12 +40,18 @@ const Adapter = {
     return userResponse;
   },
   async getAllPatterns() {
-    // TEMPORARY ADAOTER PATH FOR TESTING
     const url = `${BASE_API_URL}/patterns`;
 
     const res = await get(url);
     const patterns = await res.json();
     return patterns;
+  },
+  async getPatternPreview(id) {
+    const url = `${BASE_API_URL}/patterns/preview/${id}`;
+
+    const res = await get(url);
+    const pattern = await res.json();
+    return pattern;
   },
   async getPatternsByUser() {
     const url = `${BASE_API_URL}/patterns/by-user`;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useStytch } from "@stytch/react";
 import { fetchUser, signUp } from "../../@redux/reducers/User/UserSlice";
@@ -9,12 +9,15 @@ export default function LoginSignup({ login }) {
   const dispatch = useDispatch();
   const stytch = useStytch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirect_url = location?.state?.redirect_url;
 
   const [state, setState] = useState({
     email: "",
     password: "",
     username: "",
   });
+  console.log(location.state);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -26,7 +29,11 @@ export default function LoginSignup({ login }) {
       });
       const { user_id } = res?.user;
       dispatch(fetchUser(user_id));
-      navigate("/");
+      if (redirect_url) {
+        navigate(redirect_url);
+      } else {
+        navigate("/");
+      }
     } else {
       const res = await stytch.passwords.create({
         email: state.email,

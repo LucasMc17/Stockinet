@@ -3,21 +3,17 @@ import { useEffect } from "react";
 import {
   fetchAllPatterns,
   selectPattern,
-  fetchPatternsByUser,
 } from "../../@redux/reducers/Patterns/PatternSlice";
 import { Link } from "react-router-dom";
-import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect";
 import LoadingScreen from "../../components/LoadingScreen/index.jsx";
 import ErrorScreen from "../../components/ErrorScreen/index.jsx";
 
-export default function Patterns() {
-  UseLoggedOutRedirect();
-
+export default function AllPatternsScreen() {
   const dispatch = useDispatch();
   const { patternList, loading, error } = useSelector((s) => s.patterns);
 
   useEffect(() => {
-    dispatch(fetchPatternsByUser());
+    dispatch(fetchAllPatterns());
     dispatch(selectPattern(null));
   }, []);
 
@@ -33,7 +29,7 @@ export default function Patterns() {
     return (
       <div className="card">
         {Object.keys(patternList).map((patternId) => (
-          <Link to={`/pattern/${patternId}`}>
+          <Link to={`/pattern/preview/${patternId}`}>
             <h1>{patternList[patternId].title}</h1>
           </Link>
         ))}

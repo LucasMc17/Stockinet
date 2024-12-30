@@ -40102,7 +40102,13 @@ function LandingScreen() {
   return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "landing-screen",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingSection, {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: "/patterns",
+        children: "All Patterns"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: "/patterns/my-patterns",
+        children: "My Patterns"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(LandingSection, {
         title: "SHARE",
         subtitle: "Lorem Ipsum",
         description: "test test test",
@@ -44339,11 +44345,16 @@ const Adapter = {
     return userResponse;
   },
   async getAllPatterns() {
-    // TEMPORARY ADAOTER PATH FOR TESTING
     const url = `${BASE_API_URL}/patterns`;
     const res = await get$1(url);
     const patterns = await res.json();
     return patterns;
+  },
+  async getPatternPreview(id) {
+    const url = `${BASE_API_URL}/patterns/preview/${id}`;
+    const res = await get$1(url);
+    const pattern = await res.json();
+    return pattern;
   },
   async getPatternsByUser() {
     const url = `${BASE_API_URL}/patterns/by-user`;
@@ -44391,6 +44402,7 @@ const fulfilledBase = (state, action, callback) => {
   if (state.loading && state.currentRequestId === requestId) {
     state.loading = false;
     state.currentRequestId = undefined;
+    state.error = null;
     if (typeof callback === "function") {
       callback(state, action);
     }
@@ -44450,6 +44462,17 @@ const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payl
   }
   return pattern;
 });
+const fetchPatternPreview = createAsyncThunk("patterns/fetchPatternPreview", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const pattern = await Adapter.getPatternPreview(payload);
+  if (pattern?.errorStatus) {
+    return rejectWithValue(pattern);
+  }
+  return pattern;
+});
 const patternSlice = createSlice({
   name: "patterns",
   initialState: initialState$1,
@@ -44469,6 +44492,11 @@ const patternSlice = createSlice({
         if (state.patternList) {
           state.patternList[String(action.payload.id)] = result;
         }
+      }
+    });
+    thunkBaseCases(builder, fetchPatternPreview, {
+      fulfilledCallback: (state, action) => {
+        state.currentPattern = action.payload;
       }
     });
     thunkBaseCases(builder, fetchAllPatterns, {
@@ -44746,12 +44774,17 @@ function UseLoginStatus() {
   return user;
 }
 
-function UseLoggedOutRedirect(destination = "/login") {
+function UseLoggedOutRedirect() {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = UseLoginStatus();
   reactExports.useEffect(() => {
     if (!user) {
-      navigate(destination);
+      navigate("/login", {
+        state: {
+          redirect_url: location.pathname
+        }
+      });
     }
   }, [user]);
 }
@@ -44835,7 +44868,10 @@ function PatternScreen() {
           children: currentPattern.title
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
           children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-            children: ["by ", currentPattern.author]
+            children: ["by", " ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+              to: `/authors/${currentPattern.author.id}`,
+              children: currentPattern.author.username
+            })]
           }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
             children: ["Skill Level: ", currentPattern.difficulty]
           })]
@@ -44894,6 +44930,21 @@ function PatternScreen() {
   }
 }
 
+function PatternPreviewScreen() {
+  const {
+    patternId
+  } = useParams();
+  const dispatch = useDispatch();
+  const {
+    currentPattern
+  } = useSelector(s => s.patterns);
+  reactExports.useEffect(() => {
+    dispatch(fetchPatternPreview(patternId));
+  }, []);
+  console.log(currentPattern);
+  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
+}
+
 var reduxLogger$1 = {exports: {}};
 
 var reduxLogger = reduxLogger$1.exports;
@@ -44926,7 +44977,7 @@ const store = configureStore({
   // enhancers: [batchedSubscribe(debounceNotify)],
 });
 
-function Patterns() {
+function OwnedPatternsScreen() {
   UseLoggedOutRedirect();
   const dispatch = useDispatch();
   const {
@@ -44957,17 +45008,50 @@ function Patterns() {
   }
 }
 
+function AllPatternsScreen() {
+  const dispatch = useDispatch();
+  const {
+    patternList,
+    loading,
+    error
+  } = useSelector(s => s.patterns);
+  reactExports.useEffect(() => {
+    dispatch(fetchAllPatterns());
+    dispatch(selectPattern(null));
+  }, []);
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
+  if (patternList) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "card",
+      children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: `/pattern/preview/${patternId}`,
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+          children: patternList[patternId].title
+        })
+      }))
+    });
+  }
+}
+
 function LoginSignup({
   login
 }) {
   const dispatch = useDispatch();
   const stytch = useStytch$1();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirect_url = location?.state?.redirect_url;
   const [state, setState] = reactExports.useState({
     email: "",
     password: "",
     username: ""
   });
+  console.log(location.state);
   async function onSubmit(e) {
     e.preventDefault();
     if (login) {
@@ -44980,7 +45064,11 @@ function LoginSignup({
         user_id
       } = res?.user;
       dispatch(fetchUser(user_id));
-      navigate("/");
+      if (redirect_url) {
+        navigate(redirect_url);
+      } else {
+        navigate("/");
+      }
     } else {
       const res = await stytch.passwords.create({
         email: state.email,
@@ -45074,7 +45162,10 @@ function Header() {
   }
   return /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: "Stockinette"
+      children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: "/",
+        children: "Stockinette"
+      })
     }), loggedIn ? /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
       children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
         children: ["Welcome back, ", username, "!"]
@@ -45107,12 +45198,28 @@ const router = createBrowserRouter([{
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignup, {
     login: false
   })
-}, {
+},
+// pattern paths
+{
   path: "patterns",
-  element: /*#__PURE__*/jsxRuntimeExports.jsx(Patterns, {})
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Header, {}), /*#__PURE__*/jsxRuntimeExports.jsx(AllPatternsScreen, {})]
+  })
+}, {
+  path: "patterns/my-patterns",
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Header, {}), /*#__PURE__*/jsxRuntimeExports.jsx(OwnedPatternsScreen, {})]
+  })
 }, {
   path: "pattern/:patternId",
-  element: /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Header, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})]
+  })
+}, {
+  path: "pattern/preview/:patternId",
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Header, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternPreviewScreen, {})]
+  })
 }]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/jsxRuntimeExports.jsx(React$1.StrictMode, {
