@@ -44705,130 +44705,24 @@ function OwnedPatternsScreen() {
   }
 }
 
-function PatternPreviewScreen() {
-  const {
-    patternId
-  } = useParams();
-  const dispatch = useDispatch();
-  const {
-    currentPattern
-  } = useSelector(s => s.patterns);
-  reactExports.useEffect(() => {
-    dispatch(fetchPatternPreview(patternId));
-  }, []);
-  console.log(currentPattern);
-  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {});
-}
-
-function GridCell({
-  cell,
-  rowWidth
+function PatternHeader({
+  title,
+  author,
+  difficulty
 }) {
-  const symbolMap = {
-      K: "",
-      P: "-"
-    },
-    baseWidth = 100 / rowWidth;
-  let width = baseWidth;
-  if (cell.width) {
-    width = width * cell.width;
-  }
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "cell-holder",
-    style: {
-      width: width + "%"
-    },
-    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "interactive-grid-cell-symbols",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: symbolMap[cell.type] || ""
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: cell.width > 1 && cell.width
+    className: "pattern-header card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: title
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+        children: ["by ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: `/authors/${author.id}`,
+          children: author.username
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+        children: ["Skill Level: ", difficulty]
       })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid-cell",
-      style: {
-        paddingTop: "calc(100% / " + cell.width + ")"
-      }
-    })]
-  });
-}
-
-function GridRow({
-  row,
-  rowWidth
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "interactive-grid-row",
-    children: row.map((cell, i) => {
-      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
-        cell: cell,
-        rowWidth: rowWidth
-      }, i);
-    })
-  });
-}
-
-function getRowWidth(row) {
-  return row.reduce((a, b) => a + b.width, 0);
-}
-function InteractiveGrid({
-  gridName,
-  data
-}) {
-  const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b);
-    return width > a ? width : a;
-  }, 1);
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "interactive-grid-holder",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: gridName
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid",
-      children: data.map((row, i) => {
-        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
-          row: row,
-          rowWidth: maxWidth
-        }, i);
-      })
-    })]
-  });
-}
-
-function GaugeSquare({
-  width,
-  height
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "gauge-square",
-    style: {
-      paddingTop: height / width * 100 + "%"
-    }
-  });
-}
-
-function Gauge({
-  data
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "gauge-flex",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-holder",
-      children: /*#__PURE__*/jsxRuntimeExports.jsx(GaugeSquare, {
-        width: data.widthInches,
-        height: data.heightInches
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-rows",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [data.rows, " rows = ", data.heightInches, "\""]
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-sts",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [data.stitches, " sts = ", data.widthInches, "\""]
-      })
     })]
   });
 }
@@ -44947,6 +44841,181 @@ function Slider({
   });
 }
 
+function PatternImages({
+  images,
+  description
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("img", {
+        src: image
+      }))
+    }), images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      to: "",
+      children: "Enlarge"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: description
+    })]
+  });
+}
+
+function PatternPreviewScreen() {
+  const {
+    patternId
+  } = useParams();
+  const dispatch = useDispatch();
+  const {
+    currentPattern,
+    loading,
+    error
+  } = useSelector(s => s.patterns);
+  reactExports.useEffect(() => {
+    dispatch(fetchPatternPreview(patternId));
+  }, []);
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
+  if (currentPattern) {
+    const images = [currentPattern.leadImage, ...currentPattern.images];
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+      id: "pattern",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
+        title: currentPattern.title,
+        author: currentPattern.author,
+        difficulty: currentPattern.difficulty
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "pattern-previewscreen",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
+          images: images,
+          description: currentPattern.description
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+          className: "card",
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+            children: "What you'll need"
+          })
+        })]
+      })]
+    });
+  }
+}
+
+function GridCell({
+  cell,
+  rowWidth
+}) {
+  const symbolMap = {
+      K: "",
+      P: "-"
+    },
+    baseWidth = 100 / rowWidth;
+  let width = baseWidth;
+  if (cell.width) {
+    width = width * cell.width;
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "cell-holder",
+    style: {
+      width: width + "%"
+    },
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "interactive-grid-cell-symbols",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: symbolMap[cell.type] || ""
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: cell.width > 1 && cell.width
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid-cell",
+      style: {
+        paddingTop: "calc(100% / " + cell.width + ")"
+      }
+    })]
+  });
+}
+
+function GridRow({
+  row,
+  rowWidth
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "interactive-grid-row",
+    children: row.map((cell, i) => {
+      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
+        cell: cell,
+        rowWidth: rowWidth
+      }, i);
+    })
+  });
+}
+
+function getRowWidth(row) {
+  return row.reduce((a, b) => a + b.width, 0);
+}
+function InteractiveGrid({
+  gridName,
+  data
+}) {
+  const maxWidth = data.reduce((a, b) => {
+    const width = getRowWidth(b);
+    return width > a ? width : a;
+  }, 1);
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "interactive-grid-holder",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: gridName
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid",
+      children: data.map((row, i) => {
+        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
+          row: row,
+          rowWidth: maxWidth
+        }, i);
+      })
+    })]
+  });
+}
+
+function GaugeSquare({
+  width,
+  height
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "gauge-square",
+    style: {
+      paddingTop: height / width * 100 + "%"
+    }
+  });
+}
+
+function Gauge({
+  data
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "gauge-flex",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-holder",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx(GaugeSquare, {
+        width: data.widthInches,
+        height: data.heightInches
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-rows",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.rows, " rows = ", data.heightInches, "\""]
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "gauge-sts",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [data.stitches, " sts = ", data.widthInches, "\""]
+      })
+    })]
+  });
+}
+
 function PatternScreen() {
   useLoggedOutRedirect();
   const dispatch = useDispatch();
@@ -44976,34 +45045,15 @@ function PatternScreen() {
     const images = [currentPattern.leadImage, ...currentPattern.images];
     return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
       id: "pattern",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "pattern-header card",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-          children: currentPattern.title
-        }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-          children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-            children: ["by", " ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-              to: `/authors/${currentPattern.author.id}`,
-              children: currentPattern.author.username
-            })]
-          }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-            children: ["Skill Level: ", currentPattern.difficulty]
-          })]
-        })]
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
+        title: currentPattern.title,
+        author: currentPattern.author,
+        difficulty: currentPattern.difficulty
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         className: "pattern-splashscreen",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-          className: "card",
-          children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-            children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("img", {
-              src: image
-            }))
-          }), images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-            to: "",
-            children: "Enlarge"
-          }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-            children: currentPattern.description
-          })]
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
+          images: images,
+          description: currentPattern.description
         }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "card",
           children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {

@@ -12,6 +12,8 @@ import {
 import { useLoggedOutRedirect } from "../hooks";
 import LoadingScreen from "../components/LoadingScreen/index.jsx";
 import ErrorScreen from "../components/ErrorScreen/index.jsx";
+import PatternHeader from "../components/PatternHeader.jsx";
+import PatternImages from "../components/PatternImages.jsx";
 
 export default function PatternScreen() {
   useLoggedOutRedirect();
@@ -44,28 +46,16 @@ export default function PatternScreen() {
 
     return (
       <section id="pattern">
-        <div className="pattern-header card">
-          <h1>{currentPattern.title}</h1>
-          <div>
-            <h3>
-              by{" "}
-              <Link to={`/authors/${currentPattern.author.id}`}>
-                {currentPattern.author.username}
-              </Link>
-            </h3>
-            <h3>Skill Level: {currentPattern.difficulty}</h3>
-          </div>
-        </div>
+        <PatternHeader
+          title={currentPattern.title}
+          author={currentPattern.author}
+          difficulty={currentPattern.difficulty}
+        />
         <div className="pattern-splashscreen">
-          <div className="card">
-            <Slider>
-              {images.map((image) => (
-                <img src={image} />
-              ))}
-            </Slider>
-            {images.length > 0 && <Link to="">Enlarge</Link>}
-            <p>{currentPattern.description}</p>
-          </div>
+          <PatternImages
+            images={images}
+            description={currentPattern.description}
+          />
           <div className="card">
             <h3>What you'll need</h3>
             {/* <ul>

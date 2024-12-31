@@ -205,3 +205,15 @@ p {
   margin: auto;
   text-align: center;
 }
+
+.pattern-previewscreen {
+  display: flex;
+  justify-content: space-between;
+}
+.pattern-previewscreen > div {
+  flex-basis: 45%;
+}
+.pattern-previewscreen img {
+  width: 100%;
+  object-fit: contain;
+}

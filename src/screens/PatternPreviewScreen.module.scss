@@ -1,0 +1,13 @@
+.pattern-previewscreen {
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    flex-basis: 45%;
+  }
+
+  & img {
+    width: 100%;
+    object-fit: contain;
+  }
+}
