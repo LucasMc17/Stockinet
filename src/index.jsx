@@ -1,15 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LandingScreen from "./components/LandingScreen/index.jsx";
-import PatternScreen from "./screens/PatternScreen/index.jsx";
-import PatternPreviewScreen from "./screens/PatternPreviewScreen/index.jsx";
+import {
+  OwnedPatternsScreen,
+  PatternScreen,
+  PatternPreviewScreen,
+  LoginSignupScreen,
+  AllPatternsScreen,
+  LandingScreen,
+} from "./screens/index.jsx";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
 import "./Base.module.scss";
-import OwnedPatternsScreen from "./screens/OwnedPatternsScreen/index.jsx";
-import AllPatternsScreen from "./screens/AllPatternsScreen/index.jsx";
-import LoginSignup from "./screens/LoginSignup/index.jsx";
 import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
 import Header from "./components/Header/index.jsx";
@@ -30,11 +32,11 @@ const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: <LoginSignup login={true} />,
+    element: <LoginSignupScreen login={true} />,
   },
   {
     path: "signup",
-    element: <LoginSignup login={false} />,
+    element: <LoginSignupScreen login={false} />,
   },
   // pattern paths
   {

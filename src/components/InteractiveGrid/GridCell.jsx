@@ -1,6 +1,6 @@
-import "./PatternCell.module.scss";
+import "./GridCell.module.scss";
 
-export default function PatternCell({ cell, rowWidth }) {
+export default function GridCell({ cell, rowWidth }) {
   const symbolMap = {
       K: "",
       P: "-",
@@ -18,12 +18,12 @@ export default function PatternCell({ cell, rowWidth }) {
         width: width + "%",
       }}
     >
-      <div className="interactive-pattern-cell-symbols">
+      <div className="interactive-grid-cell-symbols">
         <p>{symbolMap[cell.type] || ""}</p>
         <p>{cell.width > 1 && cell.width}</p>
       </div>
       <div
-        className="interactive-pattern-cell"
+        className="interactive-grid-cell"
         style={{
           paddingTop: "calc(100% / " + cell.width + ")",
         }}

@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchPatternPreview } from "../../@redux/reducers/Patterns/PatternSlice";
+import { fetchPatternPreview } from "../@redux/reducers/Patterns/PatternSlice";
 
 export default function PatternPreviewScreen() {
   const { patternId } = useParams();

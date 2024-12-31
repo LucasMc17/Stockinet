@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import {
   fetchAllPatterns,
   selectPattern,
-} from "../../@redux/reducers/Patterns/PatternSlice";
+} from "../@redux/reducers/Patterns/PatternSlice.js";
 import { Link } from "react-router-dom";
-import LoadingScreen from "../../components/LoadingScreen/index.jsx";
-import ErrorScreen from "../../components/ErrorScreen/index.jsx";
+import LoadingScreen from "../components/LoadingScreen/index.jsx";
+import ErrorScreen from "../components/ErrorScreen/index.jsx";
 
 export default function AllPatternsScreen() {
   const dispatch = useDispatch();

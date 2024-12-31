@@ -1,17 +1,17 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import InteractivePattern from "../../components/InteractivePattern/index.jsx";
-import Gauge from "../../components/Gauge/index.jsx";
-import "./index.module.scss";
-import Slider from "../../components/Slider/index.jsx";
+import InteractiveGrid from "../components/InteractiveGrid/index.jsx";
+import Gauge from "../components/Gauge/index.jsx";
+import "./PatternScreen.module.scss";
+import Slider from "../components/Slider/index.jsx";
 import {
   fetchOnePattern,
   selectPattern,
-} from "../../@redux/reducers/Patterns/PatternSlice.js";
-import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect.js";
-import LoadingScreen from "../../components/LoadingScreen/index.jsx";
-import ErrorScreen from "../../components/ErrorScreen/index.jsx";
+} from "../@redux/reducers/Patterns/PatternSlice.js";
+import UseLoggedOutRedirect from "../hooks/UseLoggedOutRedirect.js";
+import LoadingScreen from "../components/LoadingScreen/index.jsx";
+import ErrorScreen from "../components/ErrorScreen/index.jsx";
 
 export default function PatternScreen() {
   UseLoggedOutRedirect();
@@ -102,7 +102,7 @@ export default function PatternScreen() {
           <div className="card">
             <Slider>
               {currentPattern.grids.map((grid) => (
-                <InteractivePattern
+                <InteractiveGrid
                   data={JSON.parse(grid.data)}
                   gridName={grid.name}
                 />

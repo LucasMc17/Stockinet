@@ -4,11 +4,11 @@ import {
   fetchAllPatterns,
   selectPattern,
   fetchPatternsByUser,
-} from "../../@redux/reducers/Patterns/PatternSlice.js";
+} from "../@redux/reducers/Patterns/PatternSlice.js";
 import { Link } from "react-router-dom";
-import UseLoggedOutRedirect from "../../hooks/UseLoggedOutRedirect.js";
-import LoadingScreen from "../../components/LoadingScreen/index.jsx";
-import ErrorScreen from "../../components/ErrorScreen/index.jsx";
+import UseLoggedOutRedirect from "../hooks/UseLoggedOutRedirect.js";
+import LoadingScreen from "../components/LoadingScreen/index.jsx";
+import ErrorScreen from "../components/ErrorScreen/index.jsx";
 
 export default function OwnedPatternsScreen() {
   UseLoggedOutRedirect();
