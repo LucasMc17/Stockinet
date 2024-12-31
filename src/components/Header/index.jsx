@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import UseLoginStatus from "../../hooks/UseLoginStatus";
+import { useLoginStatus } from "../../hooks";
 import { useStytch } from "@stytch/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ export default function Header() {
   const { username } = useSelector((s) => s.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loggedIn = UseLoginStatus();
+  const loggedIn = useLoginStatus();
   const stytch = useStytch();
 
   async function logOut() {

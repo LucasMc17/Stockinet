@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import anime from "animejs";
 import "./index.module.scss";
-import ChevronLeft from "../../icons/ChevronLeft.jsx";
-import ChevronRight from "../../icons/ChevronRight.jsx";
+import { ChevronLeft, ChevronRight } from "../../icons";
 
 export default function Slider({ children, startIndex = 0 }) {
   const [index, setIndex] = useState(startIndex);

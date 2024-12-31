@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import UseLoginStatus from "./UseLoginStatus";
+import useLoginStatus from "./UseLoginStatus";
 import { useEffect } from "react";
 
-export default function UseLoggedOutRedirect() {
+export default function useLoggedOutRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = UseLoginStatus();
+  const user = useLoginStatus();
   useEffect(() => {
     if (!user) {
       navigate("/login", { state: { redirect_url: location.pathname } });

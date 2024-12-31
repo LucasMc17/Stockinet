@@ -5,7 +5,7 @@ import { clearUser, fetchUser } from "../@redux/reducers/User/UserSlice";
 
 // See if we can avoid repeating the useauth steps in instancesd with a log out redirect AND a log in status header
 
-export default function UseLoginStatus() {
+export default function useLoginStatus() {
   const dispatch = useDispatch();
   const { id, loading } = useSelector((s) => s.user);
   const { user } = useStytchUser();

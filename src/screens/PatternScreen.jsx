@@ -9,12 +9,12 @@ import {
   fetchOnePattern,
   selectPattern,
 } from "../@redux/reducers/Patterns/PatternSlice.js";
-import UseLoggedOutRedirect from "../hooks/UseLoggedOutRedirect.js";
+import { useLoggedOutRedirect } from "../hooks";
 import LoadingScreen from "../components/LoadingScreen/index.jsx";
 import ErrorScreen from "../components/ErrorScreen/index.jsx";
 
 export default function PatternScreen() {
-  UseLoggedOutRedirect();
+  useLoggedOutRedirect();
 
   const dispatch = useDispatch();
   const { patternId } = useParams();
@@ -24,11 +24,7 @@ export default function PatternScreen() {
   );
 
   useEffect(() => {
-    if (
-      patternList &&
-      patternList[patternId] &&
-      patternList[patternId].fullyLoaded
-    ) {
+    if (patternList?.[patternId]?.fullyLoaded) {
       dispatch(selectPattern(patternList[patternId]));
     } else {
       dispatch(fetchOnePattern(patternId));
