@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { useLoginStatus } from "../../hooks";
+import { useLoginStatus } from "../hooks";
 import { useStytch } from "@stytch/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../../@redux/reducers/User/UserSlice";
+import { clearUser } from "../@redux/reducers/User/UserSlice";
 
-export default function Header() {
+export default function SiteHeader() {
   const { username } = useSelector((s) => s.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();

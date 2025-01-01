@@ -2,10 +2,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPatternPreview } from "../@redux/reducers/Patterns/PatternSlice";
-import LoadingScreen from "../components/LoadingScreen/index.jsx";
-import ErrorScreen from "../components/ErrorScreen/index.jsx";
-import PatternHeader from "../components/PatternHeader.jsx";
-import PatternImages from "../components/PatternImages.jsx";
+import {
+  LoadingScreen,
+  ErrorScreen,
+  PatternHeader,
+  PatternImages,
+} from "../components";
 import "./PatternPreviewScreen.module.scss";
 
 export default function PatternPreviewScreen() {

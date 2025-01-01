@@ -14,7 +14,7 @@ import { store } from "./@redux/store";
 import "./Base.module.scss";
 import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
-import Header from "./components/Header/index.jsx";
+import { SiteHeader } from "./components";
 
 const stytch = new StytchUIClient(
   "public-token-test-ef6d0a44-36d8-4ab6-b69f-3d6a2a47dbb7",
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <>
-        <Header />
+        <SiteHeader />
         <LandingScreen />
       </>
     ),
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     path: "patterns",
     element: (
       <>
-        <Header />
+        <SiteHeader />
         <AllPatternsScreen />
       </>
     ),
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
     path: "patterns/my-patterns",
     element: (
       <>
-        <Header />
+        <SiteHeader />
         <OwnedPatternsScreen />
       </>
     ),
@@ -61,7 +61,7 @@ const router = createBrowserRouter([
     path: "pattern/:patternId",
     element: (
       <>
-        <Header />
+        <SiteHeader />
         <PatternScreen />
       </>
     ),
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     path: "pattern/preview/:patternId",
     element: (
       <>
-        <Header />
+        <SiteHeader />
         <PatternPreviewScreen />
       </>
     ),

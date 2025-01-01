@@ -1,4 +1,4 @@
-import LoadingWheel from "../../icons/LoadingWheel.jsx";
+import LoadingWheel from "../icons/LoadingWheel.jsx";
 import anime from "animejs";
 import { useRef, useEffect } from "react";
 import "./LoadingScreen.module.scss";

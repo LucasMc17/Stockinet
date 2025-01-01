@@ -1,5 +1,4 @@
-import LandingSection from "../components/LandingScreen/LandingSection.jsx";
-import LandingHeader from "../components/LandingScreen/LandingHeader.jsx";
+import { LandingSection, LandingHeader } from "../components";
 import { Globe, Dollar, GradCap } from "../icons";
 import "./LandingScreen.module.scss";
 import { Link } from "react-router-dom";

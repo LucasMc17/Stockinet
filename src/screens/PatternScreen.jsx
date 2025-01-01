@@ -1,19 +1,21 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import InteractiveGrid from "../components/InteractiveGrid/index.jsx";
-import Gauge from "../components/Gauge/index.jsx";
+import {
+  InteractiveGrid,
+  Gauge,
+  Slider,
+  LoadingScreen,
+  ErrorScreen,
+  PatternHeader,
+  PatternImages,
+} from "../components";
 import "./PatternScreen.module.scss";
-import Slider from "../components/Slider/index.jsx";
 import {
   fetchOnePattern,
   selectPattern,
 } from "../@redux/reducers/Patterns/PatternSlice.js";
 import { useLoggedOutRedirect } from "../hooks";
-import LoadingScreen from "../components/LoadingScreen/index.jsx";
-import ErrorScreen from "../components/ErrorScreen/index.jsx";
-import PatternHeader from "../components/PatternHeader.jsx";
-import PatternImages from "../components/PatternImages.jsx";
 
 export default function PatternScreen() {
   useLoggedOutRedirect();
