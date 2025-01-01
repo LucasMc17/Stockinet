@@ -18,7 +18,6 @@ export default function AllPatternsScreen() {
   }, []);
 
   useEffect(() => {
-    console.log(method);
     dispatch(fetchAllPatterns({ method, page }));
   }, [method, page]);
 
@@ -58,8 +57,8 @@ export default function AllPatternsScreen() {
           <button onClick={nextPage}>{">"}</button>
         </div>
         <div className="card">
-          {Object.keys(patternList).map((patternId) => (
-            <Link to={`/pattern/preview/${patternId}`}>
+          {Object.keys(patternList).map((patternId, i) => (
+            <Link key={i} to={`/pattern/preview/${patternId}`}>
               <h1>{patternList[patternId].title}</h1>
             </Link>
           ))}

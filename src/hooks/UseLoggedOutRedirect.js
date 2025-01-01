@@ -6,6 +6,7 @@ export default function useLoggedOutRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useLoginStatus();
+
   useEffect(() => {
     if (!user) {
       navigate("/login", { state: { redirect_url: location.pathname } });

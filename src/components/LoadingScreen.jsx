@@ -5,6 +5,9 @@ import "./LoadingScreen.module.scss";
 
 export default function LoadingScreen({ header, text }) {
   const wheel = useRef(null);
+  useEffect(() => {
+    spin();
+  }, [wheel]);
 
   function spin() {
     anime({
@@ -15,10 +18,6 @@ export default function LoadingScreen({ header, text }) {
       loop: true,
     });
   }
-
-  useEffect(() => {
-    spin();
-  }, [wheel]);
 
   return (
     <div className="card loading-screen">

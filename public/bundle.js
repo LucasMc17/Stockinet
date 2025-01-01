@@ -41355,9 +41355,6 @@ const baseHeaders = {
   "Content-Type": "application/json",
   Accept: "application/json"
 };
-const authHeaders = token => ({
-  Authorization: `Bearer ${token}`
-});
 const fetchApi = method => (url, headers = {}, body = null) => fetch(url, {
   body,
   headers: {
@@ -41373,19 +41370,7 @@ let BASE_API_URL;
   BASE_API_URL = "http://localhost:8000/api";
 }
 const Adapter = {
-  async getUser({
-    subId,
-    token
-  }) {
-    const url = `${BASE_API_URL}/user`;
-    const body = JSON.stringify({
-      subId: `${subId}`
-    });
-    const headers = authHeaders(token);
-    const res = await post(url, headers, body);
-    const userResponse = await res.json();
-    return userResponse;
-  },
+  // Patterns
   async getAllPatterns(method, page) {
     const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}`;
     const res = await get$1(url);
@@ -41410,6 +41395,7 @@ const Adapter = {
     const pattern = await res.json();
     return pattern;
   },
+  // Users
   async getUser(stytchId) {
     const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;
     const res = await get$1(url);
@@ -44409,6 +44395,9 @@ function LoadingScreen({
   text
 }) {
   const wheel = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    spin();
+  }, [wheel]);
   function spin() {
     anime({
       targets: wheel.current,
@@ -44418,9 +44407,6 @@ function LoadingScreen({
       loop: true
     });
   }
-  reactExports.useEffect(() => {
-    spin();
-  }, [wheel]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
     className: "card loading-screen",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("div", {
@@ -44893,7 +44879,6 @@ function AllPatternsScreen() {
     dispatch(selectPattern(null));
   }, []);
   reactExports.useEffect(() => {
-    console.log(method);
     dispatch(fetchAllPatterns({
       method,
       page
@@ -44939,12 +44924,12 @@ function AllPatternsScreen() {
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
         className: "card",
-        children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        children: Object.keys(patternList).map((patternId, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
           to: `/pattern/preview/${patternId}`,
           children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
             children: patternList[patternId].title
           })
-        }))
+        }, i))
       })]
     });
   }
@@ -44963,7 +44948,6 @@ function LoginSignupScreen({
     password: "",
     username: ""
   });
-  console.log(location.state);
   async function onSubmit(e) {
     e.preventDefault();
     if (login) {
@@ -45078,12 +45062,12 @@ function OwnedPatternsScreen() {
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "card",
-      children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      children: Object.keys(patternList).map((patternId, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: `/pattern/${patternId}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
           children: patternList[patternId].title
         })
-      }))
+      }, i))
     });
   }
 }
@@ -45201,10 +45185,6 @@ function PatternScreen() {
           })
         })]
       })]
-    });
-  } else {
-    return /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-      children: "404"
     });
   }
 }

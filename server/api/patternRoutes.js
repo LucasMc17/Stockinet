@@ -1,12 +1,10 @@
 const router = require("express").Router();
-const { sql } = require("@sequelize/core");
 const {
   db,
-  models: { Pattern, Grid, GridRow, GridStitch, User },
+  models: { Pattern, Grid },
 } = require("../db");
 module.exports = router;
 const { isAuthenticated } = require("../backendUtils/stytchClient");
-const Sequelize = require("sequelize");
 
 router.get("/by-user", isAuthenticated, async (req, res, next) => {
   try {

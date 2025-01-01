@@ -12,7 +12,6 @@ router.use(
 module.exports = router;
 
 router.use("/patterns", require("./patternRoutes"));
-router.use("/auth", require("./authRoutes"));
 router.use("/user", require("./userRoutes"));
 
 router.use((req, res, next) => {

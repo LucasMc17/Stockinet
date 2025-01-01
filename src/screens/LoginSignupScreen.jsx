@@ -17,7 +17,6 @@ export default function LoginSignupScreen({ login }) {
     password: "",
     username: "",
   });
-  console.log(location.state);
 
   async function onSubmit(e) {
     e.preventDefault();

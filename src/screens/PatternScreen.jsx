@@ -19,10 +19,8 @@ import { useLoggedOutRedirect } from "../hooks";
 
 export default function PatternScreen() {
   useLoggedOutRedirect();
-
   const dispatch = useDispatch();
   const { patternId } = useParams();
-
   const { currentPattern, patternList, loading, error } = useSelector(
     (s) => s.patterns,
   );
@@ -100,7 +98,5 @@ export default function PatternScreen() {
         </div>
       </section>
     );
-  } else {
-    return <h1>404</h1>;
   }
 }

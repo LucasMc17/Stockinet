@@ -5,8 +5,6 @@ const baseHeaders = {
   Accept: "application/json",
 };
 
-const authHeaders = (token) => ({ Authorization: `Bearer ${token}` });
-
 const fetchApi =
   (method) =>
   (url, headers = {}, body = null) =>
@@ -27,18 +25,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const Adapter = {
-  async getUser({ subId, token }) {
-    const url = `${BASE_API_URL}/user`;
-    const body = JSON.stringify({
-      subId: `${subId}`,
-    });
-
-    const headers = authHeaders(token);
-
-    const res = await post(url, headers, body);
-    const userResponse = await res.json();
-    return userResponse;
-  },
+  // Patterns
   async getAllPatterns(method, page) {
     const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}`;
 
@@ -67,6 +54,7 @@ const Adapter = {
     const pattern = await res.json();
     return pattern;
   },
+  // Users
   async getUser(stytchId) {
     const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;
 

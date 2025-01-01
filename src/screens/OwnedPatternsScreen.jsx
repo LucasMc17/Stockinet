@@ -10,7 +10,6 @@ import { LoadingScreen, ErrorScreen } from "../components";
 
 export default function OwnedPatternsScreen() {
   useLoggedOutRedirect();
-
   const dispatch = useDispatch();
   const { patternList, loading, error } = useSelector((s) => s.patterns);
 
@@ -30,8 +29,8 @@ export default function OwnedPatternsScreen() {
   if (patternList) {
     return (
       <div className="card">
-        {Object.keys(patternList).map((patternId) => (
-          <Link to={`/pattern/${patternId}`}>
+        {Object.keys(patternList).map((patternId, i) => (
+          <Link key={i} to={`/pattern/${patternId}`}>
             <h1>{patternList[patternId].title}</h1>
           </Link>
         ))}

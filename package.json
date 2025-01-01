@@ -16,7 +16,6 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.4.0",
     "@rollup/plugin-replace": "^6.0.1",
-    "@sequelize/core": "^7.0.0-alpha.43",
     "@stytch/react": "^19.1.1",
     "@stytch/vanilla-js": "^5.10.1",
     "animejs": "^3.2.2",

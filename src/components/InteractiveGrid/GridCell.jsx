@@ -6,7 +6,9 @@ export default function GridCell({ cell, rowWidth }) {
       P: "-",
     },
     baseWidth = 100 / rowWidth;
+
   let width = baseWidth;
+
   if (cell.width) {
     width = width * cell.width;
   }
