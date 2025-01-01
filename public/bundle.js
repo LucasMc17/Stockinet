@@ -41386,8 +41386,8 @@ const Adapter = {
     const userResponse = await res.json();
     return userResponse;
   },
-  async getAllPatterns() {
-    const url = `${BASE_API_URL}/patterns`;
+  async getAllPatterns(method, page) {
+    const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}`;
     const res = await get$1(url);
     const patterns = await res.json();
     return patterns;
@@ -41476,7 +41476,11 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
   requestId,
   rejectWithValue
 }) => {
-  const patterns = await Adapter.getAllPatterns();
+  const {
+    method,
+    page
+  } = payload;
+  const patterns = await Adapter.getAllPatterns(method, page);
   if (patterns?.errorStatus) {
     return rejectWithValue(patterns);
   }
@@ -44285,10 +44289,26 @@ function AllPatternsScreen() {
     loading,
     error
   } = useSelector(s => s.patterns);
+  const [method, setMethod] = reactExports.useState("purchases");
+  const [page, setPage] = reactExports.useState(1);
   reactExports.useEffect(() => {
-    dispatch(fetchAllPatterns());
     dispatch(selectPattern(null));
   }, []);
+  reactExports.useEffect(() => {
+    console.log(method);
+    dispatch(fetchAllPatterns({
+      method,
+      page
+    }));
+  }, [method, page]);
+  function nextPage(e) {
+    setPage(page + 1);
+  }
+  function prevPage(e) {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  }
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
@@ -44296,14 +44316,38 @@ function AllPatternsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
   }
   if (patternList) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "card",
-      children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: `/pattern/preview/${patternId}`,
-        children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-          children: patternList[patternId].title
-        })
-      }))
+    return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("select", {
+        value: method,
+        onChange: e => {
+          setMethod(e.target.value);
+        },
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("option", {
+          value: "recency",
+          children: "Newest"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("option", {
+          value: "purchases",
+          children: "Most Popular"
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          onClick: prevPage,
+          children: "<"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: page
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          onClick: nextPage,
+          children: ">"
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card",
+        children: Object.keys(patternList).map(patternId => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: `/pattern/preview/${patternId}`,
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+            children: patternList[patternId].title
+          })
+        }))
+      })]
     });
   }
 }

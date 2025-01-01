@@ -1,9 +1,12 @@
 const router = require("express").Router();
+const { sql } = require("@sequelize/core");
 const {
+  db,
   models: { Pattern, Grid, GridRow, GridStitch, User },
 } = require("../db");
 module.exports = router;
 const { isAuthenticated } = require("../backendUtils/stytchClient");
+const Sequelize = require("sequelize");
 
 router.get("/by-user", isAuthenticated, async (req, res, next) => {
   try {
@@ -68,10 +71,35 @@ router.get("/preview/:id", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
+  const { method, page } = req.query;
+  const offset = (page - 1) * 20;
+  const dict = {
+    purchases: "user_count DESC",
+    recency: '"createdAt" DESC',
+  };
+  const sort = dict[method];
   try {
-    const patterns = await Pattern.findAll({
-      attributes: ["title", "id", "leadImage", "difficulty"],
-    });
+    // sql is not good with counting associated models, so this has to be done with raw sequel
+    const [patterns, metadata] = await db.query(`SELECT 
+
+    patterns.id, 
+
+    patterns.title, 
+
+    patterns."leadImage",
+      
+    patterns.difficulty,
+
+    (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count
+
+    FROM patterns
+
+    ORDER BY ${sort}
+    
+    OFFSET ${offset} ROWS
+
+    FETCH NEXT 20 ROWS ONLY;`);
+
     res.json(patterns);
   } catch (err) {
     next(err);

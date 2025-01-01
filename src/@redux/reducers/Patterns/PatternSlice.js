@@ -6,7 +6,8 @@ import thunkBaseCases from "../../utils/thunkBaseCases.js";
 const fetchAllPatterns = createAsyncThunk(
   "patterns/fetchAllPatterns",
   async (payload, { getState, requestId, rejectWithValue }) => {
-    const patterns = await Adapter.getAllPatterns();
+    const { method, page } = payload;
+    const patterns = await Adapter.getAllPatterns(method, page);
 
     if (patterns?.errorStatus) {
       return rejectWithValue(patterns);

@@ -39,8 +39,8 @@ const Adapter = {
     const userResponse = await res.json();
     return userResponse;
   },
-  async getAllPatterns() {
-    const url = `${BASE_API_URL}/patterns`;
+  async getAllPatterns(method, page) {
+    const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}`;
 
     const res = await get(url);
     const patterns = await res.json();

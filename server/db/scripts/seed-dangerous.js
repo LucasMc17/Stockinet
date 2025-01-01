@@ -1,4 +1,5 @@
 "use strict";
+const { uid } = require("uid");
 
 require("dotenv").config();
 const { client } = require("../../backendUtils/stytchClient");
@@ -311,16 +312,6 @@ async function createPattern(data) {
       name: obj.name,
       data: JSON.stringify(obj.data),
     });
-    // for (let y = 0; y < obj.data.length; y++) {
-    //   const row = obj.data[y];
-    //   const dbRow = await GridRow.create({ order: y });
-    //   await dbRow.setGrid(dbGrid);
-    //   for (let x = 0; x < row.length; x++) {
-    //     const stitch = row[x];
-    //     const dbStitch = await GridStitch.create({ order: x, ...stitch });
-    //     await dbStitch.setGridRow(dbRow);
-    //   }
-    // }
     await dbGrid.setPattern(dbPattern);
   }
   return dbPattern;
@@ -330,22 +321,7 @@ async function seed() {
   await db.sync({ force: true }); // THIS IS A HARD RESET
   console.log("db synced!");
 
-  const { results } = await client.users.search({
-    // limit: 2,
-    // query: {
-    //   operator: "OR",
-    //   operands: [
-    //     {
-    //       filter_name: "email_address",
-    //       filter_value: ["test@stockinette.co"],
-    //     },
-    //     {
-    //       filter_name: "email_address",
-    //       filter_value: ["test2@stockinette.co"],
-    //     },
-    //   ],
-    // },
-  });
+  const { results } = await client.users.search({});
 
   for (let i = 0; i < results.length; i++) {
     const { user_id } = results[i];
@@ -363,6 +339,52 @@ async function seed() {
     email: "test2@stockinette.co",
     username: "Test 2",
     password: "u4t39o3i9rfjeiewifj932",
+  });
+
+  const users = [];
+  const patterns = [];
+
+  for (let i = 1; i <= 10; i++) {
+    const user = await createUser({
+      email: `${uid(16)}@stockinette.co`,
+      username: uid(16),
+      password: uid(16),
+    });
+    users.push(user);
+  }
+
+  for (let i = 1; i <= 100; i++) {
+    const pattern = await createPattern({
+      title: "pattern " + i,
+      description: "",
+      leadImage: "",
+      images: [],
+      difficulty: "INTERMEDIATE",
+      materials: [],
+      gaugeStitches: 18,
+      gaugeRows: 24,
+      gaugeWidthInches: 4,
+      gaugeHeightInches: 4,
+      instructions: [],
+      grids: [],
+    });
+    const userIndex = Math.floor(Math.random() * 10);
+    await pattern.setAuthor(users[userIndex]);
+    patterns.push(pattern);
+  }
+
+  users.forEach((user) => {
+    const indexes = [];
+    async function attachRandomPattern() {
+      const patternIndex = Math.floor(Math.random() * 100);
+      if (!indexes.includes(patternIndex)) {
+        indexes.push(patternIndex);
+        await patterns[patternIndex].addUser(user);
+      }
+    }
+    for (let i = 0; i < 15; i++) {
+      attachRandomPattern();
+    }
   });
 
   const testPattern1 = await createPattern(testData[0]);
