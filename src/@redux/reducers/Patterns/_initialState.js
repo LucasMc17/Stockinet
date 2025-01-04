@@ -2,6 +2,6 @@ export default {
   loading: false,
   error: null,
   patternList: [],
-  currentPatern: null,
+  currentPattern: null,
   currentRequestId: null,
 };

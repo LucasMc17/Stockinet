@@ -68,9 +68,9 @@ const patternSlice = createSlice({
     thunkBaseCases(builder, fetchOnePattern, {
       fulfilledCallback: (state, action) => {
         const result = { ...action.payload, fullyLoaded: true };
-        state.patternList = state.patternList.map((pattern) =>
-          pattern.id === result.id ? result : pattern,
-        );
+        state.patternList = state.patternList.map((pattern) => {
+          return pattern.id === result.id ? result : pattern;
+        });
         state.currentPattern = result;
       },
     });

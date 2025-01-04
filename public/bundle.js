@@ -41345,7 +41345,7 @@ var initialState$1 = {
   loading: false,
   error: null,
   patternList: [],
-  currentPatern: null,
+  currentPattern: null,
   currentRequestId: null
 };
 
@@ -41520,7 +41520,9 @@ const patternSlice = createSlice({
           ...action.payload,
           fullyLoaded: true
         };
-        state.patternList = state.patternList.map(pattern => pattern.id === result.id ? result : pattern);
+        state.patternList = state.patternList.map(pattern => {
+          return pattern.id === result.id ? result : pattern;
+        });
         state.currentPattern = result;
       }
     });
@@ -45306,14 +45308,17 @@ function PatternScreen() {
     error
   } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
-    const pattern = patternList.find(pat => pat.id === patternId);
-    console.log(pattern);
-    if (pattern?.fullyLoaded) {
-      dispatch(selectPattern(pattern));
-    } else {
-      dispatch(fetchOnePattern(patternId));
-    }
-  }, [patternList]);
+    // Caching solution (needs update eventually)
+    // const pattern = patternList.find((pat) => {
+    //   return pat.id === Number(patternId);
+    // });
+    // console.log(pattern);
+    // if (pattern?.fullyLoaded) {
+    //   dispatch(selectPattern(pattern));
+    // } else {
+    dispatch(fetchOnePattern(patternId));
+    // }
+  }, []);
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }

@@ -26,14 +26,17 @@ export default function PatternScreen() {
   );
 
   useEffect(() => {
-    const pattern = patternList.find((pat) => pat.id === patternId);
-    console.log(pattern);
-    if (pattern?.fullyLoaded) {
-      dispatch(selectPattern(pattern));
-    } else {
-      dispatch(fetchOnePattern(patternId));
-    }
-  }, [patternList]);
+    // Caching solution (needs update eventually)
+    // const pattern = patternList.find((pat) => {
+    //   return pat.id === Number(patternId);
+    // });
+    // console.log(pattern);
+    // if (pattern?.fullyLoaded) {
+    //   dispatch(selectPattern(pattern));
+    // } else {
+    dispatch(fetchOnePattern(patternId));
+    // }
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
