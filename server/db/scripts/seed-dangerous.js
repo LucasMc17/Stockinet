@@ -8,9 +8,11 @@ const {
   db,
   models: { Pattern, Grid, User },
 } = require("..");
+const Size = require("../models/Size");
 
 const exampleGrid = {
   name: "Large Cozy",
+  size: "Large",
   data: [
     [
       { type: "P", width: 1 },
@@ -67,6 +69,7 @@ const exampleGrid = {
 
 const exampleGridTwo = {
   name: "Small COzy",
+  size: "Small",
   data: [
     [
       { type: "K", width: 1 },
@@ -242,6 +245,7 @@ async function createUser({ email, username, password }) {
 const testData = [
   {
     title: "Cable Knit Candle Cozies",
+    sizes: ["Small", "Large"],
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
     leadImage: "/public/candle-cozies.png",
@@ -273,6 +277,7 @@ const testData = [
   },
   {
     title: "Cable Knit Candle Cozies 2",
+    sizes: ["Small", "Large"],
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
     leadImage: "/public/candle-cozies.png",
@@ -305,7 +310,15 @@ const testData = [
 ];
 
 async function createPattern(data) {
+  const sizes = [];
   const dbPattern = await Pattern.create(data);
+  if (data.sizes) {
+    for (let i = 0; i < data.sizes.length; i++) {
+      const dbSize = await Size.create({ name: data.sizes[i] });
+      await dbSize.setPattern(dbPattern);
+      sizes.push(dbSize);
+    }
+  }
   for (let i = 0; i < data.grids.length; i++) {
     const obj = data.grids[i];
     const dbGrid = await Grid.create({
@@ -313,6 +326,13 @@ async function createPattern(data) {
       data: JSON.stringify(obj.data),
     });
     await dbGrid.setPattern(dbPattern);
+    if (obj.size === "Small") {
+      await dbGrid.addSize(sizes[0]);
+      await dbGrid.addSize(sizes[1]);
+    }
+    if (obj.size === "Large") {
+      await dbGrid.addSize(sizes[1]);
+    }
   }
   return dbPattern;
 }

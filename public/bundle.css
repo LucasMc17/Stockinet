@@ -46,6 +46,48 @@ p {
   display: none;
 }
 
+.loading-screen {
+  margin: auto;
+  width: 80%;
+  min-width: 600px;
+}
+.loading-screen .pinwheel {
+  margin: auto;
+  width: 100px;
+}
+
+.pattern-previewscreen {
+  display: flex;
+  justify-content: space-between;
+}
+.pattern-previewscreen > div {
+  flex-basis: 45%;
+}
+.pattern-previewscreen img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
+}
+
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
+}
+
 #pattern {
   padding: 1rem;
   display: flex;
@@ -76,48 +118,6 @@ p {
 }
 .pattern-instructions > div {
   flex-basis: 45%;
-}
-
-.pattern-previewscreen {
-  display: flex;
-  justify-content: space-between;
-}
-.pattern-previewscreen > div {
-  flex-basis: 45%;
-}
-.pattern-previewscreen img {
-  width: 100%;
-  object-fit: contain;
-}
-
-.landing-screen {
-  padding: 4rem 6rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.landing-section {
-  border: 1px solid lightblue;
-  border-radius: 1rem;
-  padding: 1rem;
-  flex: 0.25;
-  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
-}
-.landing-section > section {
-  text-align: center;
-}
-.landing-section > div {
-  flex: 0.75;
-}
-
-.loading-screen {
-  margin: auto;
-  width: 80%;
-  min-width: 600px;
-}
-.loading-screen .pinwheel {
-  margin: auto;
-  width: 100px;
 }
 
 .slider-holder {
@@ -154,6 +154,14 @@ p {
   border-right-width: 0;
 }
 
+.interactive-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
 .gauge-flex {
   display: flex;
   flex-wrap: wrap;
@@ -173,14 +181,6 @@ p {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   width: 100%;
-}
-
-.interactive-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
 }
 
 .interactive-grid-row {
