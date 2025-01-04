@@ -57,9 +57,9 @@ export default function AllPatternsScreen() {
           <button onClick={nextPage}>{">"}</button>
         </div>
         <div className="card">
-          {Object.keys(patternList).map((patternId, i) => (
-            <Link key={i} to={`/pattern/preview/${patternId}`}>
-              <h1>{patternList[patternId].title}</h1>
+          {patternList.map((pattern, i) => (
+            <Link key={i} to={`/pattern/preview/${pattern.id}`}>
+              <h1>{pattern.title}</h1>
             </Link>
           ))}
         </div>

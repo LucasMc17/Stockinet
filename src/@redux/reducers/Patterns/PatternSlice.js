@@ -68,10 +68,10 @@ const patternSlice = createSlice({
     thunkBaseCases(builder, fetchOnePattern, {
       fulfilledCallback: (state, action) => {
         const result = { ...action.payload, fullyLoaded: true };
+        state.patternList = state.patternList.map((pattern) =>
+          pattern.id === result.id ? result : pattern,
+        );
         state.currentPattern = result;
-        if (state.patternList) {
-          state.patternList[String(action.payload.id)] = result;
-        }
       },
     });
 
@@ -83,25 +83,13 @@ const patternSlice = createSlice({
 
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
-        const list = {};
-        action.payload.forEach((item) => {
-          list[item.id] = state.patternList[item.id]
-            ? { ...state.patternList[item.id], ...item }
-            : item;
-        });
-        state.patternList = list;
+        state.patternList = action.payload;
       },
     });
 
     thunkBaseCases(builder, fetchPatternsByUser, {
       fulfilledCallback: (state, action) => {
-        const list = {};
-        action.payload.forEach((item) => {
-          list[item.id] = state.patternList[item.id]
-            ? { ...state.patternList[item.id], ...item }
-            : item;
-        });
-        state.patternList = list;
+        state.patternList = action.payload;
       },
     });
   },

@@ -26,8 +26,10 @@ export default function PatternScreen() {
   );
 
   useEffect(() => {
-    if (patternList?.[patternId]?.fullyLoaded) {
-      dispatch(selectPattern(patternList[patternId]));
+    const pattern = patternList.find((pat) => pat.id === patternId);
+    console.log(pattern);
+    if (pattern?.fullyLoaded) {
+      dispatch(selectPattern(pattern));
     } else {
       dispatch(fetchOnePattern(patternId));
     }

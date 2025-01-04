@@ -41344,7 +41344,7 @@ function noop$1() {
 var initialState$1 = {
   loading: false,
   error: null,
-  patternList: {},
+  patternList: [],
   currentPatern: null,
   currentRequestId: null
 };
@@ -41520,10 +41520,8 @@ const patternSlice = createSlice({
           ...action.payload,
           fullyLoaded: true
         };
+        state.patternList = state.patternList.map(pattern => pattern.id === result.id ? result : pattern);
         state.currentPattern = result;
-        if (state.patternList) {
-          state.patternList[String(action.payload.id)] = result;
-        }
       }
     });
     thunkBaseCases(builder, fetchPatternPreview, {
@@ -41533,26 +41531,12 @@ const patternSlice = createSlice({
     });
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
-        const list = {};
-        action.payload.forEach(item => {
-          list[item.id] = state.patternList[item.id] ? {
-            ...state.patternList[item.id],
-            ...item
-          } : item;
-        });
-        state.patternList = list;
+        state.patternList = action.payload;
       }
     });
     thunkBaseCases(builder, fetchPatternsByUser, {
       fulfilledCallback: (state, action) => {
-        const list = {};
-        action.payload.forEach(item => {
-          list[item.id] = state.patternList[item.id] ? {
-            ...state.patternList[item.id],
-            ...item
-          } : item;
-        });
-        state.patternList = list;
+        state.patternList = action.payload;
       }
     });
   }
@@ -44924,10 +44908,10 @@ function AllPatternsScreen() {
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
         className: "card",
-        children: Object.keys(patternList).map((patternId, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: `/pattern/preview/${patternId}`,
+        children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: `/pattern/preview/${pattern.id}`,
           children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-            children: patternList[patternId].title
+            children: pattern.title
           })
         }, i))
       })]
@@ -45256,10 +45240,10 @@ function OwnedPatternsScreen() {
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "card",
-      children: Object.keys(patternList).map((patternId, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: `/pattern/${patternId}`,
+      children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: `/pattern/${pattern.id}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-          children: patternList[patternId].title
+          children: pattern.title
         })
       }, i))
     });
@@ -45322,8 +45306,10 @@ function PatternScreen() {
     error
   } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
-    if (patternList?.[patternId]?.fullyLoaded) {
-      dispatch(selectPattern(patternList[patternId]));
+    const pattern = patternList.find(pat => pat.id === patternId);
+    console.log(pattern);
+    if (pattern?.fullyLoaded) {
+      dispatch(selectPattern(pattern));
     } else {
       dispatch(fetchOnePattern(patternId));
     }

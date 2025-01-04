@@ -29,9 +29,9 @@ export default function OwnedPatternsScreen() {
   if (patternList) {
     return (
       <div className="card">
-        {Object.keys(patternList).map((patternId, i) => (
-          <Link key={i} to={`/pattern/${patternId}`}>
-            <h1>{patternList[patternId].title}</h1>
+        {patternList.map((pattern, i) => (
+          <Link key={i} to={`/pattern/${pattern.id}`}>
+            <h1>{pattern.title}</h1>
           </Link>
         ))}
       </div>
