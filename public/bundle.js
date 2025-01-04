@@ -44936,7 +44936,7 @@ function AllPatternsScreen() {
 }
 
 function LoginSignupScreen({
-  login
+  method
 }) {
   const dispatch = useDispatch();
   const stytch = useStytch$1();
@@ -44946,11 +44946,51 @@ function LoginSignupScreen({
   const [state, setState] = reactExports.useState({
     email: "",
     password: "",
-    username: ""
+    username: "",
+    confirmPassword: ""
   });
-  async function onSubmit(e) {
-    e.preventDefault();
-    if (login) {
+  const [error, setError] = reactExports.useState("");
+  reactExports.useEffect(() => {
+    setState({
+      email: "",
+      password: "",
+      username: "",
+      confirmPassword: ""
+    });
+    setError("");
+  }, [method]);
+  const errorDict = {
+    invalid_email: "Make sure you input a valid email",
+    breached_password: "It looks like that password may have been involved in a data breach, please try another",
+    duplicate_email: "That email already has a Stockinette account",
+    weak_password: "That password is a bit too weak to be secure, try making it longer or adding special characters",
+    unauthorized_credentials: "That password and email don't seem to match, please double check them",
+    no_user_password: "It looks like you don't have a password set up for Stockinette, [MAGIC EMAIL LINK PROMPT]",
+    reser_password: "Your password may have been involved in a data breach, please use the link below to reset it and log in"
+  };
+  async function handleReset() {
+    try {
+      const token = new URLSearchParams(window.location.search).get("token");
+      if (!token) {
+        setError("Could not verify user, please try again from the link in your email");
+        return;
+      }
+      if (state.password !== state.confirmPassword) {
+        setError("Please ensure the password fields match!");
+        return;
+      }
+      const res = await stytch.passwords.resetByEmail({
+        token,
+        password: state.password,
+        session_duration_minutes: 60
+      });
+      navigate("/");
+    } catch (err) {
+      setError(errorDict[err.error_type] || "Sorry, something went wrong, please try again");
+    }
+  }
+  async function handleLogin() {
+    try {
       const res = await stytch.passwords.authenticate({
         email: state.email,
         password: state.password,
@@ -44965,7 +45005,20 @@ function LoginSignupScreen({
       } else {
         navigate("/");
       }
-    } else {
+    } catch (err) {
+      setError(errorDict[err.error_type] || "Sorry, something went wrong, please try again");
+    }
+  }
+  async function handleSignup() {
+    if (state.password !== state.confirmPassword) {
+      setError("Please ensure the password fields match!");
+      return;
+    }
+    if (!state.username) {
+      setError("Don't forget to add a username");
+      return;
+    }
+    try {
       const res = await stytch.passwords.create({
         email: state.email,
         password: state.password,
@@ -44983,6 +45036,38 @@ function LoginSignupScreen({
         username: state.username
       }));
       navigate("/");
+    } catch (err) {
+      setError(errorDict[err.error_type] || "Sorry, something went wrong, please try again");
+    }
+  }
+  async function handleResetStart() {
+    try {
+      const res = await stytch.passwords.resetByEmailStart({
+        email: state.email,
+        reset_password_redirect_url: "http://localhost:8000/reset-password"
+      });
+      if (res) {
+        setError("Check your email for a reset link!");
+      }
+    } catch (err) {
+      setError(errorDict[err.error_type] || "Sorry, something went wrong, please try again");
+    }
+  }
+  async function onSubmit(e) {
+    e.preventDefault();
+    switch (method) {
+      case "reset-password":
+        await handleReset();
+        break;
+      case "login":
+        await handleLogin();
+        break;
+      case "signup":
+        await handleSignup();
+        break;
+      case "reset-start":
+        await handleResetStart();
+        break;
     }
   }
   function onChange(e) {
@@ -44991,54 +45076,163 @@ function LoginSignupScreen({
       [e.target.name]: e.target.value
     });
   }
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: login ? "Log in to get the most out of your Stockinette account" : "Sign up to start using Stockinette"
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
-      onSubmit: onSubmit,
-      onChange: onChange,
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
-        children: "Email:"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
-        name: "email",
-        value: state.email,
-        type: "text"
-      }), !login && /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
-          children: "Username:"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
-          name: "username",
-          value: state.username,
-          type: "text"
+  switch (method) {
+    case "reset-password":
+      return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+          children: "Reset your Stockinette password"
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+          onSubmit: onSubmit,
+          onChange: onChange,
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "New Password:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "password",
+            value: state.password,
+            type: "password"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Confirm New Password:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "confirmPassword",
+            value: state.confirmPassword,
+            type: "password"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            type: "submit",
+            children: "Confirm New Password"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: error
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+          children: ["Already have an account? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+            to: "/login",
+            children: "Log in now!"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: "/",
+          children: "Back to Home"
         })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
-        children: "Password:"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
-        name: "password",
-        value: state.password,
-        type: "password"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        type: "submit",
-        children: login ? "Log in" : "Sign up"
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-      children: login ? /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-        children: ["New to Stockinette? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: "/signup",
-          children: "Make an account!"
+      });
+    case "login":
+      return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+          children: "Log in to get the most out of your Stockinette account"
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+          onSubmit: onSubmit,
+          onChange: onChange,
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Email:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "email",
+            value: state.email,
+            type: "text"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Password:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "password",
+            value: state.password,
+            type: "password"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            type: "submit",
+            children: "Log in"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: error
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+          children: ["New to Stockinette? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+            to: "/signup",
+            children: "Make an account!"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+          children: ["Trouble logging in? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+            to: "/reset",
+            children: "Reset your password"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: "/",
+          children: "Back to Home"
         })]
-      }) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-        children: ["Already have an account? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: "/login",
-          children: "Log in now!"
+      });
+    case "signup":
+      return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+          children: "Sign up to start using Stockinette"
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+          onSubmit: onSubmit,
+          onChange: onChange,
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Email:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "email",
+            value: state.email,
+            type: "text"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Username:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "username",
+            value: state.username,
+            type: "text"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Password:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "password",
+            value: state.password,
+            type: "password"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Confirm Password:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "confirmPassword",
+            value: state.confirmPassword,
+            type: "password"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            type: "submit",
+            children: "Sign up"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: error
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+          children: ["Already have an account? ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+            to: "/login",
+            children: "Log in now!"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: "/",
+          children: "Back to Home"
         })]
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-      to: "/",
-      children: "Back to Home"
-    })]
-  });
+      });
+    case "reset-start":
+      return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+          children: "Reset your password"
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
+          onSubmit: onSubmit,
+          onChange: onChange,
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("label", {
+            children: "Email:"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("input", {
+            name: "email",
+            value: state.email,
+            type: "text"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            type: "submit",
+            children: "Send email"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: error
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+            to: "/signup",
+            children: "Back to Login"
+          })
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: "/",
+          children: "Back to Home"
+        })]
+      });
+  }
 }
 
 function OwnedPatternsScreen() {
@@ -45265,12 +45459,22 @@ const router = createBrowserRouter([{
 }, {
   path: "login",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignupScreen, {
-    login: true
+    method: "login"
   })
 }, {
   path: "signup",
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignupScreen, {
-    login: false
+    method: "signup"
+  })
+}, {
+  path: "reset",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignupScreen, {
+    method: "reset-start"
+  })
+}, {
+  path: "reset-password",
+  element: /*#__PURE__*/jsxRuntimeExports.jsx(LoginSignupScreen, {
+    method: "reset-password"
   })
 },
 // pattern paths

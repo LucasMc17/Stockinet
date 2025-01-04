@@ -16,9 +16,7 @@ import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
 import { SiteHeader } from "./components";
 
-const stytch = new StytchUIClient(
-  "public-token-test-ef6d0a44-36d8-4ab6-b69f-3d6a2a47dbb7",
-);
+const stytch = new StytchUIClient(process.env.STYTCH_TEST_PUBLIC_TOKEN);
 
 const router = createBrowserRouter([
   {
@@ -32,11 +30,19 @@ const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: <LoginSignupScreen login={true} />,
+    element: <LoginSignupScreen method="login" />,
   },
   {
     path: "signup",
-    element: <LoginSignupScreen login={false} />,
+    element: <LoginSignupScreen method="signup" />,
+  },
+  {
+    path: "reset",
+    element: <LoginSignupScreen method="reset-start" />,
+  },
+  {
+    path: "reset-password",
+    element: <LoginSignupScreen method="reset-password" />,
   },
   // pattern paths
   {

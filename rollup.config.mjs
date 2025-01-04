@@ -18,11 +18,11 @@ export default {
   plugins: [
     nodeResolve(),
     // json(),
+    dotenv(),
     replace({
       preventAssignment: false,
       "process.env.NODE_ENV": devMode ? '"development"' : '"production"',
     }),
-    dotenv(),
     commonjs(),
     babel({
       babelHelpers: "bundled",
