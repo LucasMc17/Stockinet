@@ -1,0 +1,19 @@
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  background-color: lightgray;
+  align-items: center;
+
+  & > .landing-header-hero {
+    flex: 0.5;
+  }
+
+  & > .landing-header-image {
+    flex: 0.2;
+
+    & > img {
+      width: 100%;
+    }
+  }
+}

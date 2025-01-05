@@ -46,16 +46,6 @@ p {
   display: none;
 }
 
-.loading-screen {
-  margin: auto;
-  width: 80%;
-  min-width: 600px;
-}
-.loading-screen .pinwheel {
-  margin: auto;
-  width: 100px;
-}
-
 .pattern-previewscreen {
   display: flex;
   justify-content: space-between;
@@ -66,26 +56,6 @@ p {
 .pattern-previewscreen img {
   width: 100%;
   object-fit: contain;
-}
-
-.landing-section {
-  border: 1px solid lightblue;
-  border-radius: 1rem;
-  padding: 1rem;
-  flex: 0.25;
-  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
-}
-.landing-section > section {
-  text-align: center;
-}
-.landing-section > div {
-  flex: 0.75;
-}
-
-.landing-screen {
-  padding: 4rem 6rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 #pattern {
@@ -118,6 +88,53 @@ p {
 }
 .pattern-instructions > div {
   flex-basis: 45%;
+}
+
+.landing-screen {
+  padding: 4rem 6rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
+}
+
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  background-color: lightgray;
+  align-items: center;
+}
+.landing-header > .landing-header-hero {
+  flex: 0.5;
+}
+.landing-header > .landing-header-image {
+  flex: 0.2;
+}
+.landing-header > .landing-header-image > img {
+  width: 100%;
+}
+
+.loading-screen {
+  margin: auto;
+  width: 80%;
+  min-width: 600px;
+}
+.loading-screen .pinwheel {
+  margin: auto;
+  width: 100px;
 }
 
 .slider-holder {
@@ -154,14 +171,6 @@ p {
   border-right-width: 0;
 }
 
-.interactive-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
-}
-
 .gauge-flex {
   display: flex;
   flex-wrap: wrap;
@@ -183,12 +192,20 @@ p {
   width: 100%;
 }
 
-.interactive-grid-row {
+.interactive-grid {
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
 }
 
 .gauge-square {
   border: 3px solid black;
+}
+
+.interactive-grid-row {
+  display: flex;
 }
 
 .interactive-grid-cell {

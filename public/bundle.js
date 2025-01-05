@@ -43020,11 +43020,20 @@ function ErrorScreen() {
 }
 
 function LandingHeader() {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-      children: "Welcome to Stockinet!"
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
-      children: "The one ultimate online knitting resource"
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "landing-header",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "landing-header-hero",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: "Welcome to Stockinette!"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "landing-header-image placeholder-image",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("img", {
+        src: "/public/placeholder.webp"
+      })
     })]
   });
 }

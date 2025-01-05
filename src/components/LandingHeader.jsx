@@ -1,8 +1,19 @@
+import "./LandingHeader.module.scss";
+
 export default function LandingHeader() {
   return (
-    <div>
-      <h1>Welcome to Stockinet!</h1>
-      <h4>The one ultimate online knitting resource</h4>
-    </div>
+    <section className="landing-header">
+      <div className="landing-header-hero">
+        <h1>Welcome to Stockinette!</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco
+        </p>
+      </div>
+      <div className="landing-header-image placeholder-image">
+        <img src="/public/placeholder.webp" />
+      </div>
+    </section>
   );
 }
