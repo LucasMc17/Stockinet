@@ -4,8 +4,9 @@ import {
   fetchAllPatterns,
   selectPattern,
 } from "../@redux/reducers/Patterns/PatternSlice.js";
-import { Link } from "react-router-dom";
 import { LoadingScreen, ErrorScreen } from "../components";
+import { PatternCard } from "../components";
+import "./AllPatternsScreen.module.scss";
 
 export default function AllPatternsScreen() {
   const dispatch = useDispatch();
@@ -56,11 +57,15 @@ export default function AllPatternsScreen() {
           <p>{page}</p>
           <button onClick={nextPage}>{">"}</button>
         </div>
-        <div className="card">
+        <div className="pattern-list all-patterns-list">
           {patternList.map((pattern, i) => (
-            <Link key={i} to={`/pattern/preview/${pattern.id}`}>
-              <h1>{pattern.title}</h1>
-            </Link>
+            <PatternCard
+              key={i}
+              title={pattern.title}
+              image={pattern.leadImage}
+              description={pattern.description}
+              link={`/pattern/preview/${pattern.id}`}
+            />
           ))}
         </div>
       </>

@@ -43019,51 +43019,6 @@ function ErrorScreen() {
   });
 }
 
-function LandingHeader() {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-    className: "landing-header",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "landing-header-hero",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-        children: "Welcome to Stockinette!"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "landing-header-image placeholder-image",
-      children: /*#__PURE__*/jsxRuntimeExports.jsx("img", {
-        src: "/public/placeholder.webp"
-      })
-    })]
-  });
-}
-
-function LandingSection({
-  title,
-  subtitle,
-  description,
-  link,
-  SVG
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-    className: "landing-section",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(SVG, {}), /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-        children: title
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-        children: subtitle
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: description
-      }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: link,
-        children: "Try it out"
-      })]
-    })]
-  });
-}
-
 function LoadingWheel() {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
@@ -44412,6 +44367,107 @@ function LoadingScreen({
   });
 }
 
+function LandingHeader() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "landing-header",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "landing-header-hero",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: "Welcome to Stockinette!"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "landing-header-image placeholder-image",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("img", {
+        src: "/public/placeholder.webp"
+      })
+    })]
+  });
+}
+
+function LandingSection({
+  title,
+  subtitle,
+  description,
+  link,
+  SVG
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "landing-section",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(SVG, {}), /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: title
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+        children: subtitle
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: description
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: link,
+        children: "Try it out"
+      })]
+    })]
+  });
+}
+
+function PatternCard({
+  image,
+  title,
+  description,
+  link
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs(Link$1, {
+    to: link,
+    className: "pattern-card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("img", {
+      src: image
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h5", {
+      children: title
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: description
+    })]
+  });
+}
+
+function LandingPatterns() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    id: "landing-patterns",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("header", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+        children: "My Patterns"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      id: "landing-patterns-list",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+        title: "Pattern Name",
+        image: "/public/placeholder.webp",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        link: "/patterns/1"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+        title: "Pattern Name",
+        image: "/public/placeholder.webp",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        link: "/patterns/1"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+        title: "Pattern Name",
+        image: "/public/placeholder.webp",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        link: "/patterns/1"
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      to: "/patterns/my-patterns",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        id: "pattern-button",
+        children: "View Your Patterns"
+      })
+    })]
+  });
+}
+
 function PatternHeader({
   title,
   author,
@@ -44840,18 +44896,26 @@ function SiteHeader() {
     navigate("/");
   }
   return /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: "/",
-        children: "Stockinette"
-      })
-    }), loggedIn ? /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+    id: "site-header",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+        id: "header-logo",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: "/",
+          children: "Stockinette"
+        })
+      }), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
         children: ["Welcome back, ", username, "!"]
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        onClick: logOut,
-        children: "Log out"
       })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "My Patterns"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Learn"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Pattern Search"
+    }), loggedIn ? /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+      onClick: logOut,
+      children: "Log Out"
     }) : /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
       to: "/login",
       children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
@@ -44918,12 +44982,12 @@ function AllPatternsScreen() {
           children: ">"
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "card",
-        children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: `/pattern/preview/${pattern.id}`,
-          children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-            children: pattern.title
-          })
+        className: "pattern-list all-patterns-list",
+        children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+          title: pattern.title,
+          image: pattern.leadImage,
+          description: pattern.description,
+          link: `/pattern/preview/${pattern.id}`
         }, i))
       })]
     });
@@ -45384,8 +45448,9 @@ function PatternScreen() {
 }
 
 function LandingScreen() {
+  const loggedIn = useLoginStatus();
   return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsx(LandingPatterns, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "landing-screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: "/patterns",

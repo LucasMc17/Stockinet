@@ -1,0 +1,19 @@
+#landing-patterns {
+  background-color: slategray;
+  padding: 1em;
+}
+
+#pattern-button {
+  background-color: black;
+  border-radius: 1000px;
+  color: white;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+
+  & > a {
+    flex: 0 1 20%;
+  }
+}

@@ -4,6 +4,7 @@ import { useStytch } from "@stytch/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../@redux/reducers/User/UserSlice";
+import "./SiteHeader.module.scss";
 
 export default function SiteHeader() {
   const { username } = useSelector((s) => s.user);
@@ -19,15 +20,18 @@ export default function SiteHeader() {
   }
 
   return (
-    <header>
-      <h2>
-        <Link to="/">Stockinette</Link>
-      </h2>
+    <header id="site-header">
+      <div>
+        <h2 id="header-logo">
+          <Link to="/">Stockinette</Link>
+        </h2>
+        {loggedIn && <h4>Welcome back, {username}!</h4>}
+      </div>
+      <h4>My Patterns</h4>
+      <h4>Learn</h4>
+      <h4>Pattern Search</h4>
       {loggedIn ? (
-        <>
-          <h3>Welcome back, {username}!</h3>
-          <button onClick={logOut}>Log out</button>
-        </>
+        <h3 onClick={logOut}>Log Out</h3>
       ) : (
         <Link to="/login">
           <h3>Log in</h3>

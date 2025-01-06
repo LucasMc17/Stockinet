@@ -1,0 +1,10 @@
+.all-patterns-list {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1em;
+
+  & > a {
+    flex: 0 1 18%;
+    margin-bottom: 1em;
+  }
+}

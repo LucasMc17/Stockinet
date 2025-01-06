@@ -1,0 +1,19 @@
+#site-header {
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+
+  & h2,
+  & h3,
+  & h4 {
+    margin: 0 10px;
+    display: inline;
+  }
+}
+
+#header-logo {
+  color: yellow;
+}

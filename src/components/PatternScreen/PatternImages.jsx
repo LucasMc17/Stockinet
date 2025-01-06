@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Slider from "./Slider.jsx";
+import Slider from "../Slider.jsx";
 
 export default function PatternImages({ images, description }) {
   return (

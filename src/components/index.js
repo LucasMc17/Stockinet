@@ -1,13 +1,20 @@
 import Gauge from "./Gauge/index.jsx";
+
 import InteractiveGrid from "./InteractiveGrid/index.jsx";
-import ErrorScreen from "./ErrorScreen.jsx";
-import LandingHeader from "./LandingHeader.jsx";
-import LandingSection from "./LandingSection.jsx";
-import LoadingScreen from "./LoadingScreen.jsx";
-import PatternHeader from "./PatternHeader.jsx";
-import PatternImages from "./PatternImages.jsx";
+
+import ErrorScreen from "./UtilityScreens/ErrorScreen.jsx";
+import LoadingScreen from "./UtilityScreens/LoadingScreen.jsx";
+
+import LandingHeader from "./LandingScreen/LandingHeader.jsx";
+import LandingSection from "./LandingScreen/LandingSection.jsx";
+import LandingPatterns from "./LandingScreen/LandingPatterns.jsx";
+
+import PatternHeader from "./PatternScreen/PatternHeader.jsx";
+import PatternImages from "./PatternScreen/PatternImages.jsx";
+
 import SiteHeader from "./SiteHeader.jsx";
 import Slider from "./Slider.jsx";
+import PatternCard from "./PatternCard.jsx";
 
 export {
   Gauge,
@@ -20,4 +27,6 @@ export {
   PatternImages,
   SiteHeader,
   Slider,
+  LandingPatterns,
+  PatternCard,
 };
