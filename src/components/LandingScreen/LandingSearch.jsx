@@ -67,7 +67,7 @@ export default function LandingSearch() {
   return (
     <section id="landing-search">
       <h3>Pattern Search</h3>
-      <div className="landing-search-menu">
+      <div className="landing-search-menu menu">
         <h4>Lorem ipsum dolor sit amet!</h4>
         <div className="landing-search-filters">
           <DropDown
@@ -92,7 +92,9 @@ export default function LandingSearch() {
             }}
           />
         </div>
-        <button>Search</button>
+        <div className="right-button">
+          <button>Search</button>
+        </div>
       </div>
       <p id="to-all-patterns">
         Already have something in mind?{" "}

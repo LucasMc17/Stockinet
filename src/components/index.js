@@ -9,6 +9,7 @@ import LandingHeader from "./LandingScreen/LandingHeader.jsx";
 import LandingSection from "./LandingScreen/LandingSection.jsx";
 import LandingPatterns from "./LandingScreen/LandingPatterns.jsx";
 import LandingSearch from "./LandingScreen/LandingSearch.jsx";
+import LandingHelp from "./LandingScreen/LandingHelp.jsx";
 
 import PatternHeader from "./PatternScreen/PatternHeader.jsx";
 import PatternImages from "./PatternScreen/PatternImages.jsx";
@@ -34,4 +35,5 @@ export {
   PatternCard,
   LandingSearch,
   DropDown,
+  LandingHelp,
 };

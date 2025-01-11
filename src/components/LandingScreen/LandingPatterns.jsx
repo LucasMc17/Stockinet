@@ -4,7 +4,7 @@ import PatternCard from "../PatternCard.jsx";
 
 export default function LandingPatterns() {
   return (
-    <section id="landing-patterns">
+    <section id="landing-patterns" className="menu">
       <header>
         <h3>My Patterns</h3>
         <p>
@@ -35,9 +35,11 @@ export default function LandingPatterns() {
           link={"/patterns/1"}
         />
       </div>
-      <Link to="/patterns/my-patterns">
-        <button id="pattern-button">View Your Patterns</button>
-      </Link>
+      <div className="right-button">
+        <Link to="/patterns/my-patterns">
+          <button>View Your Patterns</button>
+        </Link>
+      </div>
     </section>
   );
 }

@@ -76,3 +76,20 @@ ol {
 .pattern-list {
   display: flex;
 }
+
+.menu {
+  position: relative;
+  padding: 1em 2em;
+}
+
+button {
+  background-color: black;
+  border-radius: 1000px;
+  color: white;
+  padding: 0.75em;
+  border: 0px;
+}
+
+.right-button {
+  direction: rtl;
+}

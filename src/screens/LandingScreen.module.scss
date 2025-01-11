@@ -1,5 +1,7 @@
-.landing-screen {
-  padding: 4rem 6rem;
-  display: flex;
-  justify-content: space-between;
+#landing-screen > section:nth-child(odd) {
+  background-color: lightgray;
+}
+
+#landing-screen > section:nth-child(even) {
+  background-color: gray;
 }
