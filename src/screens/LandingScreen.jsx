@@ -1,4 +1,9 @@
-import { LandingSection, LandingHeader, LandingPatterns } from "../components";
+import {
+  LandingSection,
+  LandingHeader,
+  LandingPatterns,
+  LandingSearch,
+} from "../components";
 import { useLoginStatus } from "../hooks";
 import { Globe, Dollar, GradCap } from "../icons";
 import "./LandingScreen.module.scss";
@@ -10,6 +15,7 @@ export default function LandingScreen() {
     <>
       <LandingHeader />
       {loggedIn && <LandingPatterns />}
+      <LandingSearch />
       <div className="landing-screen">
         <Link to="/patterns">All Patterns</Link>
         <Link to="/patterns/my-patterns">My Patterns</Link>

@@ -1,0 +1,39 @@
+.drop-down {
+  border-bottom: 2px solid black;
+  position: relative;
+}
+
+.dd-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > svg {
+    flex: 0 0 2em;
+  }
+
+  .dd-label-box {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.dd-menu {
+  max-height: 0px;
+  overflow-y: scroll;
+  width: 100%;
+  position: absolute;
+  top: calc(100% + 2px);
+  background-color: white;
+  border-radius: 0.5em;
+  box-shadow: 10px 5px 10px rgba(103, 103, 103, 0.35);
+  z-index: 100;
+
+  & li {
+    padding: 0 1em;
+
+    &:hover {
+      background-color: lightgray;
+    }
+  }
+}

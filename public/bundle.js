@@ -44468,28 +44468,6 @@ function LandingPatterns() {
   });
 }
 
-function PatternHeader({
-  title,
-  author,
-  difficulty
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "pattern-header card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-      children: title
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-        children: ["by ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: `/authors/${author.id}`,
-          children: author.username
-        })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-        children: ["Skill Level: ", difficulty]
-      })]
-    })]
-  });
-}
-
 function ChevronLeft() {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
@@ -44516,6 +44494,36 @@ function ChevronRight() {
       strokeLinecap: "round",
       strokeLinejoin: "round",
       d: "m8.25 4.5 7.5 7.5-7.5 7.5"
+    })
+  });
+}
+
+function ChevronDown() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      d: "m19.5 8.25-7.5 7.5-7.5-7.5"
+    })
+  });
+}
+
+function ChevronUp() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      d: "m4.5 15.75 7.5-7.5 7.5 7.5"
     })
   });
 }
@@ -44557,68 +44565,6 @@ function GradCap() {
       d: "M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z"
     }), /*#__PURE__*/jsxRuntimeExports.jsx("path", {
       d: "M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z"
-    })]
-  });
-}
-
-function Slider({
-  children,
-  startIndex = 0
-}) {
-  const [index, setIndex] = reactExports.useState(startIndex);
-  const ref = reactExports.useRef(null);
-  function handleSlide(newIndex) {
-    anime({
-      targets: ref.current,
-      translateX: "calc(" + -100 * newIndex + "% - " + newIndex * 3 + "rem)",
-      easing: "easeInOutSine",
-      duration: 500
-    });
-    setIndex(newIndex);
-  }
-  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
-    children: /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "slider-holder",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        className: `slider-back ${index === 0 ? "hidden" : ""}`,
-        onClick: () => {
-          const newIndex = index - 1;
-          handleSlide(newIndex);
-        },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {})
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        className: `slider-forward ${index === children.length - 1 ? "hidden" : ""}`,
-        onClick: () => {
-          const newIndex = index + 1;
-          handleSlide(newIndex);
-        },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {})
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        ref: ref,
-        className: "slider",
-        children: children
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [index + 1, "/", children.length]
-      })]
-    })
-  });
-}
-
-function PatternImages({
-  images,
-  description
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-      children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("img", {
-        src: image
-      }))
-    }), images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-      to: "",
-      children: "Enlarge"
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-      children: description
     })]
   });
 }
@@ -44880,6 +44826,275 @@ function useLoggedOutRedirect() {
       });
     }
   }, [user]);
+}
+
+function useDetectClickAway(ref, callback) {
+  reactExports.useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+}
+
+function DropDown({
+  name,
+  options,
+  defaultIndex = 0,
+  onSelect
+}) {
+  const [selected, setSelected] = reactExports.useState(options[defaultIndex]);
+  const [open, setOpen] = reactExports.useState(false);
+  const ref = reactExports.useRef(),
+    animRef = reactExports.useRef();
+
+  // 23px per number of lines OR 500px, whatever is less
+  const maxHeight = 23 * options.length;
+  reactExports.useEffect(() => {
+    if (open) {
+      anime({
+        targets: animRef.current,
+        maxHeight: `${maxHeight > 500 ? 500 : maxHeight}px`,
+        easing: "linear",
+        duration: 100
+      });
+    } else {
+      anime({
+        targets: animRef.current,
+        maxHeight: "0px",
+        easing: "linear",
+        duration: 100
+      });
+    }
+  }, [open]);
+  function toggleOpen() {
+    if (!open) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }
+  useDetectClickAway(ref, () => {
+    setOpen(false);
+  });
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "drop-down",
+    ref: ref,
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "dd-box",
+      onClick: toggleOpen,
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "dd-label-box",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("small", {
+          children: name
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+          children: selected.name
+        })]
+      }), open ? /*#__PURE__*/jsxRuntimeExports.jsx(ChevronDown, {}) : /*#__PURE__*/jsxRuntimeExports.jsx(ChevronUp, {})]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("menu", {
+      className: `dd-menu ${!open && ""}`,
+      ref: animRef,
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("ul", {
+        children: options.map(op => /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+          onClick: () => {
+            setSelected(op);
+            if (typeof onSelect === "function") {
+              onSelect(op);
+            }
+            setOpen(false);
+          },
+          children: op.name
+        }))
+      })
+    })]
+  });
+}
+
+function LandingSearch() {
+  const [searchState, setSearchState] = reactExports.useState({
+    patternType: {
+      name: "Scarf",
+      value: "scarf"
+    },
+    difficulty: {
+      name: "Beginner",
+      value: "BEGINNER"
+    },
+    priceRange: {
+      name: "Free",
+      value: "free"
+    }
+  });
+  const patternTypes = [{
+    name: "Scarf",
+    value: "scarf"
+  }, {
+    name: "Sweater",
+    value: "sweater"
+  }, {
+    name: "Hat",
+    value: "hat"
+  }];
+  const difficulties = [{
+    name: "Beginner",
+    value: "BEGINNER"
+  }, {
+    name: "Intermediate",
+    value: "INTERMEDIATE"
+  }, {
+    name: "Expert",
+    value: "EXPERT"
+  }];
+  const priceRanges = [{
+    name: "Free",
+    value: "free"
+  }, {
+    name: "Under $10",
+    value: "<10"
+  }, {
+    name: "$10 and up",
+    value: ">10"
+  }];
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    id: "landing-search",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+      children: "Pattern Search"
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "landing-search-menu",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+        children: "Lorem ipsum dolor sit amet!"
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "landing-search-filters",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+          name: "Pattern type",
+          options: patternTypes,
+          onSelect: selected => {
+            setSearchState({
+              ...searchState,
+              patternType: selected
+            });
+          }
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+          name: "Difficulty",
+          options: difficulties,
+          onSelect: selected => {
+            setSearchState({
+              ...searchState,
+              difficulty: selected
+            });
+          }
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+          name: "Price Range",
+          options: priceRanges,
+          onSelect: selected => {
+            setSearchState({
+              ...searchState,
+              priceRange: selected
+            });
+          }
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        children: "Search"
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+      id: "to-all-patterns",
+      children: ["Already have something in mind?", " ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: "/patterns",
+        children: "See All Patterns"
+      })]
+    })]
+  });
+}
+
+function PatternHeader({
+  title,
+  author,
+  difficulty
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "pattern-header card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: title
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+        children: ["by ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+          to: `/authors/${author.id}`,
+          children: author.username
+        })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+        children: ["Skill Level: ", difficulty]
+      })]
+    })]
+  });
+}
+
+function Slider({
+  children,
+  startIndex = 0
+}) {
+  const [index, setIndex] = reactExports.useState(startIndex);
+  const ref = reactExports.useRef(null);
+  function handleSlide(newIndex) {
+    anime({
+      targets: ref.current,
+      translateX: "calc(" + -100 * newIndex + "% - " + newIndex * 3 + "rem)",
+      easing: "easeInOutSine",
+      duration: 500
+    });
+    setIndex(newIndex);
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
+    children: /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "slider-holder",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        className: `slider-back ${index === 0 ? "hidden" : ""}`,
+        onClick: () => {
+          const newIndex = index - 1;
+          handleSlide(newIndex);
+        },
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {})
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        className: `slider-forward ${index === children.length - 1 ? "hidden" : ""}`,
+        onClick: () => {
+          const newIndex = index + 1;
+          handleSlide(newIndex);
+        },
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {})
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        ref: ref,
+        className: "slider",
+        children: children
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+        children: [index + 1, "/", children.length]
+      })]
+    })
+  });
+}
+
+function PatternImages({
+  images,
+  description
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("img", {
+        src: image
+      }))
+    }), images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      to: "",
+      children: "Enlarge"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: description
+    })]
+  });
 }
 
 function SiteHeader() {
@@ -45450,7 +45665,7 @@ function PatternScreen() {
 function LandingScreen() {
   const loggedIn = useLoginStatus();
   return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsx(LandingPatterns, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsx(LandingPatterns, {}), /*#__PURE__*/jsxRuntimeExports.jsx(LandingSearch, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "landing-screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: "/patterns",
