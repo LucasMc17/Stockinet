@@ -19,6 +19,7 @@ import DropDown from "./Inputs/DropDown.jsx";
 import SiteHeader from "./SiteHeader.jsx";
 import Slider from "./Slider.jsx";
 import PatternCard from "./PatternCard.jsx";
+import PatternSearch from "./PatternSearch.jsx";
 
 export {
   Gauge,
@@ -36,4 +37,5 @@ export {
   LandingSearch,
   DropDown,
   LandingHelp,
+  PatternSearch,
 };

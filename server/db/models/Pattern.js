@@ -21,6 +21,10 @@ const Pattern = db.define("pattern", {
     type: Sequelize.ENUM("BEGINNER", "INTERMEDIATE", "EXPERT"),
     allowNull: false,
   },
+  type: {
+    type: Sequelize.ENUM("HAT", "SWEATER", "SCARF", "MISC"),
+    allowNull: false,
+  },
   //   materials: {
   //     type: Sequelize.ARRAY,
   //   },

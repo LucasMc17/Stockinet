@@ -69,7 +69,14 @@ router.get("/preview/:id", async (req, res, next) => {
 });
 
 router.get("/", async (req, res, next) => {
-  const { method, page } = req.query;
+  const { method, page, type, difficulty } = req.query;
+  const whereList = [];
+  if (type && type !== "null") {
+    whereList.push(`patterns.type = '${type}'`);
+  }
+  if (difficulty && difficulty !== "null") {
+    whereList.push(`patterns.difficulty = '${difficulty}'`);
+  }
   const offset = (page - 1) * 20;
   const dict = {
     purchases: "user_count DESC",
@@ -91,6 +98,8 @@ router.get("/", async (req, res, next) => {
     (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count
 
     FROM patterns
+
+    ${whereList.length ? `WHERE ${whereList.join(" AND ")}` : ""}
 
     ORDER BY ${sort}
     

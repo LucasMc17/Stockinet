@@ -1,0 +1,21 @@
+.pattern-search-menu {
+  width: 80%;
+  margin: auto;
+  border-radius: 1em;
+  background-color: white;
+
+  & > h4 {
+    text-align: center;
+  }
+}
+
+.pattern-search-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75em;
+  gap: 20px;
+
+  & > * {
+    flex: 1 0 20%;
+  }
+}

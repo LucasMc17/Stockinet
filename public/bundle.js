@@ -41371,8 +41371,8 @@ let BASE_API_URL;
 }
 const Adapter = {
   // Patterns
-  async getAllPatterns(method, page) {
-    const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}`;
+  async getAllPatterns(method, page, type, difficulty) {
+    const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}&type=${type}&difficulty=${difficulty}`;
     const res = await get$1(url);
     const patterns = await res.json();
     return patterns;
@@ -41464,9 +41464,11 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
 }) => {
   const {
     method,
-    page
+    page,
+    type,
+    difficulty
   } = payload;
-  const patterns = await Adapter.getAllPatterns(method, page);
+  const patterns = await Adapter.getAllPatterns(method, page, type, difficulty);
   if (patterns?.errorStatus) {
     return rejectWithValue(patterns);
   }
@@ -44853,11 +44855,14 @@ function DropDown({
   });
 }
 
-function LandingSearch() {
+function PatternSearch({
+  patternPage
+}) {
+  const dispatch = useDispatch();
   const [searchState, setSearchState] = reactExports.useState({
     patternType: {
       name: "Scarf",
-      value: "scarf"
+      value: "SCARF"
     },
     difficulty: {
       name: "Beginner",
@@ -44866,17 +44871,28 @@ function LandingSearch() {
     priceRange: {
       name: "Free",
       value: "free"
+    },
+    sortBy: {
+      name: "Most Popular",
+      value: "purchases"
     }
   });
+  const sortTypes = [{
+    name: "Most Popular",
+    value: "purchases"
+  }, {
+    name: "Newest",
+    value: "recency"
+  }];
   const patternTypes = [{
     name: "Scarf",
-    value: "scarf"
+    value: "SCARF"
   }, {
     name: "Sweater",
-    value: "sweater"
+    value: "SWEATER"
   }, {
     name: "Hat",
-    value: "hat"
+    value: "HAT"
   }];
   const difficulties = [{
     name: "Beginner",
@@ -44898,51 +44914,77 @@ function LandingSearch() {
     name: "$10 and up",
     value: ">10"
   }];
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "pattern-search-menu menu",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Lorem ipsum dolor sit amet!"
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-search-filters",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+        name: "Pattern type",
+        options: patternTypes,
+        onSelect: selected => {
+          setSearchState({
+            ...searchState,
+            patternType: selected
+          });
+        }
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+        name: "Difficulty",
+        options: difficulties,
+        onSelect: selected => {
+          setSearchState({
+            ...searchState,
+            difficulty: selected
+          });
+        }
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+        name: "Price Range",
+        options: priceRanges,
+        onSelect: selected => {
+          setSearchState({
+            ...searchState,
+            priceRange: selected
+          });
+        }
+      }), patternPage && /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+        name: "Sort By",
+        options: sortTypes,
+        onSelect: selected => {
+          setSearchState({
+            ...searchState,
+            sortBy: selected
+          });
+        }
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "right-button",
+      children: patternPage ? /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        onClick: () => {
+          dispatch(fetchAllPatterns({
+            method: searchState.sortBy.value,
+            page: 1,
+            type: searchState.patternType.value,
+            difficulty: searchState.difficulty.value
+          }));
+        },
+        children: "Search"
+      }) : /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: `/patterns?type=${searchState.patternType.value}&difficulty=${searchState.difficulty.value}`,
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          children: "Search"
+        })
+      })
+    })]
+  });
+}
+
+function LandingSearch() {
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
     id: "landing-search",
     children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
       children: "Pattern Search"
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "landing-search-menu menu",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h4", {
-        children: "Lorem ipsum dolor sit amet!"
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "landing-search-filters",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
-          name: "Pattern type",
-          options: patternTypes,
-          onSelect: selected => {
-            setSearchState({
-              ...searchState,
-              patternType: selected
-            });
-          }
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
-          name: "Difficulty",
-          options: difficulties,
-          onSelect: selected => {
-            setSearchState({
-              ...searchState,
-              difficulty: selected
-            });
-          }
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
-          name: "Price Range",
-          options: priceRanges,
-          onSelect: selected => {
-            setSearchState({
-              ...searchState,
-              priceRange: selected
-            });
-          }
-        })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "right-button",
-        children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-          children: "Search"
-        })
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternSearch, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
       id: "to-all-patterns",
       children: ["Already have something in mind?", " ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: "/patterns",
@@ -45094,22 +45136,26 @@ function SiteHeader() {
 
 function AllPatternsScreen() {
   const dispatch = useDispatch();
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type");
+  const difficulty = params.get("difficulty");
   const {
     patternList,
     loading,
     error
   } = useSelector(s => s.patterns);
-  const [method, setMethod] = reactExports.useState("purchases");
   const [page, setPage] = reactExports.useState(1);
   reactExports.useEffect(() => {
     dispatch(selectPattern(null));
   }, []);
   reactExports.useEffect(() => {
     dispatch(fetchAllPatterns({
-      method,
-      page
+      method: "purchases",
+      page,
+      type,
+      difficulty
     }));
-  }, [method, page]);
+  }, [page, type, difficulty]);
   function nextPage(e) {
     setPage(page + 1);
   }
@@ -45126,18 +45172,8 @@ function AllPatternsScreen() {
   }
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("select", {
-        value: method,
-        onChange: e => {
-          setMethod(e.target.value);
-        },
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("option", {
-          value: "recency",
-          children: "Newest"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("option", {
-          value: "purchases",
-          children: "Most Popular"
-        })]
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternSearch, {
+        patternPage: true
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
           onClick: prevPage,

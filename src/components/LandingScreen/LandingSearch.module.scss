@@ -2,27 +2,6 @@
   padding: 1em;
 }
 
-.landing-search-menu {
-  width: 80%;
-  margin: auto;
-  border-radius: 1em;
-  background-color: white;
-
-  & > h4 {
-    text-align: center;
-  }
-}
-
-.landing-search-filters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75em;
-
-  & > * {
-    flex: 0 0 30%;
-  }
-}
-
 #to-all-patterns {
   text-align: right;
 

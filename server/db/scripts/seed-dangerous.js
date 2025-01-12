@@ -246,6 +246,7 @@ const testData = [
   {
     title: "Cable Knit Candle Cozies",
     sizes: ["Small", "Large"],
+    type: "MISC",
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
     leadImage: "/public/candle-cozies.png",
@@ -278,6 +279,7 @@ const testData = [
   {
     title: "Cable Knit Candle Cozies 2",
     sizes: ["Small", "Large"],
+    type: "MISC",
     description:
       "Keep your candles cozy with these simple but beautiful cable knits!",
     leadImage: "/public/candle-cozies.png",
@@ -376,6 +378,7 @@ async function seed() {
   for (let i = 1; i <= 100; i++) {
     const pattern = await createPattern({
       title: "pattern " + i,
+      type: ["HAT", "SWEATER", "SCARF", "MISC"][Math.floor(Math.random() * 4)],
       description: "",
       leadImage: "",
       images: [],

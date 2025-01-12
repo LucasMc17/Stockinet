@@ -4,14 +4,20 @@ import {
   fetchAllPatterns,
   selectPattern,
 } from "../@redux/reducers/Patterns/PatternSlice.js";
-import { LoadingScreen, ErrorScreen } from "../components";
-import { PatternCard } from "../components";
+import {
+  LoadingScreen,
+  ErrorScreen,
+  PatternCard,
+  PatternSearch,
+} from "../components";
 import "./AllPatternsScreen.module.scss";
 
 export default function AllPatternsScreen() {
   const dispatch = useDispatch();
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type");
+  const difficulty = params.get("difficulty");
   const { patternList, loading, error } = useSelector((s) => s.patterns);
-  const [method, setMethod] = useState("purchases");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -19,8 +25,8 @@ export default function AllPatternsScreen() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAllPatterns({ method, page }));
-  }, [method, page]);
+    dispatch(fetchAllPatterns({ method: "purchases", page, type, difficulty }));
+  }, [page, type, difficulty]);
 
   function nextPage(e) {
     setPage(page + 1);
@@ -43,15 +49,7 @@ export default function AllPatternsScreen() {
   if (patternList) {
     return (
       <>
-        <select
-          value={method}
-          onChange={(e) => {
-            setMethod(e.target.value);
-          }}
-        >
-          <option value="recency">Newest</option>
-          <option value="purchases">Most Popular</option>
-        </select>
+        <PatternSearch patternPage={true} />
         <div>
           <button onClick={prevPage}>{"<"}</button>
           <p>{page}</p>
