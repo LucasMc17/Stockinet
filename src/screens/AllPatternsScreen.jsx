@@ -17,7 +17,9 @@ export default function AllPatternsScreen() {
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type");
   const difficulty = params.get("difficulty");
-  const { patternList, loading, error } = useSelector((s) => s.patterns);
+  const { patternList, loading, error, maxPages } = useSelector(
+    (s) => s.patterns,
+  );
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -29,7 +31,9 @@ export default function AllPatternsScreen() {
   }, [page, type, difficulty]);
 
   function nextPage(e) {
-    setPage(page + 1);
+    if (maxPages > page) {
+      setPage(page + 1);
+    }
   }
 
   function prevPage(e) {
@@ -38,34 +42,38 @@ export default function AllPatternsScreen() {
     }
   }
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  if (error) {
-    return <ErrorScreen />;
-  }
-
   if (patternList) {
     return (
       <>
         <PatternSearch patternPage={true} />
-        <div>
-          <button onClick={prevPage}>{"<"}</button>
-          <p>{page}</p>
-          <button onClick={nextPage}>{">"}</button>
-        </div>
-        <div className="pattern-list all-patterns-list">
-          {patternList.map((pattern, i) => (
-            <PatternCard
-              key={i}
-              title={pattern.title}
-              image={pattern.leadImage}
-              description={pattern.description}
-              link={`/pattern/preview/${pattern.id}`}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <LoadingScreen />
+        ) : error ? (
+          <ErrorScreen />
+        ) : (
+          <>
+            <div>
+              <button disabled={page <= 1} onClick={prevPage}>
+                {"<"}
+              </button>
+              <p>{page}</p>
+              <button disabled={page >= maxPages} onClick={nextPage}>
+                {">"}
+              </button>
+            </div>
+            <div className="pattern-list all-patterns-list">
+              {patternList.map((pattern, i) => (
+                <PatternCard
+                  key={i}
+                  title={pattern.title}
+                  image={pattern.leadImage}
+                  description={pattern.description}
+                  link={`/pattern/preview/${pattern.id}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </>
     );
   }

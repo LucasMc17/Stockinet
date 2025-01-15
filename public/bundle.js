@@ -41345,6 +41345,7 @@ var initialState$1 = {
   loading: false,
   error: null,
   patternList: [],
+  maxPages: null,
   currentPattern: null,
   currentRequestId: null
 };
@@ -41535,6 +41536,9 @@ const patternSlice = createSlice({
     });
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
+        if (action.payload?.[0]?.totalcount) {
+          state.maxPages = Math.ceil(action.payload[0].totalcount / 20);
+        }
         state.patternList = action.payload;
       }
     });
@@ -45142,7 +45146,8 @@ function AllPatternsScreen() {
   const {
     patternList,
     loading,
-    error
+    error,
+    maxPages
   } = useSelector(s => s.patterns);
   const [page, setPage] = reactExports.useState(1);
   reactExports.useEffect(() => {
@@ -45157,41 +45162,41 @@ function AllPatternsScreen() {
     }));
   }, [page, type, difficulty]);
   function nextPage(e) {
-    setPage(page + 1);
+    if (maxPages > page) {
+      setPage(page + 1);
+    }
   }
   function prevPage(e) {
     if (page > 1) {
       setPage(page - 1);
     }
   }
-  if (loading) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
-  }
-  if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
-  }
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternSearch, {
         patternPage: true
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
-          onClick: prevPage,
-          children: "<"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-          children: page
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-          onClick: nextPage,
-          children: ">"
+      }), loading ? /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {}) : error ? /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {}) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            disabled: page <= 1,
+            onClick: prevPage,
+            children: "<"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+            children: page
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+            disabled: page >= maxPages,
+            onClick: nextPage,
+            children: ">"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+          className: "pattern-list all-patterns-list",
+          children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+            title: pattern.title,
+            image: pattern.leadImage,
+            description: pattern.description,
+            link: `/pattern/preview/${pattern.id}`
+          }, i))
         })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "pattern-list all-patterns-list",
-        children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
-          title: pattern.title,
-          image: pattern.leadImage,
-          description: pattern.description,
-          link: `/pattern/preview/${pattern.id}`
-        }, i))
       })]
     });
   }

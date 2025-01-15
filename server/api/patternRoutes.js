@@ -87,6 +87,8 @@ router.get("/", async (req, res, next) => {
     // sql is not good with counting associated models, so this has to be done with raw sequel
     const [patterns, metadata] = await db.query(`SELECT 
 
+    COUNT(*) OVER () as TotalCount,
+
     patterns.id, 
 
     patterns.title, 
@@ -106,6 +108,8 @@ router.get("/", async (req, res, next) => {
     OFFSET ${offset} ROWS
 
     FETCH NEXT 20 ROWS ONLY;`);
+
+    console.log(patterns);
 
     res.json(patterns);
   } catch (err) {

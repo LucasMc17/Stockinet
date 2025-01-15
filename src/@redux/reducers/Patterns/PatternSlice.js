@@ -88,6 +88,9 @@ const patternSlice = createSlice({
 
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
+        if (action.payload?.[0]?.totalcount) {
+          state.maxPages = Math.ceil(action.payload[0].totalcount / 20);
+        }
         state.patternList = action.payload;
       },
     });
