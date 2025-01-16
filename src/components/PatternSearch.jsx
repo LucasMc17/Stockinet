@@ -119,7 +119,7 @@ export default function PatternSearch({ patternPage }) {
         )}
       </div>
       <div className="right-button">
-        {patternPage ? (
+        {/* {patternPage ? (
           <button
             onClick={() => {
               dispatch(
@@ -140,7 +140,28 @@ export default function PatternSearch({ patternPage }) {
           >
             <button>Search</button>
           </Link>
-        )}
+        )} */}
+        <Link
+          to={`/patterns?type=${searchState.patternType.value}&difficulty=${searchState.difficulty.value}`}
+        >
+          <button
+            onClick={() => {
+              if (patternPage) {
+                dispatch(
+                  fetchAllPatterns({
+                    method: searchState.sortBy.value,
+                    page: 1,
+                    type: searchState.patternType.value,
+                    difficulty: searchState.difficulty.value,
+                    clear: true,
+                  }),
+                );
+              }
+            }}
+          >
+            Search
+          </button>
+        </Link>
       </div>
     </div>
   );

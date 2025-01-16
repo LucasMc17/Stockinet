@@ -6,19 +6,16 @@ import thunkBaseCases from "../../utils/thunkBaseCases.js";
 const fetchAllPatterns = createAsyncThunk(
   "patterns/fetchAllPatterns",
   async (payload, { getState, requestId, rejectWithValue }) => {
-    const { method, page, type, difficulty } = payload;
-    const patterns = await Adapter.getAllPatterns(
-      method,
-      page,
-      type,
-      difficulty,
-    );
+    const { method, page, type, difficulty, clear } = payload;
+    const result = await Adapter.getAllPatterns(method, page, type, difficulty);
 
-    if (patterns?.errorStatus) {
-      return rejectWithValue(patterns);
+    if (result?.errorStatus) {
+      return rejectWithValue(result);
     }
 
-    return patterns;
+    result.clear = clear;
+
+    return result;
   },
 );
 
@@ -68,6 +65,13 @@ const patternSlice = createSlice({
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
     },
+    clearPages: (state, action) => {
+      state.pages = {};
+      state.currentPage = 1;
+    },
+    setPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     thunkBaseCases(builder, fetchOnePattern, {
@@ -88,10 +92,16 @@ const patternSlice = createSlice({
 
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
-        if (action.payload?.[0]?.totalcount) {
-          state.maxPages = Math.ceil(action.payload[0].totalcount / 20);
+        const { patterns, page, clear } = action.payload;
+        if (patterns?.[0]?.totalcount) {
+          state.maxPages = Math.ceil(patterns[0].totalcount / 20);
         }
-        state.patternList = action.payload;
+        if (clear) {
+          state.pages = { [page]: patterns };
+          state.currentPage = 1;
+        } else {
+          state.pages[page] = patterns;
+        }
       },
     });
 
@@ -103,7 +113,7 @@ const patternSlice = createSlice({
   },
 });
 
-export const { selectPattern } = patternSlice.actions;
+export const { selectPattern, clearPages, setPage } = patternSlice.actions;
 export {
   fetchAllPatterns,
   fetchOnePattern,

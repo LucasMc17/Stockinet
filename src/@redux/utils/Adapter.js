@@ -31,7 +31,7 @@ const Adapter = {
 
     const res = await get(url);
     const patterns = await res.json();
-    return patterns;
+    return { patterns, page };
   },
   async getPatternPreview(id) {
     const url = `${BASE_API_URL}/patterns/preview/${id}`;

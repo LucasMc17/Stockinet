@@ -41345,6 +41345,8 @@ var initialState$1 = {
   loading: false,
   error: null,
   patternList: [],
+  pages: {},
+  currentPage: 1,
   maxPages: null,
   currentPattern: null,
   currentRequestId: null
@@ -41376,7 +41378,10 @@ const Adapter = {
     const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}&type=${type}&difficulty=${difficulty}`;
     const res = await get$1(url);
     const patterns = await res.json();
-    return patterns;
+    return {
+      patterns,
+      page
+    };
   },
   async getPatternPreview(id) {
     const url = `${BASE_API_URL}/patterns/preview/${id}`;
@@ -41467,13 +41472,15 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
     method,
     page,
     type,
-    difficulty
+    difficulty,
+    clear
   } = payload;
-  const patterns = await Adapter.getAllPatterns(method, page, type, difficulty);
-  if (patterns?.errorStatus) {
-    return rejectWithValue(patterns);
+  const result = await Adapter.getAllPatterns(method, page, type, difficulty);
+  if (result?.errorStatus) {
+    return rejectWithValue(result);
   }
-  return patterns;
+  result.clear = clear;
+  return result;
 });
 const fetchPatternsByUser = createAsyncThunk("patterns/fetchPatternsByUser", async (payload, {
   getState,
@@ -41514,6 +41521,13 @@ const patternSlice = createSlice({
   reducers: {
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
+    },
+    clearPages: (state, action) => {
+      state.pages = {};
+      state.currentPage = 1;
+    },
+    setPage: (state, action) => {
+      state.currentPage = action.payload;
     }
   },
   extraReducers: builder => {
@@ -41536,10 +41550,22 @@ const patternSlice = createSlice({
     });
     thunkBaseCases(builder, fetchAllPatterns, {
       fulfilledCallback: (state, action) => {
-        if (action.payload?.[0]?.totalcount) {
-          state.maxPages = Math.ceil(action.payload[0].totalcount / 20);
+        const {
+          patterns,
+          page,
+          clear
+        } = action.payload;
+        if (patterns?.[0]?.totalcount) {
+          state.maxPages = Math.ceil(patterns[0].totalcount / 20);
         }
-        state.patternList = action.payload;
+        if (clear) {
+          state.pages = {
+            [page]: patterns
+          };
+          state.currentPage = 1;
+        } else {
+          state.pages[page] = patterns;
+        }
       }
     });
     thunkBaseCases(builder, fetchPatternsByUser, {
@@ -41550,7 +41576,9 @@ const patternSlice = createSlice({
   }
 });
 const {
-  selectPattern
+  selectPattern,
+  clearPages,
+  setPage
 } = patternSlice.actions;
 var PatternSlice = patternSlice.reducer;
 
@@ -44963,19 +44991,20 @@ function PatternSearch({
       })]
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "right-button",
-      children: patternPage ? /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        onClick: () => {
-          dispatch(fetchAllPatterns({
-            method: searchState.sortBy.value,
-            page: 1,
-            type: searchState.patternType.value,
-            difficulty: searchState.difficulty.value
-          }));
-        },
-        children: "Search"
-      }) : /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: `/patterns?type=${searchState.patternType.value}&difficulty=${searchState.difficulty.value}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+          onClick: () => {
+            if (patternPage) {
+              dispatch(fetchAllPatterns({
+                method: searchState.sortBy.value,
+                page: 1,
+                type: searchState.patternType.value,
+                difficulty: searchState.difficulty.value,
+                clear: true
+              }));
+            }
+          },
           children: "Search"
         })
       })
@@ -45147,28 +45176,35 @@ function AllPatternsScreen() {
     patternList,
     loading,
     error,
-    maxPages
+    maxPages,
+    pages,
+    currentPage
   } = useSelector(s => s.patterns);
-  const [page, setPage] = reactExports.useState(1);
   reactExports.useEffect(() => {
     dispatch(selectPattern(null));
+    return () => {
+      console.log("RUNNING!!!");
+      dispatch(clearPages());
+    };
   }, []);
   reactExports.useEffect(() => {
-    dispatch(fetchAllPatterns({
-      method: "purchases",
-      page,
-      type,
-      difficulty
-    }));
-  }, [page, type, difficulty]);
+    if (!pages[currentPage]) {
+      dispatch(fetchAllPatterns({
+        method: "purchases",
+        page: currentPage,
+        type,
+        difficulty
+      }));
+    }
+  }, [currentPage, type, difficulty]);
   function nextPage(e) {
-    if (maxPages > page) {
-      setPage(page + 1);
+    if (maxPages > currentPage) {
+      dispatch(setPage(currentPage + 1));
     }
   }
   function prevPage(e) {
-    if (page > 1) {
-      setPage(page - 1);
+    if (currentPage > 1) {
+      dispatch(setPage(currentPage - 1));
     }
   }
   if (patternList) {
@@ -45178,19 +45214,19 @@ function AllPatternsScreen() {
       }), loading ? /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {}) : error ? /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {}) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
         children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
           children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
-            disabled: page <= 1,
+            disabled: currentPage <= 1,
             onClick: prevPage,
             children: "<"
           }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-            children: page
+            children: currentPage
           }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-            disabled: page >= maxPages,
+            disabled: currentPage >= maxPages,
             onClick: nextPage,
             children: ">"
           })]
         }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "pattern-list all-patterns-list",
-          children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+          children: pages[currentPage] && pages[currentPage].map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
             title: pattern.title,
             image: pattern.leadImage,
             description: pattern.description,

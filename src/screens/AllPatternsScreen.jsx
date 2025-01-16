@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import {
   fetchAllPatterns,
   selectPattern,
+  clearPages,
+  setPage,
 } from "../@redux/reducers/Patterns/PatternSlice.js";
 import {
   LoadingScreen,
@@ -17,28 +19,39 @@ export default function AllPatternsScreen() {
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type");
   const difficulty = params.get("difficulty");
-  const { patternList, loading, error, maxPages } = useSelector(
-    (s) => s.patterns,
-  );
-  const [page, setPage] = useState(1);
+  const { patternList, loading, error, maxPages, pages, currentPage } =
+    useSelector((s) => s.patterns);
 
   useEffect(() => {
     dispatch(selectPattern(null));
+    return () => {
+      console.log("RUNNING!!!");
+      dispatch(clearPages());
+    };
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAllPatterns({ method: "purchases", page, type, difficulty }));
-  }, [page, type, difficulty]);
+    if (!pages[currentPage]) {
+      dispatch(
+        fetchAllPatterns({
+          method: "purchases",
+          page: currentPage,
+          type,
+          difficulty,
+        }),
+      );
+    }
+  }, [currentPage, type, difficulty]);
 
   function nextPage(e) {
-    if (maxPages > page) {
-      setPage(page + 1);
+    if (maxPages > currentPage) {
+      dispatch(setPage(currentPage + 1));
     }
   }
 
   function prevPage(e) {
-    if (page > 1) {
-      setPage(page - 1);
+    if (currentPage > 1) {
+      dispatch(setPage(currentPage - 1));
     }
   }
 
@@ -53,24 +66,25 @@ export default function AllPatternsScreen() {
         ) : (
           <>
             <div>
-              <button disabled={page <= 1} onClick={prevPage}>
+              <button disabled={currentPage <= 1} onClick={prevPage}>
                 {"<"}
               </button>
-              <p>{page}</p>
-              <button disabled={page >= maxPages} onClick={nextPage}>
+              <p>{currentPage}</p>
+              <button disabled={currentPage >= maxPages} onClick={nextPage}>
                 {">"}
               </button>
             </div>
             <div className="pattern-list all-patterns-list">
-              {patternList.map((pattern, i) => (
-                <PatternCard
-                  key={i}
-                  title={pattern.title}
-                  image={pattern.leadImage}
-                  description={pattern.description}
-                  link={`/pattern/preview/${pattern.id}`}
-                />
-              ))}
+              {pages[currentPage] &&
+                pages[currentPage].map((pattern, i) => (
+                  <PatternCard
+                    key={i}
+                    title={pattern.title}
+                    image={pattern.leadImage}
+                    description={pattern.description}
+                    link={`/pattern/preview/${pattern.id}`}
+                  />
+                ))}
             </div>
           </>
         )}
