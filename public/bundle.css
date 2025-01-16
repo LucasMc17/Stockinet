@@ -38,7 +38,7 @@ p {
 a {
   text-decoration: none;
 }
-a:hover, a:active, a:visited, a:focus {
+a:hover, a:active, a:visited, a:link, a:focus {
   color: inherit;
 }
 

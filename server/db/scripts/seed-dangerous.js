@@ -379,10 +379,12 @@ async function seed() {
     const pattern = await createPattern({
       title: "pattern " + i,
       type: ["HAT", "SWEATER", "SCARF", "MISC"][Math.floor(Math.random() * 4)],
-      description: "",
-      leadImage: "",
+      description: "An Example pattern",
+      leadImage: "/public/candle-cozies.png",
       images: [],
-      difficulty: "INTERMEDIATE",
+      difficulty: ["BEGINNER", "INTERMEDIATE", "EXPERT"][
+        Math.floor(Math.random() * 3)
+      ],
       materials: [],
       gaugeStitches: 18,
       gaugeRows: 24,

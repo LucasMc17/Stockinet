@@ -30,7 +30,6 @@ export default function PatternScreen() {
     // const pattern = patternList.find((pat) => {
     //   return pat.id === Number(patternId);
     // });
-    // console.log(pattern);
     // if (pattern?.fullyLoaded) {
     //   dispatch(selectPattern(pattern));
     // } else {

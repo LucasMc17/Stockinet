@@ -25,7 +25,6 @@ export default function AllPatternsScreen() {
   useEffect(() => {
     dispatch(selectPattern(null));
     return () => {
-      console.log("RUNNING!!!");
       dispatch(clearPages());
     };
   }, []);
@@ -81,6 +80,9 @@ export default function AllPatternsScreen() {
                     key={i}
                     title={pattern.title}
                     image={pattern.leadImage}
+                    type={pattern.type}
+                    difficulty={pattern.difficulty}
+                    purchaseCount={pattern.user_count}
                     description={pattern.description}
                     link={`/pattern/preview/${pattern.id}`}
                   />

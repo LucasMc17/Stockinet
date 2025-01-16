@@ -97,6 +97,8 @@ router.get("/", async (req, res, next) => {
       
     patterns.difficulty,
 
+    patterns.type,
+
     (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count
 
     FROM patterns
@@ -108,8 +110,6 @@ router.get("/", async (req, res, next) => {
     OFFSET ${offset} ROWS
 
     FETCH NEXT 20 ROWS ONLY;`);
-
-    console.log(patterns);
 
     res.json(patterns);
   } catch (err) {

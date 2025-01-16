@@ -44424,7 +44424,10 @@ function PatternCard({
   image,
   title,
   description,
-  link
+  link,
+  type,
+  purchaseCount,
+  difficulty
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsxs(Link$1, {
     to: link,
@@ -44433,8 +44436,14 @@ function PatternCard({
       src: image
     }), /*#__PURE__*/jsxRuntimeExports.jsx("h5", {
       children: title
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("small", {
+      children: [type, " \u2022 FREE \u2022 ", difficulty]
     }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
       children: description
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("small", {
+        children: ["Purchased ", purchaseCount, " times"]
+      })
     })]
   });
 }
@@ -45183,7 +45192,6 @@ function AllPatternsScreen() {
   reactExports.useEffect(() => {
     dispatch(selectPattern(null));
     return () => {
-      console.log("RUNNING!!!");
       dispatch(clearPages());
     };
   }, []);
@@ -45229,6 +45237,9 @@ function AllPatternsScreen() {
           children: pages[currentPage] && pages[currentPage].map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
             title: pattern.title,
             image: pattern.leadImage,
+            type: pattern.type,
+            difficulty: pattern.difficulty,
+            purchaseCount: pattern.user_count,
             description: pattern.description,
             link: `/pattern/preview/${pattern.id}`
           }, i))
@@ -45629,7 +45640,6 @@ function PatternScreen() {
     // const pattern = patternList.find((pat) => {
     //   return pat.id === Number(patternId);
     // });
-    // console.log(pattern);
     // if (pattern?.fullyLoaded) {
     //   dispatch(selectPattern(pattern));
     // } else {
