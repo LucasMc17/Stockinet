@@ -1,10 +1,22 @@
 const router = require("express").Router();
 const {
   db,
-  models: { Pattern, Grid },
+  models: { Pattern, Grid, Purchaser },
 } = require("../db");
 module.exports = router;
 const { isAuthenticated } = require("../backendUtils/stytchClient");
+
+router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
+  try {
+    const patterns = await req.user.getPatterns({
+      order: [[db.col("purchaser.lastAccessed"), "DESC"]],
+      limit: 3,
+    });
+    res.json(patterns);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get("/by-user", isAuthenticated, async (req, res, next) => {
   try {
@@ -37,7 +49,17 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     }
     const associated = await pattern.hasUser(req.user);
     if (associated) {
-      res.json(pattern);
+      const purchaser = await Purchaser.findOne({
+        where: { patternId: pattern.id, userId: req.user.id },
+      });
+      if (purchaser) {
+        await purchaser.update({ lastAccessed: new Date() });
+        res.json(pattern);
+      } else {
+        const error = new Error("Not found");
+        error.status = 404;
+        throw error;
+      }
     } else {
       const error = new Error("Not found");
       error.status = 404;

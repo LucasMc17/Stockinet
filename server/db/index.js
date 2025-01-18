@@ -4,6 +4,7 @@ const Pattern = require("./models/Pattern.js");
 const Grid = require("./models/Grid.js");
 const User = require("./models/User.js");
 const Size = require("./models/Size.js");
+const Purchaser = require("./models/Purchaser.js");
 
 Pattern.hasMany(Grid);
 Grid.belongsTo(Pattern);
@@ -16,8 +17,8 @@ Grid.belongsToMany(Size, { through: "sizeGrids" });
 
 Pattern.belongsTo(User, { as: "author" });
 
-Pattern.belongsToMany(User, { through: "purchasers" });
-User.belongsToMany(Pattern, { through: "purchasers" });
+Pattern.belongsToMany(User, { through: Purchaser });
+User.belongsToMany(Pattern, { through: Purchaser });
 
 module.exports = {
   db,
@@ -25,5 +26,6 @@ module.exports = {
     Pattern,
     Grid,
     User,
+    Purchaser,
   },
 };

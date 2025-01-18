@@ -404,7 +404,9 @@ async function seed() {
       const patternIndex = Math.floor(Math.random() * 100);
       if (!indexes.includes(patternIndex)) {
         indexes.push(patternIndex);
-        await patterns[patternIndex].addUser(user);
+        await patterns[patternIndex].addUser(user, {
+          through: { lastAccessed: new Date() },
+        });
       }
     }
     for (let i = 0; i < 15; i++) {
@@ -418,10 +420,18 @@ async function seed() {
   await testPattern1.setAuthor(testUser1);
   await testPattern2.setAuthor(testUser1);
 
-  await testPattern1.addUser(testUser2);
-  await testPattern2.addUser(testUser2);
-  await testPattern1.addUser(testUser1);
-  await testPattern2.addUser(testUser1);
+  await testPattern1.addUser(testUser2, {
+    through: { lastAccessed: new Date() },
+  });
+  await testPattern2.addUser(testUser2, {
+    through: { lastAccessed: new Date() },
+  });
+  await testPattern1.addUser(testUser1, {
+    through: { lastAccessed: new Date() },
+  });
+  await testPattern2.addUser(testUser1, {
+    through: { lastAccessed: new Date() },
+  });
 
   console.log(`seeded successfully`);
 }
