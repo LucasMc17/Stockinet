@@ -23,6 +23,15 @@
     z-index: 999999;
     background-color: white;
     border: 2px solid lightgray;
+    padding: 0;
+
+    & svg {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      top: calc(50% - 7.5px);
+      left: calc(50% - 7.5px);
+    }
 
     &.slider-back {
       left: 0px;

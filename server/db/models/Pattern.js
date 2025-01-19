@@ -1,10 +1,22 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
+const _ = require("lodash");
+
 const Pattern = db.define("pattern", {
+  id: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false,
+  },
+  slug: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
   },
   description: {
     type: Sequelize.STRING,
@@ -48,6 +60,10 @@ const Pattern = db.define("pattern", {
   //     type: Sequelize.ARRAY,
   //     allowNull: false,
   //   },
+});
+
+Pattern.beforeValidate((pattern, options) => {
+  pattern.slug = _.kebabCase(pattern.title.slice(0, 50)) + "-" + pattern.id;
 });
 
 module.exports = Pattern;

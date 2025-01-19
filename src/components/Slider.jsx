@@ -27,7 +27,7 @@ export default function Slider({ children, startIndex = 0 }) {
             handleSlide(newIndex);
           }}
         >
-          <ChevronLeft />
+          <ChevronLeft stroke="black" />
         </button>
         <button
           className={`slider-forward ${
@@ -38,7 +38,7 @@ export default function Slider({ children, startIndex = 0 }) {
             handleSlide(newIndex);
           }}
         >
-          <ChevronRight />
+          <ChevronRight stroke="black" />
         </button>
         <div ref={ref} className="slider">
           {children}

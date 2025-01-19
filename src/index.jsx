@@ -64,7 +64,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "pattern/:patternId",
+    path: "pattern/:patternSlug",
     element: (
       <>
         <SiteHeader />
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "pattern/preview/:patternId",
+    path: "pattern/preview/:patternSlug",
     element: (
       <>
         <SiteHeader />

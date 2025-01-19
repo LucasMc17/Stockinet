@@ -20,7 +20,8 @@ import { useLoggedOutRedirect } from "../hooks";
 export default function PatternScreen() {
   useLoggedOutRedirect();
   const dispatch = useDispatch();
-  const { patternId } = useParams();
+  const { patternSlug } = useParams();
+  // const patternId = patternSlug.slice(-36);
   const { currentPattern, patternList, loading, error } = useSelector(
     (s) => s.patterns,
   );
@@ -33,8 +34,11 @@ export default function PatternScreen() {
     // if (pattern?.fullyLoaded) {
     //   dispatch(selectPattern(pattern));
     // } else {
-    dispatch(fetchOnePattern(patternId));
+    dispatch(fetchOnePattern(patternSlug));
     // }
+    return () => {
+      dispatch(selectPattern(null));
+    };
   }, []);
 
   if (loading) {
@@ -91,12 +95,13 @@ export default function PatternScreen() {
           </div>
           <div className="card">
             <Slider>
-              {currentPattern.grids.map((grid) => (
-                <InteractiveGrid
-                  data={JSON.parse(grid.data)}
-                  gridName={grid.name}
-                />
-              ))}
+              {currentPattern?.grids?.length &&
+                currentPattern.grids.map((grid) => (
+                  <InteractiveGrid
+                    data={JSON.parse(grid.data)}
+                    gridName={grid.name}
+                  />
+                ))}
             </Slider>
           </div>
         </div>

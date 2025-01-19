@@ -44494,7 +44494,7 @@ function LandingPatterns() {
         title: pattern.title,
         image: pattern.leadImage,
         description: pattern.description,
-        link: `/pattern/${pattern.id}`
+        link: `/pattern/${pattern.slug}`
       }))
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "right-button",
@@ -44508,13 +44508,15 @@ function LandingPatterns() {
   });
 }
 
-function ChevronLeft() {
+function ChevronLeft({
+  stroke
+}) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
     strokeWidth: 1.5,
-    stroke: "currentColor",
+    stroke: stroke || "currentColor",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
       strokeLinecap: "round",
       strokeLinejoin: "round",
@@ -44523,13 +44525,15 @@ function ChevronLeft() {
   });
 }
 
-function ChevronRight() {
+function ChevronRight({
+  stroke
+}) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
     strokeWidth: 1.5,
-    stroke: "currentColor",
+    stroke: stroke || "currentColor",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
       strokeLinecap: "round",
       strokeLinejoin: "round",
@@ -44538,13 +44542,15 @@ function ChevronRight() {
   });
 }
 
-function ChevronDown() {
+function ChevronDown({
+  stroke
+}) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
     strokeWidth: 1.5,
-    stroke: "currentColor",
+    stroke: stroke || "currentColor",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
       strokeLinecap: "round",
       strokeLinejoin: "round",
@@ -44553,13 +44559,15 @@ function ChevronDown() {
   });
 }
 
-function ChevronUp() {
+function ChevronUp({
+  stroke
+}) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     fill: "none",
     viewBox: "0 0 24 24",
     strokeWidth: 1.5,
-    stroke: "currentColor",
+    stroke: stroke || "currentColor",
     children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
       strokeLinecap: "round",
       strokeLinejoin: "round",
@@ -45115,14 +45123,18 @@ function Slider({
           const newIndex = index - 1;
           handleSlide(newIndex);
         },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {})
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {
+          stroke: "black"
+        })
       }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
         className: `slider-forward ${index === children.length - 1 ? "hidden" : ""}`,
         onClick: () => {
           const newIndex = index + 1;
           handleSlide(newIndex);
         },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {})
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {
+          stroke: "black"
+        })
       }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
         ref: ref,
         className: "slider",
@@ -45261,7 +45273,7 @@ function AllPatternsScreen() {
             difficulty: pattern.difficulty,
             purchaseCount: pattern.user_count,
             description: pattern.description,
-            link: `/pattern/preview/${pattern.id}`
+            link: `/pattern/preview/${pattern.slug}`
           }, i))
         })]
       })]
@@ -45602,7 +45614,7 @@ function OwnedPatternsScreen() {
 
 function PatternPreviewScreen() {
   const {
-    patternId
+    patternSlug
   } = useParams();
   const dispatch = useDispatch();
   const {
@@ -45611,7 +45623,10 @@ function PatternPreviewScreen() {
     error
   } = useSelector(s => s.patterns);
   reactExports.useEffect(() => {
-    dispatch(fetchPatternPreview(patternId));
+    dispatch(fetchPatternPreview(patternSlug));
+    return () => {
+      dispatch(selectPattern(null));
+    };
   }, []);
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
@@ -45647,8 +45662,9 @@ function PatternScreen() {
   useLoggedOutRedirect();
   const dispatch = useDispatch();
   const {
-    patternId
+    patternSlug
   } = useParams();
+  // const patternId = patternSlug.slice(-36);
   const {
     currentPattern,
     patternList,
@@ -45663,8 +45679,11 @@ function PatternScreen() {
     // if (pattern?.fullyLoaded) {
     //   dispatch(selectPattern(pattern));
     // } else {
-    dispatch(fetchOnePattern(patternId));
+    dispatch(fetchOnePattern(patternSlug));
     // }
+    return () => {
+      dispatch(selectPattern(null));
+    };
   }, []);
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
@@ -45710,7 +45729,7 @@ function PatternScreen() {
         }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "card",
           children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-            children: currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
+            children: currentPattern?.grids?.length && currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
               data: JSON.parse(grid.data),
               gridName: grid.name
             }))
@@ -45802,12 +45821,12 @@ const router = createBrowserRouter([{
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(OwnedPatternsScreen, {})]
   })
 }, {
-  path: "pattern/:patternId",
+  path: "pattern/:patternSlug",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})]
   })
 }, {
-  path: "pattern/preview/:patternId",
+  path: "pattern/preview/:patternSlug",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternPreviewScreen, {})]
   })

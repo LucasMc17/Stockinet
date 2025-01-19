@@ -12,6 +12,7 @@ router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
       attributes: [
         "title",
         "leadImage",
+        "slug",
         "id",
         "difficulty",
         "description",
@@ -29,7 +30,7 @@ router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
 router.get("/by-user", isAuthenticated, async (req, res, next) => {
   try {
     const patterns = await req.user.getPatterns({
-      attributes: ["title", "id"],
+      attributes: ["title", "id", "slug"],
     });
     res.json(patterns);
   } catch (err) {
@@ -37,10 +38,13 @@ router.get("/by-user", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.get("/:id", isAuthenticated, async (req, res, next) => {
+router.get("/:slug", isAuthenticated, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const pattern = await Pattern.findByPk(id, {
+    const { slug } = req.params;
+    const pattern = await Pattern.findOne({
+      where: {
+        slug,
+      },
       include: [
         {
           model: Grid,
@@ -78,10 +82,11 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.get("/preview/:id", async (req, res, next) => {
+router.get("/preview/:slug", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const pattern = await Pattern.findByPk(id, {
+    const { slug } = req.params;
+    const pattern = await Pattern.findOne({
+      where: { slug },
       include: { association: "author" },
       attributes: [
         "id",
@@ -126,6 +131,8 @@ router.get("/", async (req, res, next) => {
     patterns."leadImage",
       
     patterns.difficulty,
+
+    patterns.slug,
 
     patterns.type,
 

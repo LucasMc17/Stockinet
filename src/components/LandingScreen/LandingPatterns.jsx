@@ -28,7 +28,7 @@ export default function LandingPatterns() {
             title={pattern.title}
             image={pattern.leadImage}
             description={pattern.description}
-            link={`/pattern/${pattern.id}`}
+            link={`/pattern/${pattern.slug}`}
           />
         ))}
       </div>

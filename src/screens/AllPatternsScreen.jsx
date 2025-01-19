@@ -84,7 +84,7 @@ export default function AllPatternsScreen() {
                     difficulty={pattern.difficulty}
                     purchaseCount={pattern.user_count}
                     description={pattern.description}
-                    link={`/pattern/preview/${pattern.id}`}
+                    link={`/pattern/preview/${pattern.slug}`}
                   />
                 ))}
             </div>
