@@ -19,6 +19,19 @@ const fetchAllPatterns = createAsyncThunk(
   },
 );
 
+const fetchRecentPatterns = createAsyncThunk(
+  "patterns/fetchRecentPatterns",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const patterns = await Adapter.getRecentPatterns();
+
+    if (patterns?.errorStatus) {
+      return rejectWithValue(patterns);
+    }
+
+    return patterns;
+  },
+);
+
 const fetchPatternsByUser = createAsyncThunk(
   "patterns/fetchPatternsByUser",
   async (payload, { getState, requestId, rejectWithValue }) => {
@@ -74,6 +87,11 @@ const patternSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    thunkBaseCases(builder, fetchRecentPatterns, {
+      fulfilledCallback: (state, action) => {
+        state.recentPatterns = action.payload;
+      },
+    });
     thunkBaseCases(builder, fetchOnePattern, {
       fulfilledCallback: (state, action) => {
         const result = { ...action.payload, fullyLoaded: true };
@@ -119,5 +137,6 @@ export {
   fetchOnePattern,
   fetchPatternsByUser,
   fetchPatternPreview,
+  fetchRecentPatterns,
 };
 export default patternSlice.reducer;

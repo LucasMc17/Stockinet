@@ -26,6 +26,13 @@ if (process.env.NODE_ENV === "development") {
 
 const Adapter = {
   // Patterns
+  async getRecentPatterns() {
+    const url = `${BASE_API_URL}/patterns/by-user/recents`;
+
+    const res = await get(url);
+    const patterns = await res.json();
+    return patterns;
+  },
   async getAllPatterns(method, page, type, difficulty) {
     const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}&type=${type}&difficulty=${difficulty}`;
 

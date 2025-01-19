@@ -9,6 +9,14 @@ const { isAuthenticated } = require("../backendUtils/stytchClient");
 router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
   try {
     const patterns = await req.user.getPatterns({
+      attributes: [
+        "title",
+        "leadImage",
+        "id",
+        "difficulty",
+        "description",
+        "type",
+      ],
       order: [[db.col("purchaser.lastAccessed"), "DESC"]],
       limit: 3,
     });

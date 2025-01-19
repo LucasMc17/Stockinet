@@ -7,4 +7,5 @@ export default {
   maxPages: null,
   currentPattern: null,
   currentRequestId: null,
+  recentPatterns: [],
 };

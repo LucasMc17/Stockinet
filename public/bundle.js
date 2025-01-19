@@ -41349,7 +41349,8 @@ var initialState$1 = {
   currentPage: 1,
   maxPages: null,
   currentPattern: null,
-  currentRequestId: null
+  currentRequestId: null,
+  recentPatterns: []
 };
 
 //NOTHING HERE HAS BEEN TESTED. This will become relevent once we have a db set up
@@ -41374,6 +41375,12 @@ let BASE_API_URL;
 }
 const Adapter = {
   // Patterns
+  async getRecentPatterns() {
+    const url = `${BASE_API_URL}/patterns/by-user/recents`;
+    const res = await get$1(url);
+    const patterns = await res.json();
+    return patterns;
+  },
   async getAllPatterns(method, page, type, difficulty) {
     const url = `${BASE_API_URL}/patterns?method=${method}&page=${page}&type=${type}&difficulty=${difficulty}`;
     const res = await get$1(url);
@@ -41482,6 +41489,17 @@ const fetchAllPatterns = createAsyncThunk("patterns/fetchAllPatterns", async (pa
   result.clear = clear;
   return result;
 });
+const fetchRecentPatterns = createAsyncThunk("patterns/fetchRecentPatterns", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const patterns = await Adapter.getRecentPatterns();
+  if (patterns?.errorStatus) {
+    return rejectWithValue(patterns);
+  }
+  return patterns;
+});
 const fetchPatternsByUser = createAsyncThunk("patterns/fetchPatternsByUser", async (payload, {
   getState,
   requestId,
@@ -41531,6 +41549,11 @@ const patternSlice = createSlice({
     }
   },
   extraReducers: builder => {
+    thunkBaseCases(builder, fetchRecentPatterns, {
+      fulfilledCallback: (state, action) => {
+        state.recentPatterns = action.payload;
+      }
+    });
     thunkBaseCases(builder, fetchOnePattern, {
       fulfilledCallback: (state, action) => {
         const result = {
@@ -44449,6 +44472,13 @@ function PatternCard({
 }
 
 function LandingPatterns() {
+  const dispatch = useDispatch();
+  const {
+    recentPatterns
+  } = useSelector(s => s.patterns);
+  reactExports.useEffect(() => {
+    dispatch(fetchRecentPatterns());
+  }, []);
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
     id: "landing-patterns",
     className: "menu",
@@ -44458,24 +44488,14 @@ function LandingPatterns() {
       }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
         children: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       id: "landing-patterns-list",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
-        title: "Pattern Name",
-        image: "/public/placeholder.webp",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        link: "/patterns/1"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
-        title: "Pattern Name",
-        image: "/public/placeholder.webp",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        link: "/patterns/1"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
-        title: "Pattern Name",
-        image: "/public/placeholder.webp",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        link: "/patterns/1"
-      })]
+      children: recentPatterns.map(pattern => /*#__PURE__*/jsxRuntimeExports.jsx(PatternCard, {
+        title: pattern.title,
+        image: pattern.leadImage,
+        description: pattern.description,
+        link: `/pattern/${pattern.id}`
+      }))
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "right-button",
       children: /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
