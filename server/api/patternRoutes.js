@@ -4,9 +4,12 @@ const {
   models: { Pattern, Grid, Purchaser },
 } = require("../db");
 module.exports = router;
-const { isAuthenticated } = require("../backendUtils/stytchClient");
+const {
+  rejectWithoutAuth,
+  checkAuth,
+} = require("../backendUtils/stytchClient");
 
-router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
+router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
   try {
     const patterns = await req.user.getPatterns({
       attributes: [
@@ -27,7 +30,7 @@ router.get("/by-user/recents", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.get("/by-user", isAuthenticated, async (req, res, next) => {
+router.get("/by-user", rejectWithoutAuth, async (req, res, next) => {
   try {
     const patterns = await req.user.getPatterns({
       attributes: ["title", "id", "slug"],
@@ -38,8 +41,9 @@ router.get("/by-user", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.get("/:slug", isAuthenticated, async (req, res, next) => {
+router.get("/:slug", checkAuth, async (req, res, next) => {
   try {
+    // first, find the pattern and return 404 if it doesn't exist
     const { slug } = req.params;
     const pattern = await Pattern.findOne({
       where: {
@@ -55,49 +59,53 @@ router.get("/:slug", isAuthenticated, async (req, res, next) => {
       ],
     });
     if (!pattern) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
-    }
-    const associated = await pattern.hasUser(req.user);
-    if (associated) {
-      const purchaser = await Purchaser.findOne({
-        where: { patternId: pattern.id, userId: req.user.id },
-      });
-      if (purchaser) {
-        await purchaser.update({ lastAccessed: new Date() });
-        res.json(pattern);
-      } else {
+      if (!pattern) {
         const error = new Error("Not found");
         error.status = 404;
         throw error;
       }
-    } else {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
     }
-  } catch (err) {
-    next(err);
-  }
-});
 
-router.get("/preview/:slug", async (req, res, next) => {
-  try {
-    const { slug } = req.params;
-    const pattern = await Pattern.findOne({
-      where: { slug },
-      include: { association: "author" },
-      attributes: [
-        "id",
-        "title",
-        "description",
-        "leadImage",
-        "images",
-        "difficulty",
-      ],
-    });
-    res.json(pattern);
+    if (req.user) {
+      //user is logged in
+      const associated = await pattern.hasUser(req.user);
+      if (associated) {
+        // user is logged in, pattern been purchased
+        const purchaser = await Purchaser.findOne({
+          where: { patternId: pattern.id, userId: req.user.id },
+        });
+        if (purchaser) {
+          await purchaser.update({ lastAccessed: new Date() });
+          const patternWithFlag = pattern.toJSON();
+          patternWithFlag.owned = true;
+          res.json(patternWithFlag);
+        }
+      } else {
+        // user is logged in, pattern exists but is not purchased
+        res.json({
+          id: pattern.id,
+          title: pattern.title,
+          description: pattern.description,
+          leadImage: pattern.leadImage,
+          images: pattern.images,
+          difficulty: pattern.difficulty,
+          author: pattern.author,
+          owned: false,
+        });
+      }
+    } else {
+      // user is not logged in
+      res.json({
+        id: pattern.id,
+        title: pattern.title,
+        description: pattern.description,
+        leadImage: pattern.leadImage,
+        images: pattern.images,
+        difficulty: pattern.difficulty,
+        author: pattern.author,
+        owned: false,
+      });
+    }
   } catch (err) {
     next(err);
   }

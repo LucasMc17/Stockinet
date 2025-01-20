@@ -13,6 +13,8 @@ import LandingHelp from "./LandingScreen/LandingHelp.jsx";
 
 import PatternHeader from "./PatternScreen/PatternHeader.jsx";
 import PatternImages from "./PatternScreen/PatternImages.jsx";
+import FullPattern from "./PatternScreen/FullPattern.jsx";
+import PreviewPattern from "./PatternScreen/PreviewPattern.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
@@ -38,4 +40,6 @@ export {
   DropDown,
   LandingHelp,
   PatternSearch,
+  FullPattern,
+  PreviewPattern,
 };

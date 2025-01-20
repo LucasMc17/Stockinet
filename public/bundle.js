@@ -41390,20 +41390,14 @@ const Adapter = {
       page
     };
   },
-  async getPatternPreview(id) {
-    const url = `${BASE_API_URL}/patterns/preview/${id}`;
-    const res = await get$1(url);
-    const pattern = await res.json();
-    return pattern;
-  },
   async getPatternsByUser() {
     const url = `${BASE_API_URL}/patterns/by-user`;
     const res = await get$1(url);
     const patterns = await res.json();
     return patterns;
   },
-  async getOnePattern(id) {
-    const url = `${BASE_API_URL}/patterns/${id}`;
+  async getOnePattern(slug) {
+    const url = `${BASE_API_URL}/patterns/${slug}`;
     const res = await get$1(url);
     const pattern = await res.json();
     return pattern;
@@ -41522,17 +41516,6 @@ const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payl
   }
   return pattern;
 });
-const fetchPatternPreview = createAsyncThunk("patterns/fetchPatternPreview", async (payload, {
-  getState,
-  requestId,
-  rejectWithValue
-}) => {
-  const pattern = await Adapter.getPatternPreview(payload);
-  if (pattern?.errorStatus) {
-    return rejectWithValue(pattern);
-  }
-  return pattern;
-});
 const patternSlice = createSlice({
   name: "patterns",
   initialState: initialState$1,
@@ -41564,11 +41547,6 @@ const patternSlice = createSlice({
           return pattern.id === result.id ? result : pattern;
         });
         state.currentPattern = result;
-      }
-    });
-    thunkBaseCases(builder, fetchPatternPreview, {
-      fulfilledCallback: (state, action) => {
-        state.currentPattern = action.payload;
       }
     });
     thunkBaseCases(builder, fetchAllPatterns, {
@@ -44494,7 +44472,7 @@ function LandingPatterns() {
         title: pattern.title,
         image: pattern.leadImage,
         description: pattern.description,
-        link: `/pattern/${pattern.slug}`
+        link: `/patterns/${pattern.slug}`
       }))
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "right-button",
@@ -45165,6 +45143,82 @@ function PatternImages({
   });
 }
 
+function FullPattern({
+  currentPattern
+}) {
+  useLoggedOutRedirect();
+  const images = [currentPattern.leadImage, ...currentPattern.images];
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    id: "pattern",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
+      title: currentPattern.title,
+      author: currentPattern.author,
+      difficulty: currentPattern.difficulty
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-splashscreen",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
+        images: images,
+        description: currentPattern.description
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: "What you'll need"
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "card",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: "The gauge"
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(Gauge, {
+          data: {
+            widthInches: currentPattern.gaugeWidthInches,
+            heightInches: currentPattern.gaugeHeightInches,
+            rows: currentPattern.gaugeRows,
+            stitches: currentPattern.gaugeStitches
+          }
+        })]
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-instructions",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+          children: currentPattern?.grids?.length && currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
+            data: JSON.parse(grid.data),
+            gridName: grid.name
+          }))
+        })
+      })]
+    })]
+  });
+}
+
+function PreviewPattern({
+  currentPattern
+}) {
+  const images = [currentPattern.leadImage, ...currentPattern.images];
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    id: "pattern",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
+      title: currentPattern.title,
+      author: currentPattern.author,
+      difficulty: currentPattern.difficulty
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-previewscreen",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
+        images: images,
+        description: currentPattern.description
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "card",
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+          children: "What you'll need"
+        })
+      })]
+    })]
+  });
+}
+
 function SiteHeader() {
   const {
     username
@@ -45273,7 +45327,7 @@ function AllPatternsScreen() {
             difficulty: pattern.difficulty,
             purchaseCount: pattern.user_count,
             description: pattern.description,
-            link: `/pattern/preview/${pattern.slug}`
+            link: `/patterns/${pattern.slug}`
           }, i))
         })]
       })]
@@ -45603,7 +45657,7 @@ function OwnedPatternsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "card",
       children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: `/pattern/${pattern.id}`,
+        to: `/patterns/${pattern.id}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
           children: pattern.title
         })
@@ -45612,59 +45666,11 @@ function OwnedPatternsScreen() {
   }
 }
 
-function PatternPreviewScreen() {
-  const {
-    patternSlug
-  } = useParams();
-  const dispatch = useDispatch();
-  const {
-    currentPattern,
-    loading,
-    error
-  } = useSelector(s => s.patterns);
-  reactExports.useEffect(() => {
-    dispatch(fetchPatternPreview(patternSlug));
-    return () => {
-      dispatch(selectPattern(null));
-    };
-  }, []);
-  if (loading) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
-  }
-  if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
-  }
-  if (currentPattern) {
-    const images = [currentPattern.leadImage, ...currentPattern.images];
-    return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-      id: "pattern",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
-        title: currentPattern.title,
-        author: currentPattern.author,
-        difficulty: currentPattern.difficulty
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "pattern-previewscreen",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
-          images: images,
-          description: currentPattern.description
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "card",
-          children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-            children: "What you'll need"
-          })
-        })]
-      })]
-    });
-  }
-}
-
 function PatternScreen() {
-  useLoggedOutRedirect();
   const dispatch = useDispatch();
   const {
     patternSlug
   } = useParams();
-  // const patternId = patternSlug.slice(-36);
   const {
     currentPattern,
     patternList,
@@ -45691,51 +45697,13 @@ function PatternScreen() {
   if (error) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
   }
-  if (currentPattern) {
-    const images = [currentPattern.leadImage, ...currentPattern.images];
-    return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-      id: "pattern",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
-        title: currentPattern.title,
-        author: currentPattern.author,
-        difficulty: currentPattern.difficulty
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "pattern-splashscreen",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
-          images: images,
-          description: currentPattern.description
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "card",
-          children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-            children: "What you'll need"
-          })
-        }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-          className: "card",
-          children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-            children: "The gauge"
-          }), /*#__PURE__*/jsxRuntimeExports.jsx(Gauge, {
-            data: {
-              widthInches: currentPattern.gaugeWidthInches,
-              heightInches: currentPattern.gaugeHeightInches,
-              rows: currentPattern.gaugeRows,
-              stitches: currentPattern.gaugeStitches
-            }
-          })]
-        })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "pattern-instructions",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "card"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-          className: "card",
-          children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-            children: currentPattern?.grids?.length && currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
-              data: JSON.parse(grid.data),
-              gridName: grid.name
-            }))
-          })
-        })]
-      })]
+  if (currentPattern?.owned) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(FullPattern, {
+      currentPattern: currentPattern
+    });
+  } else if (currentPattern) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(PreviewPattern, {
+      currentPattern: currentPattern
     });
   }
 }
@@ -45821,16 +45789,21 @@ const router = createBrowserRouter([{
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(OwnedPatternsScreen, {})]
   })
 }, {
-  path: "pattern/:patternSlug",
+  path: "patterns/:patternSlug",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})]
   })
-}, {
-  path: "pattern/preview/:patternSlug",
-  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternPreviewScreen, {})]
-  })
-}]);
+}
+// {
+//   path: "patterns/preview/:patternSlug",
+//   element: (
+//     <>
+//       <SiteHeader />
+//       <PatternPreviewScreen />
+//     </>
+//   ),
+// },
+]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/jsxRuntimeExports.jsx(React$1.StrictMode, {
   children: /*#__PURE__*/jsxRuntimeExports.jsx(StytchProvider, {

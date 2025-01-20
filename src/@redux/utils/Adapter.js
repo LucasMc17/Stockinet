@@ -40,13 +40,6 @@ const Adapter = {
     const patterns = await res.json();
     return { patterns, page };
   },
-  async getPatternPreview(id) {
-    const url = `${BASE_API_URL}/patterns/preview/${id}`;
-
-    const res = await get(url);
-    const pattern = await res.json();
-    return pattern;
-  },
   async getPatternsByUser() {
     const url = `${BASE_API_URL}/patterns/by-user`;
 
@@ -54,8 +47,8 @@ const Adapter = {
     const patterns = await res.json();
     return patterns;
   },
-  async getOnePattern(id) {
-    const url = `${BASE_API_URL}/patterns/${id}`;
+  async getOnePattern(slug) {
+    const url = `${BASE_API_URL}/patterns/${slug}`;
 
     const res = await get(url);
     const pattern = await res.json();

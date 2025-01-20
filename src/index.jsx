@@ -4,7 +4,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   OwnedPatternsScreen,
   PatternScreen,
-  PatternPreviewScreen,
   LoginSignupScreen,
   AllPatternsScreen,
   LandingScreen,
@@ -64,7 +63,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "pattern/:patternSlug",
+    path: "patterns/:patternSlug",
     element: (
       <>
         <SiteHeader />
@@ -72,15 +71,15 @@ const router = createBrowserRouter([
       </>
     ),
   },
-  {
-    path: "pattern/preview/:patternSlug",
-    element: (
-      <>
-        <SiteHeader />
-        <PatternPreviewScreen />
-      </>
-    ),
-  },
+  // {
+  //   path: "patterns/preview/:patternSlug",
+  //   element: (
+  //     <>
+  //       <SiteHeader />
+  //       <PatternPreviewScreen />
+  //     </>
+  //   ),
+  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -18,7 +18,7 @@ const client = new stytch.Client({
   secret: stytchSecret,
 });
 
-async function isAuthenticated(req, res, next) {
+async function rejectWithoutAuth(req, res, next) {
   try {
     const sessionJWT = req.cookies.stytch_session_jwt;
     const resp = await client.sessions.authenticateJwt({
@@ -35,4 +35,20 @@ async function isAuthenticated(req, res, next) {
   }
 }
 
-module.exports = { client, isAuthenticated };
+async function checkAuth(req, res, next) {
+  try {
+    const sessionJWT = req.cookies.stytch_session_jwt;
+    const resp = await client.sessions.authenticateJwt({
+      session_jwt: sessionJWT,
+    });
+    const user = await User.findOne({
+      where: { stytchId: resp.session.user_id },
+    });
+    req.user = user;
+    next();
+  } catch (err) {
+    next();
+  }
+}
+
+module.exports = { client, rejectWithoutAuth, checkAuth };
