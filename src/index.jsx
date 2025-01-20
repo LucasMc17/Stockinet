@@ -71,15 +71,6 @@ const router = createBrowserRouter([
       </>
     ),
   },
-  // {
-  //   path: "patterns/preview/:patternSlug",
-  //   element: (
-  //     <>
-  //       <SiteHeader />
-  //       <PatternPreviewScreen />
-  //     </>
-  //   ),
-  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
