@@ -59,11 +59,9 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
       ],
     });
     if (!pattern) {
-      if (!pattern) {
-        const error = new Error("Not found");
-        error.status = 404;
-        throw error;
-      }
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
     }
 
     if (req.user) {

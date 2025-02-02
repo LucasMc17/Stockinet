@@ -71,6 +71,13 @@ const Adapter = {
     const user = await res.json();
     return user;
   },
+  async getAuthor(slug) {
+    const url = `${BASE_API_URL}/user/${slug}`;
+
+    const res = await get(url);
+    const author = await res.json();
+    return author;
+  },
 };
 
 export default Adapter;

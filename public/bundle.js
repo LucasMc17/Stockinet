@@ -41341,7 +41341,7 @@ function handleThunkCaseReducerDefinition({
 function noop$1() {
 }
 
-var initialState$1 = {
+var initialState$2 = {
   loading: false,
   error: null,
   patternList: [],
@@ -41415,6 +41415,12 @@ const Adapter = {
     const res = await post(url, baseHeaders, body);
     const user = await res.json();
     return user;
+  },
+  async getAuthor(slug) {
+    const url = `${BASE_API_URL}/user/${slug}`;
+    const res = await get$1(url);
+    const author = await res.json();
+    return author;
   }
 };
 
@@ -41518,7 +41524,7 @@ const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payl
 });
 const patternSlice = createSlice({
   name: "patterns",
-  initialState: initialState$1,
+  initialState: initialState$2,
   reducers: {
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
@@ -44708,7 +44714,7 @@ const StytchProvider = ({ stytch, children }) => {
             React$1.createElement(StytchSessionContext.Provider, { value: session }, children))));
 };
 
-var initialState = {
+var initialState$1 = {
   loading: false,
   error: null,
   id: null,
@@ -44741,7 +44747,7 @@ const signUp = createAsyncThunk("user/signUp", async (payload, {
 });
 const userSlice = createSlice({
   name: "user",
-  initialState: initialState,
+  initialState: initialState$1,
   reducers: {
     clearUser: (state, action) => {
       state.error = null;
@@ -45067,7 +45073,7 @@ function PatternHeader({
     }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
         children: ["by ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-          to: `/authors/${author.id}`,
+          to: `/authors/${author.slug}`,
           children: author.username
         })]
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
@@ -45716,6 +45722,74 @@ function LandingScreen() {
   });
 }
 
+var initialState = {
+  loading: false,
+  error: null,
+  currentAuthor: null,
+  currentRequestId: null
+};
+
+const fetchAuthor = createAsyncThunk("authors/fetchAuthor", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const author = await Adapter.getAuthor(payload);
+  if (author?.errorStatus) {
+    return rejectWithValue(author);
+  }
+  return author;
+});
+const authorSlice = createSlice({
+  name: "authors",
+  initialState,
+  reducers: {
+    clearAuthor: (state, action) => {
+      state.currentAuthor = null;
+    }
+  },
+  extraReducers: builder => {
+    thunkBaseCases(builder, fetchAuthor, {
+      fulfilledCallback: (state, action) => {
+        state.currentAuthor = action.payload;
+      }
+    });
+  }
+});
+const {
+  clearAuthor
+} = authorSlice.actions;
+var AuthorSlice = authorSlice.reducer;
+
+function AuthorScreen() {
+  const dispatch = useDispatch();
+  const {
+    authorSlug
+  } = useParams();
+  const {
+    currentAuthor,
+    error,
+    loading
+  } = useSelector(s => s.authors);
+  reactExports.useEffect(() => {
+    dispatch(fetchAuthor(authorSlug));
+    return () => {
+      dispatch(clearAuthor());
+    };
+  }, []);
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
+  if (currentAuthor) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: currentAuthor.username
+    });
+  }
+}
+
 var reduxLogger$1 = {exports: {}};
 
 var reduxLogger = reduxLogger$1.exports;
@@ -45736,7 +45810,8 @@ var logger$1 = /*@__PURE__*/getDefaultExportFromCjs$1(reduxLoggerExports);
 
 var reducer$1 = combineReducers({
   patterns: PatternSlice,
-  user: UserSlice
+  user: UserSlice,
+  authors: AuthorSlice
 });
 
 const store = configureStore({
@@ -45793,17 +45868,12 @@ const router = createBrowserRouter([{
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(PatternScreen, {})]
   })
-}
-// {
-//   path: "patterns/preview/:patternSlug",
-//   element: (
-//     <>
-//       <SiteHeader />
-//       <PatternPreviewScreen />
-//     </>
-//   ),
-// },
-]);
+}, {
+  path: "authors/:authorSlug",
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(AuthorScreen, {})]
+  })
+}]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(/*#__PURE__*/jsxRuntimeExports.jsx(React$1.StrictMode, {
   children: /*#__PURE__*/jsxRuntimeExports.jsx(StytchProvider, {

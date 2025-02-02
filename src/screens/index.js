@@ -3,6 +3,7 @@ import LoginSignupScreen from "./LoginSignupScreen.jsx";
 import OwnedPatternsScreen from "./OwnedPatternsScreen.jsx";
 import PatternScreen from "./PatternScreen.jsx";
 import LandingScreen from "./LandingScreen.jsx";
+import AuthorScreen from "./AuthorScreen.jsx";
 
 export {
   AllPatternsScreen,
@@ -10,4 +11,5 @@ export {
   OwnedPatternsScreen,
   PatternScreen,
   LandingScreen,
+  AuthorScreen,
 };

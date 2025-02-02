@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
+const _ = require("lodash");
+
 const User = db.define("user", {
   id: {
     type: Sequelize.UUID,
@@ -15,6 +17,15 @@ const User = db.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  slug: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+});
+
+User.beforeValidate((user, options) => {
+  user.slug = _.kebabCase(user.username.slice(0, 50)) + "-" + user.id;
 });
 
 module.exports = User;

@@ -7,6 +7,7 @@ import {
   LoginSignupScreen,
   AllPatternsScreen,
   LandingScreen,
+  AuthorScreen,
 } from "./screens";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
@@ -68,6 +69,15 @@ const router = createBrowserRouter([
       <>
         <SiteHeader />
         <PatternScreen />
+      </>
+    ),
+  },
+  {
+    path: "authors/:authorSlug",
+    element: (
+      <>
+        <SiteHeader />
+        <AuthorScreen />
       </>
     ),
   },
