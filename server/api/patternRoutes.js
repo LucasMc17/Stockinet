@@ -118,7 +118,7 @@ router.get("/", async (req, res, next) => {
   if (difficulty && difficulty !== "null") {
     whereList.push(`patterns.difficulty = '${difficulty}'`);
   }
-  const offset = (page - 1) * 20;
+  const offset = (page - 1) * 40;
   const dict = {
     purchases: "user_count DESC",
     recency: '"createdAt" DESC',
@@ -142,17 +142,19 @@ router.get("/", async (req, res, next) => {
 
     patterns.type,
 
-    (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count
+    (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count,
+
+    (SELECT AVG(stars) FROM reviews WHERE "reviews"."patternId" = patterns.id) AS rating
 
     FROM patterns
 
     ${whereList.length ? `WHERE ${whereList.join(" AND ")}` : ""}
 
-    ORDER BY ${sort}
+    ORDER BY ${sort}, "updatedAt" DESC
     
-    OFFSET ${offset} ROWS
+    OFFSET ${offset}
 
-    FETCH NEXT 20 ROWS ONLY;`);
+    FETCH NEXT 40 ROWS ONLY;`);
 
     res.json(patterns);
   } catch (err) {

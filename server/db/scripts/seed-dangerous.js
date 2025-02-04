@@ -6,9 +6,25 @@ const { client } = require("../../backendUtils/stytchClient");
 
 const {
   db,
-  models: { Pattern, Grid, User },
+  models: { Pattern, Grid, User, Needle, Yarn, Review },
 } = require("..");
 const Size = require("../models/Size");
+
+const exampleNeedleOne = {
+  type: "STRAIGHT",
+  material: "N/A",
+  size: 7,
+};
+
+const exampleNeedleTwo = {
+  customDescription: "Size 8 Wooden Needles!!!",
+};
+
+const exampleYarn = {
+  color: "red",
+  weight: 2,
+  yardage: 48,
+};
 
 const exampleGrid = {
   name: "Large Cozy",
@@ -413,9 +429,32 @@ async function seed() {
       attachRandomPattern();
     }
   });
-
   const testPattern1 = await createPattern(testData[0]);
+  {
+    const Needle1 = await Needle.create(exampleNeedleOne);
+    const Needle2 = await Needle.create(exampleNeedleTwo);
+    const ExampleYarn = await Yarn.create(exampleYarn);
+    await Needle1.setPattern(testPattern1);
+    await Needle2.setPattern(testPattern1);
+    await ExampleYarn.setPattern(testPattern1);
+
+    const Review1 = await Review.create({ stars: 5, text: "Great pattern!" });
+    await Review1.setUser(testUser1);
+    await Review1.setPattern(testPattern1);
+
+    const Review2 = await Review.create({ stars: 4 });
+    await Review2.setUser(testUser2);
+    await Review2.setPattern(testPattern1);
+  }
   const testPattern2 = await createPattern(testData[1]);
+  {
+    const Needle1 = await Needle.create(exampleNeedleOne);
+    const Needle2 = await Needle.create(exampleNeedleTwo);
+    const ExampleYarn = await Yarn.create(exampleYarn);
+    await Needle1.setPattern(testPattern2);
+    await Needle2.setPattern(testPattern2);
+    await ExampleYarn.setPattern(testPattern2);
+  }
 
   await testPattern1.setAuthor(testUser1);
   await testPattern2.setAuthor(testUser1);

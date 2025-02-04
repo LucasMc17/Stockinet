@@ -41563,7 +41563,7 @@ const patternSlice = createSlice({
           clear
         } = action.payload;
         if (patterns?.[0]?.totalcount) {
-          state.maxPages = Math.ceil(patterns[0].totalcount / 20);
+          state.maxPages = Math.ceil(patterns[0].totalcount / 40);
         }
         if (clear) {
           state.pages = {
