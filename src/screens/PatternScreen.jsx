@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   LoadingScreen,
   ErrorScreen,
-  FullPattern,
-  PreviewPattern,
   PatternOverview,
   HeroImages,
   PatternDetails,

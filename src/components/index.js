@@ -11,10 +11,6 @@ import LandingPatterns from "./LandingScreen/LandingPatterns.jsx";
 import LandingSearch from "./LandingScreen/LandingSearch.jsx";
 import LandingHelp from "./LandingScreen/LandingHelp.jsx";
 
-import PatternHeader from "./PatternScreen/PatternHeader.jsx";
-import PatternImages from "./PatternScreen/PatternImages.jsx";
-import FullPattern from "./PatternScreen/FullPattern.jsx";
-import PreviewPattern from "./PatternScreen/PreviewPattern.jsx";
 import HeroImages from "./PatternScreen/HeroImages.jsx";
 import PatternOverview from "./PatternScreen/PatternOverview.jsx";
 import PatternDetails from "./PatternScreen/PatternDetails.jsx";
@@ -33,8 +29,6 @@ export {
   LandingHeader,
   LandingSection,
   LoadingScreen,
-  PatternHeader,
-  PatternImages,
   SiteHeader,
   Slider,
   LandingPatterns,
@@ -43,8 +37,6 @@ export {
   DropDown,
   LandingHelp,
   PatternSearch,
-  FullPattern,
-  PreviewPattern,
   PatternOverview,
   HeroImages,
   PatternDetails,

@@ -103,6 +103,16 @@ button {
   width: 20px;
 }
 
+.all-patterns-list {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1em;
+}
+.all-patterns-list > a {
+  flex: 0 1 18%;
+  margin-bottom: 1em;
+}
+
 #site-header {
   background-color: black;
   color: white;
@@ -118,6 +128,14 @@ button {
 
 #header-logo {
   color: yellow;
+}
+
+#landing-screen > section:nth-child(odd) {
+  background-color: lightgray;
+}
+
+#landing-screen > section:nth-child(even) {
+  background-color: gray;
 }
 
 .pattern-search-menu {
@@ -192,44 +210,36 @@ button {
   border-right-width: 0;
 }
 
-#landing-screen > section:nth-child(odd) {
-  background-color: lightgray;
+.hero-images {
+  overflow: hidden;
+  position: relative;
+  border-bottom: 2px solid black;
 }
-
-#landing-screen > section:nth-child(even) {
-  background-color: gray;
-}
-
-.all-patterns-list {
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 1em;
-}
-.all-patterns-list > a {
-  flex: 0 1 18%;
-  margin-bottom: 1em;
-}
-
-.landing-section {
-  border: 1px solid lightblue;
-  border-radius: 1rem;
-  padding: 1rem;
-  flex: 0.25;
-  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
-}
-.landing-section > section {
-  text-align: center;
-}
-.landing-section > div {
-  flex: 0.75;
-}
-
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
+.hero-images > .hero-image-holder {
+  height: 40vh;
+  min-height: 200px;
   align-items: center;
+  display: flex;
+}
+.hero-images > .hero-image-holder > div {
+  flex: 1 0 30%;
+}
+.hero-images > .hero-image-holder > div > img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.hero-image-shadow {
+  height: 25%;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25));
+  position: absolute;
+  bottom: 0;
+}
+.hero-image-shadow > button {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
 }
 
 .loading-screen {
@@ -242,12 +252,51 @@ button {
   width: 100px;
 }
 
-.interactive-grid {
-  width: 100%;
+.pattern-overview {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
+  padding: 4em 2em;
+  border-bottom: 2px solid black;
+}
+
+.pattern-overview-text {
+  flex: 1 0 85%;
+}
+
+.pattern-overview-button {
+  flex: 1 0 15%;
+}
+.pattern-overview-button > button {
+  width: 100%;
+}
+
+.rating-box > div {
+  overflow: hidden;
+  display: flex;
+}
+.rating-box > div > svg {
+  stroke: black;
+  flex: 1 0 20px;
+}
+
+.gauge-flex {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+.gauge-flex > .gauge-holder,
+.gauge-flex > .gauge-sts {
+  flex-basis: 66%;
+}
+.gauge-flex > div.gauge-rows {
+  flex-basis: 33%;
+  position: relative;
+}
+.gauge-flex > div.gauge-rows > p {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 100%;
 }
 
 #landing-patterns {
@@ -263,31 +312,17 @@ button {
   flex: 0 1 20%;
 }
 
-#landing-search {
-  padding: 1em;
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
 }
 
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
-}
-
-.landing-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
-  align-items: center;
-}
-.landing-header > .landing-header-hero {
-  flex: 0.5;
-}
-.landing-header > .landing-header-image {
-  flex: 0.2;
-}
-.landing-header > .landing-header-image > img {
+.interactive-grid {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
 }
 
 #pattern {
@@ -334,6 +369,44 @@ button {
   object-fit: contain;
 }
 
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
+}
+
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  align-items: center;
+}
+.landing-header > .landing-header-hero {
+  flex: 0.5;
+}
+.landing-header > .landing-header-image {
+  flex: 0.2;
+}
+.landing-header > .landing-header-image > img {
+  width: 100%;
+}
+
+#landing-help {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+
 .drop-down {
   border-bottom: 2px solid black;
   position: relative;
@@ -370,33 +443,23 @@ button {
   background-color: lightgray;
 }
 
-.gauge-flex {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: center;
-}
-.gauge-flex > .gauge-holder,
-.gauge-flex > .gauge-sts {
-  flex-basis: 66%;
-}
-.gauge-flex > div.gauge-rows {
-  flex-basis: 33%;
-  position: relative;
-}
-.gauge-flex > div.gauge-rows > p {
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  width: 100%;
+#landing-search {
+  padding: 1em;
 }
 
-.interactive-grid-row {
-  display: flex;
+#to-all-patterns {
+  text-align: right;
+}
+#to-all-patterns > a {
+  text-decoration: underline;
 }
 
 .gauge-square {
   border: 3px solid black;
+}
+
+.interactive-grid-row {
+  display: flex;
 }
 
 .interactive-grid-cell {
@@ -424,67 +487,4 @@ button {
   width: 100%;
   margin: auto;
   text-align: center;
-}
-
-.hero-images {
-  overflow: hidden;
-  position: relative;
-  border-bottom: 2px solid black;
-}
-.hero-images > .hero-image-holder {
-  height: 40vh;
-  min-height: 200px;
-  align-items: center;
-  display: flex;
-}
-.hero-images > .hero-image-holder > div {
-  flex: 1 0 30%;
-}
-.hero-images > .hero-image-holder > div > img {
-  width: 100%;
-  object-fit: cover;
-}
-
-.hero-image-shadow {
-  height: 25%;
-  width: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25));
-  position: absolute;
-  bottom: 0;
-}
-.hero-image-shadow > button {
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-}
-
-.pattern-overview {
-  display: flex;
-  padding: 4em 2em;
-  border-bottom: 2px solid black;
-}
-
-.pattern-overview-text {
-  flex: 1 0 85%;
-}
-
-.pattern-overview-button {
-  flex: 1 0 15%;
-}
-.pattern-overview-button > button {
-  width: 100%;
-}
-
-.rating-box > div {
-  overflow: hidden;
-  display: flex;
-}
-.rating-box > div > svg {
-  stroke: black;
-  flex: 1 0 20px;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
 }

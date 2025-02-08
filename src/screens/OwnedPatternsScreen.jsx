@@ -30,7 +30,7 @@ export default function OwnedPatternsScreen() {
     return (
       <div className="card">
         {patternList.map((pattern, i) => (
-          <Link key={i} to={`/patterns/${pattern.id}`}>
+          <Link key={i} to={`/patterns/${pattern.slug}`}>
             <h1>{pattern.title}</h1>
           </Link>
         ))}

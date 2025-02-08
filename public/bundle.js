@@ -45501,7 +45501,7 @@ function OwnedPatternsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "card",
       children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-        to: `/patterns/${pattern.id}`,
+        to: `/patterns/${pattern.slug}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
           children: pattern.title
         })
