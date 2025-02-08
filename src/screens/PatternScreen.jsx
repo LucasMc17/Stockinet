@@ -55,7 +55,11 @@ export default function PatternScreen() {
           avgRating={4.5}
           ratings={53}
         />
-        <PatternDetails />
+        <PatternDetails
+          yarns={currentPattern.yarns}
+          needles={currentPattern.needles}
+          sizes={currentPattern.sizes}
+        />
       </>
     );
   }

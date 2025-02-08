@@ -1,0 +1,15 @@
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  overflow-y: scroll;
+  padding: 1em 0;
+
+  & > .material-card {
+    flex: 0 0 200px;
+  }
+}

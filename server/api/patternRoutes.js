@@ -8,6 +8,9 @@ const {
   rejectWithoutAuth,
   checkAuth,
 } = require("../backendUtils/stytchClient");
+const Yarn = require("../db/models/Yarn");
+const Needle = require("../db/models/Needle");
+const Size = require("../db/models/Size");
 
 router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
   try {
@@ -41,9 +44,77 @@ router.get("/by-user", rejectWithoutAuth, async (req, res, next) => {
   }
 });
 
+// router.get("/:slug", checkAuth, async (req, res, next) => {
+//   try {
+//     // first, find the pattern and return 404 if it doesn't exist
+//     const { slug } = req.params;
+//     const pattern = await Pattern.findOne({
+//       where: {
+//         slug,
+//       },
+//       include: [
+//         {
+//           model: Grid,
+//         },
+//         {
+//           association: "author",
+//         },
+//       ],
+//     });
+//     if (!pattern) {
+//       const error = new Error("Not found");
+//       error.status = 404;
+//       throw error;
+//     }
+
+//     if (req.user) {
+//       //user is logged in
+//       const associated = await pattern.hasUser(req.user);
+//       if (associated) {
+//         // user is logged in, pattern been purchased
+//         const purchaser = await Purchaser.findOne({
+//           where: { patternId: pattern.id, userId: req.user.id },
+//         });
+//         if (purchaser) {
+//           await purchaser.update({ lastAccessed: new Date() });
+//           const patternWithFlag = pattern.toJSON();
+//           patternWithFlag.owned = true;
+//           res.json(patternWithFlag);
+//         }
+//       } else {
+//         // user is logged in, pattern exists but is not purchased
+//         res.json({
+//           id: pattern.id,
+//           title: pattern.title,
+//           description: pattern.description,
+//           leadImage: pattern.leadImage,
+//           images: pattern.images,
+//           difficulty: pattern.difficulty,
+//           author: pattern.author,
+//           owned: false,
+//         });
+//       }
+//     } else {
+//       // user is not logged in
+//       res.json({
+//         id: pattern.id,
+//         title: pattern.title,
+//         description: pattern.description,
+//         leadImage: pattern.leadImage,
+//         images: pattern.images,
+//         difficulty: pattern.difficulty,
+//         author: pattern.author,
+//         owned: false,
+//       });
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
 router.get("/:slug", checkAuth, async (req, res, next) => {
+  // Later we can use checkAuth to see if the user already owns the pattern and change the button depending
   try {
-    // first, find the pattern and return 404 if it doesn't exist
     const { slug } = req.params;
     const pattern = await Pattern.findOne({
       where: {
@@ -51,59 +122,25 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
       },
       include: [
         {
-          model: Grid,
+          association: "author",
         },
         {
-          association: "author",
+          model: Yarn,
+        },
+        {
+          model: Needle,
+        },
+        {
+          model: Size,
         },
       ],
     });
-    if (!pattern) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
-    }
-
-    if (req.user) {
-      //user is logged in
-      const associated = await pattern.hasUser(req.user);
-      if (associated) {
-        // user is logged in, pattern been purchased
-        const purchaser = await Purchaser.findOne({
-          where: { patternId: pattern.id, userId: req.user.id },
-        });
-        if (purchaser) {
-          await purchaser.update({ lastAccessed: new Date() });
-          const patternWithFlag = pattern.toJSON();
-          patternWithFlag.owned = true;
-          res.json(patternWithFlag);
-        }
-      } else {
-        // user is logged in, pattern exists but is not purchased
-        res.json({
-          id: pattern.id,
-          title: pattern.title,
-          description: pattern.description,
-          leadImage: pattern.leadImage,
-          images: pattern.images,
-          difficulty: pattern.difficulty,
-          author: pattern.author,
-          owned: false,
-        });
-      }
-    } else {
-      // user is not logged in
-      res.json({
-        id: pattern.id,
-        title: pattern.title,
-        description: pattern.description,
-        leadImage: pattern.leadImage,
-        images: pattern.images,
-        difficulty: pattern.difficulty,
-        author: pattern.author,
-        owned: false,
-      });
-    }
+    // if (!pattern) {
+    //   const error = new Error("Not found");
+    //   error.status = 404;
+    //   throw error;
+    // }
+    res.json(pattern);
   } catch (err) {
     next(err);
   }

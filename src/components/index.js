@@ -2,6 +2,8 @@ import Gauge from "./Gauge/index.jsx";
 
 import InteractiveGrid from "./InteractiveGrid/index.jsx";
 
+import SectionHeader from "./SectionHeader.jsx";
+
 import ErrorScreen from "./UtilityScreens/ErrorScreen.jsx";
 import LoadingScreen from "./UtilityScreens/LoadingScreen.jsx";
 
@@ -14,6 +16,7 @@ import LandingHelp from "./LandingScreen/LandingHelp.jsx";
 import HeroImages from "./PatternScreen/HeroImages.jsx";
 import PatternOverview from "./PatternScreen/PatternOverview.jsx";
 import PatternDetails from "./PatternScreen/PatternDetails.jsx";
+import MaterialCard from "./PatternScreen/MaterialCard.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
@@ -25,6 +28,7 @@ import PatternSearch from "./PatternSearch.jsx";
 export {
   Gauge,
   InteractiveGrid,
+  SectionHeader,
   ErrorScreen,
   LandingHeader,
   LandingSection,
@@ -40,4 +44,5 @@ export {
   PatternOverview,
   HeroImages,
   PatternDetails,
+  MaterialCard,
 };

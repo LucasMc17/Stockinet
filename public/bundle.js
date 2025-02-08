@@ -42941,6 +42941,18 @@ function requireJsxRuntime () {
 
 var jsxRuntimeExports = requireJsxRuntime();
 
+function SectionHeader({
+  svg,
+  name
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
+    className: "section-header",
+    children: [svg(), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+      children: name
+    })]
+  });
+}
+
 function ErrorScreen() {
   return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
     children: "OOPS!"
@@ -45033,32 +45045,110 @@ function PatternOverview({
   });
 }
 
-function PatternDetails() {
+function MaterialCard({
+  children
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "material-card",
+    children: children
+  });
+}
+
+function PatternDetails({
+  yarns,
+  needles,
+  sizes
+}) {
   return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("section", {
       className: "pattern-detail",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
-        className: "section-header",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Squares, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
-          children: "Sizes"
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+        svg: Squares,
+        name: "Sizes"
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "material-card-holder",
+        children: [sizes.map((size, i) => /*#__PURE__*/jsxRuntimeExports.jsxs(MaterialCard, {
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: size.name
+          }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+            children: "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum"
+          })]
+        }, i)), /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
+        }), " ", /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: /*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+            children: "Lorem"
+          })
         })]
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
       className: "pattern-detail",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
-        className: "section-header",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Bars, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
-          children: "Needles"
-        })]
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+        svg: Bars,
+        name: "Needles"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "material-card-holder",
+        children: needles.map((needle, i) => /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: needle.customDescription ? /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+            children: needle.customDescription
+          }) : /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
+            children: ["Size ", needle.size, " ", needle.material, " ", needle.type, " needles"]
+          })
+        }, i))
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
       className: "pattern-detail",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
-        className: "section-header",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Bars, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
-          children: "Yarn"
-        })]
-      })
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+        svg: Bars,
+        name: "Yarn"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        className: "material-card-holder",
+        children: yarns.map((yarn, i) => /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+          children: yarn.customDescription ? /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+            children: yarn.customDescription
+          }) : /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
+            children: ["Weight ", yarn.weight, " ", yarn.color, " yarn, ", yarn.yardage, " yards"]
+          })
+        }, i))
+      })]
     })]
   });
 }
@@ -45553,7 +45643,11 @@ function PatternScreen() {
         description: currentPattern.description,
         avgRating: 4.5,
         ratings: 53
-      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternDetails, {})]
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternDetails, {
+        yarns: currentPattern.yarns,
+        needles: currentPattern.needles,
+        sizes: currentPattern.sizes
+      })]
     });
   }
 
