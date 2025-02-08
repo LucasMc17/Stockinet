@@ -1,4 +1,4 @@
-import "./PatternSizeInfo.module.scss";
+import "./PatternDetail.module.scss";
 import { Squares, Bars } from "../../icons";
 
 export default function PatternDetails() {
