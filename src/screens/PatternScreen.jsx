@@ -6,6 +6,9 @@ import {
   ErrorScreen,
   FullPattern,
   PreviewPattern,
+  PatternOverview,
+  HeroImages,
+  PatternDetails,
 } from "../components";
 import {
   fetchOnePattern,
@@ -42,9 +45,26 @@ export default function PatternScreen() {
     return <ErrorScreen />;
   }
 
-  if (currentPattern?.owned) {
-    return <FullPattern currentPattern={currentPattern} />;
-  } else if (currentPattern) {
-    return <PreviewPattern currentPattern={currentPattern} />;
+  if (currentPattern) {
+    const images = [currentPattern.leadImage, ...currentPattern.images];
+    return (
+      <>
+        <HeroImages images={images} limit={3} />
+        <PatternOverview
+          title={currentPattern.title}
+          author={currentPattern.author}
+          description={currentPattern.description}
+          avgRating={4.5}
+          ratings={53}
+        />
+        <PatternDetails />
+      </>
+    );
   }
+
+  // if (currentPattern?.owned) {
+  //   return <FullPattern currentPattern={currentPattern} />;
+  // } else if (currentPattern) {
+  //   return <PreviewPattern currentPattern={currentPattern} />;
+  // }
 }

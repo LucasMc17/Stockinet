@@ -15,6 +15,9 @@ import PatternHeader from "./PatternScreen/PatternHeader.jsx";
 import PatternImages from "./PatternScreen/PatternImages.jsx";
 import FullPattern from "./PatternScreen/FullPattern.jsx";
 import PreviewPattern from "./PatternScreen/PreviewPattern.jsx";
+import HeroImages from "./PatternScreen/HeroImages.jsx";
+import PatternOverview from "./PatternScreen/PatternOverview.jsx";
+import PatternDetails from "./PatternScreen/PatternDetails.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
@@ -42,4 +45,7 @@ export {
   PatternSearch,
   FullPattern,
   PreviewPattern,
+  PatternOverview,
+  HeroImages,
+  PatternDetails,
 };

@@ -6,6 +6,9 @@ import Dollar from "./Dollar.jsx";
 import Globe from "./Globe.jsx";
 import GradCap from "./GradCap.jsx";
 import LoadingWheel from "./LoadingWheel.jsx";
+import Star from "./Star.jsx";
+import Squares from "./Squares.jsx";
+import Bars from "./Bars.jsx";
 
 export {
   ChevronLeft,
@@ -16,4 +19,7 @@ export {
   Globe,
   GradCap,
   LoadingWheel,
+  Star,
+  Squares,
+  Bars,
 };

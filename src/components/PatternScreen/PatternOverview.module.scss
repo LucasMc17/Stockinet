@@ -1,0 +1,29 @@
+.pattern-overview {
+  display: flex;
+  padding: 4em 2em;
+  border-bottom: 2px solid black;
+}
+
+.pattern-overview-text {
+  flex: 1 0 85%;
+}
+
+.pattern-overview-button {
+  flex: 1 0 15%;
+
+  & > button {
+    width: 100%;
+  }
+}
+
+.rating-box {
+  & > div {
+    overflow: hidden;
+    display: flex;
+
+    & > svg {
+      stroke: black;
+      flex: 1 0 20px;
+    }
+  }
+}

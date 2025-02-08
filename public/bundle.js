@@ -42941,119 +42941,6 @@ function requireJsxRuntime () {
 
 var jsxRuntimeExports = requireJsxRuntime();
 
-function GaugeSquare({
-  width,
-  height
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "gauge-square",
-    style: {
-      paddingTop: height / width * 100 + "%"
-    }
-  });
-}
-
-function Gauge({
-  data
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "gauge-flex",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-holder",
-      children: /*#__PURE__*/jsxRuntimeExports.jsx(GaugeSquare, {
-        width: data.widthInches,
-        height: data.heightInches
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-rows",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [data.rows, " rows = ", data.heightInches, "\""]
-      })
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "gauge-sts",
-      children: /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [data.stitches, " sts = ", data.widthInches, "\""]
-      })
-    })]
-  });
-}
-
-function GridCell({
-  cell,
-  rowWidth
-}) {
-  const symbolMap = {
-      K: "",
-      P: "-"
-    },
-    baseWidth = 100 / rowWidth;
-  let width = baseWidth;
-  if (cell.width) {
-    width = width * cell.width;
-  }
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "cell-holder",
-    style: {
-      width: width + "%"
-    },
-    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "interactive-grid-cell-symbols",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: symbolMap[cell.type] || ""
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: cell.width > 1 && cell.width
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid-cell",
-      style: {
-        paddingTop: "calc(100% / " + cell.width + ")"
-      }
-    })]
-  });
-}
-
-function GridRow({
-  row,
-  rowWidth
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "interactive-grid-row",
-    children: row.map((cell, i) => {
-      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
-        cell: cell,
-        rowWidth: rowWidth
-      }, i);
-    })
-  });
-}
-
-function getRowWidth(row) {
-  return row.reduce((a, b) => a + b.width, 0);
-}
-function InteractiveGrid({
-  gridName,
-  data
-}) {
-  const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b);
-    return width > a ? width : a;
-  }, 1);
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "interactive-grid-holder",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: gridName
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid",
-      children: data.map((row, i) => {
-        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
-          row: row,
-          rowWidth: maxWidth
-        }, i);
-      })
-    })]
-  });
-}
-
 function ErrorScreen() {
   return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
     children: "OOPS!"
@@ -44492,40 +44379,6 @@ function LandingPatterns() {
   });
 }
 
-function ChevronLeft({
-  stroke
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: stroke || "currentColor",
-    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-      d: "M15.75 19.5 8.25 12l7.5-7.5"
-    })
-  });
-}
-
-function ChevronRight({
-  stroke
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: stroke || "currentColor",
-    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-      d: "m8.25 4.5 7.5 7.5-7.5 7.5"
-    })
-  });
-}
-
 function ChevronDown({
   stroke
 }) {
@@ -44556,6 +44409,51 @@ function ChevronUp({
       strokeLinecap: "round",
       strokeLinejoin: "round",
       d: "m4.5 15.75 7.5-7.5 7.5 7.5"
+    })
+  });
+}
+
+function Star({
+  fill
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: fill || "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      d: "M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+    })
+  });
+}
+
+function Squares() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      d: "M16.5 8.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v8.25A2.25 2.25 0 0 0 6 16.5h2.25m8.25-8.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-7.5A2.25 2.25 0 0 1 8.25 18v-1.5m8.25-8.25h-6a2.25 2.25 0 0 0-2.25 2.25v6"
+    })
+  });
+}
+
+function Bars() {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx("path", {
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      d: "M3.75 9h16.5m-16.5 6.75h16.5"
     })
   });
 }
@@ -45061,166 +44959,106 @@ function LandingHelp() {
   });
 }
 
-function PatternHeader({
+function HeroImages({
+  images,
+  limit
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "hero-images",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "hero-image-holder",
+      children: images.slice(0, limit).map(image => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("img", {
+          src: image
+        })
+      }))
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "hero-image-shadow",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("button", {
+        children: ["See All (", images.length, ")"]
+      })
+    })]
+  });
+}
+
+function PatternOverview({
   title,
   author,
-  difficulty
+  avgRating,
+  ratings,
+  description
 }) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "pattern-header card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-      children: title
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "pattern-overview",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "pattern-overview-text",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+          children: title
+        })
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
         children: ["by ", /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
           to: `/authors/${author.slug}`,
           children: author.username
         })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("h3", {
-        children: ["Skill Level: ", difficulty]
-      })]
-    })]
-  });
-}
-
-function Slider({
-  children,
-  startIndex = 0
-}) {
-  const [index, setIndex] = reactExports.useState(startIndex);
-  const ref = reactExports.useRef(null);
-  function handleSlide(newIndex) {
-    anime({
-      targets: ref.current,
-      translateX: "calc(" + -100 * newIndex + "% - " + newIndex * 3 + "rem)",
-      easing: "easeInOutSine",
-      duration: 500
-    });
-    setIndex(newIndex);
-  }
-  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
-    children: /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "slider-holder",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        className: `slider-back ${index === 0 ? "hidden" : ""}`,
-        onClick: () => {
-          const newIndex = index - 1;
-          handleSlide(newIndex);
-        },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {
-          stroke: "black"
-        })
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        className: `slider-forward ${index === children.length - 1 ? "hidden" : ""}`,
-        onClick: () => {
-          const newIndex = index + 1;
-          handleSlide(newIndex);
-        },
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {
-          stroke: "black"
-        })
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        ref: ref,
-        className: "slider",
-        children: children
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("p", {
-        children: [index + 1, "/", children.length]
-      })]
-    })
-  });
-}
-
-function PatternImages({
-  images,
-  description
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-      children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("img", {
-        src: image
-      }))
-    }), images.length > 0 && /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
-      to: "",
-      children: "Enlarge"
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-      children: description
-    })]
-  });
-}
-
-function FullPattern({
-  currentPattern
-}) {
-  useLoggedOutRedirect();
-  const images = [currentPattern.leadImage, ...currentPattern.images];
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-    id: "pattern",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
-      title: currentPattern.title,
-      author: currentPattern.author,
-      difficulty: currentPattern.difficulty
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "pattern-splashscreen",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
-        images: images,
-        description: currentPattern.description
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "card",
-        children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-          children: "What you'll need"
-        })
       }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "card",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-          children: "The gauge"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Gauge, {
-          data: {
-            widthInches: currentPattern.gaugeWidthInches,
-            heightInches: currentPattern.gaugeHeightInches,
-            rows: currentPattern.gaugeRows,
-            stitches: currentPattern.gaugeStitches
-          }
+        className: "rating-box",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+          style: {
+            width: avgRating * 20 + "px"
+          },
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+            fill: "black"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+            fill: "black"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+            fill: "black"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+            fill: "black"
+          }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+            fill: "black"
+          })]
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("small", {
+          children: [avgRating, " (", ratings, " Ratings)"]
         })]
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: description
       })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "pattern-instructions",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "card"
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "card",
-        children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-          children: currentPattern?.grids?.length && currentPattern.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
-            data: JSON.parse(grid.data),
-            gridName: grid.name
-          }))
-        })
-      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "pattern-overview-button",
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        children: "Buy this Pattern"
+      })
     })]
   });
 }
 
-function PreviewPattern({
-  currentPattern
-}) {
-  const images = [currentPattern.leadImage, ...currentPattern.images];
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-    id: "pattern",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternHeader, {
-      title: currentPattern.title,
-      author: currentPattern.author,
-      difficulty: currentPattern.difficulty
-    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "pattern-previewscreen",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternImages, {
-        images: images,
-        description: currentPattern.description
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-        className: "card",
-        children: /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
-          children: "What you'll need"
-        })
-      })]
+function PatternDetails() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("section", {
+      className: "pattern-detail",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
+        className: "section-header",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Squares, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+          children: "Sizes"
+        })]
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+      className: "pattern-detail",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
+        className: "section-header",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Bars, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+          children: "Needles"
+        })]
+      })
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+      className: "pattern-detail",
+      children: /*#__PURE__*/jsxRuntimeExports.jsxs("header", {
+        className: "section-header",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Bars, {}), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+          children: "Yarn"
+        })]
+      })
     })]
   });
 }
@@ -45703,15 +45541,27 @@ function PatternScreen() {
   if (error) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
   }
-  if (currentPattern?.owned) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(FullPattern, {
-      currentPattern: currentPattern
-    });
-  } else if (currentPattern) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(PreviewPattern, {
-      currentPattern: currentPattern
+  if (currentPattern) {
+    const images = [currentPattern.leadImage, ...currentPattern.images];
+    return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(HeroImages, {
+        images: images,
+        limit: 3
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternOverview, {
+        title: currentPattern.title,
+        author: currentPattern.author,
+        description: currentPattern.description,
+        avgRating: 4.5,
+        ratings: 53
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternDetails, {})]
     });
   }
+
+  // if (currentPattern?.owned) {
+  //   return <FullPattern currentPattern={currentPattern} />;
+  // } else if (currentPattern) {
+  //   return <PreviewPattern currentPattern={currentPattern} />;
+  // }
 }
 
 function LandingScreen() {
