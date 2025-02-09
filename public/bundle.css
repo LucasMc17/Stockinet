@@ -107,6 +107,16 @@ button {
   background-color: gray;
 }
 
+.pattern-card {
+  padding: 1em;
+  text-align: center;
+  background-color: lightgray;
+  border-radius: 1em;
+}
+.pattern-card > img {
+  width: 100%;
+}
+
 .slider-holder {
   position: relative;
   padding: 30px;
@@ -149,31 +159,18 @@ button {
   border-right-width: 0;
 }
 
-#site-header {
-  background-color: black;
-  color: white;
+.section-header {
+  background-color: palegoldenrod;
+  border-radius: 9999px;
+  width: fit-content;
+  padding: 0.75em;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1em;
+  gap: 10px;
 }
-#site-header h2, #site-header h3, #site-header h4 {
-  margin: 0 10px;
+.section-header > svg {
+  stroke: black;
   display: inline;
-}
-
-#header-logo {
-  color: yellow;
-}
-
-.pattern-card {
-  padding: 1em;
-  text-align: center;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-.pattern-card > img {
-  width: 100%;
+  width: 20px;
 }
 
 .pattern-search-menu {
@@ -196,14 +193,21 @@ button {
   flex: 1 0 20%;
 }
 
-.loading-screen {
-  margin: auto;
-  width: 80%;
-  min-width: 600px;
+#site-header {
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
 }
-.loading-screen .pinwheel {
-  margin: auto;
-  width: 100px;
+#site-header h2, #site-header h3, #site-header h4 {
+  margin: 0 10px;
+  display: inline;
+}
+
+#header-logo {
+  color: yellow;
 }
 
 .gauge-flex {
@@ -227,17 +231,22 @@ button {
   width: 100%;
 }
 
-#landing-patterns {
-  padding: 1em;
+.interactive-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
 }
 
-#landing-patterns-list {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.75em;
+.loading-screen {
+  margin: auto;
+  width: 80%;
+  min-width: 600px;
 }
-#landing-patterns-list > a {
-  flex: 0 1 20%;
+.loading-screen .pinwheel {
+  margin: auto;
+  width: 100px;
 }
 
 .landing-header {
@@ -254,25 +263,6 @@ button {
 }
 .landing-header > .landing-header-image > img {
   width: 100%;
-}
-
-#landing-search {
-  padding: 1em;
-}
-
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
-}
-
-.interactive-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
 }
 
 .hero-images {
@@ -307,17 +297,30 @@ button {
   right: 15px;
 }
 
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
+.modal-image {
+  height: 70vh;
+}
+.modal-image > img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
 
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
+#image-close-button {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+#landing-search {
+  padding: 1em;
+}
+
+#to-all-patterns {
+  text-align: right;
+}
+#to-all-patterns > a {
+  text-decoration: underline;
 }
 
 .landing-section {
@@ -332,6 +335,42 @@ button {
 }
 .landing-section > div {
   flex: 0.75;
+}
+
+#landing-help {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+
+#landing-patterns {
+  padding: 1em;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.75em;
+}
+#landing-patterns-list > a {
+  flex: 0 1 20%;
+}
+
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  overflow-y: scroll;
+  padding: 1em 0;
+}
+.material-card-holder > .material-card {
+  flex: 0 0 200px;
 }
 
 .pattern-overview {
@@ -349,15 +388,6 @@ button {
 }
 .pattern-overview-button > button {
   width: 100%;
-}
-
-.rating-box > div {
-  overflow: hidden;
-  display: flex;
-}
-.rating-box > div > svg {
-  stroke: black;
-  flex: 1 0 20px;
 }
 
 .drop-down {
@@ -396,6 +426,12 @@ button {
   background-color: lightgray;
 }
 
+.material-card {
+  border: 1px solid goldenrod;
+  border-radius: 2em;
+  padding: 0.5em;
+}
+
 .gauge-square {
   border: 3px solid black;
 }
@@ -431,37 +467,23 @@ button {
   text-align: center;
 }
 
-.section-header {
-  background-color: palegoldenrod;
-  border-radius: 9999px;
-  width: fit-content;
-  padding: 0.75em;
+.star-box {
   display: flex;
-  gap: 10px;
 }
-.section-header > svg {
+
+.star-holder {
+  position: relative;
+}
+.star-holder > div.filled-stars {
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.star-holder > div.unfilled-stars {
+  display: flex;
+}
+.star-holder svg {
   stroke: black;
-  display: inline;
-  width: 20px;
-}
-
-.material-card {
-  border: 1px solid goldenrod;
-  border-radius: 2em;
-  padding: 0.5em;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
-}
-
-.material-card-holder {
-  display: flex;
-  gap: 1em;
-  overflow-y: scroll;
-  padding: 1em 0;
-}
-.material-card-holder > .material-card {
-  flex: 0 0 200px;
 }

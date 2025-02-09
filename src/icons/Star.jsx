@@ -1,10 +1,11 @@
-export default function Star({ fill }) {
+export default function Star({ fill, flex }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill={fill || "none"}
       viewBox="0 0 24 24"
       strokeWidth={1.5}
+      style={{ flex }}
     >
       <path
         strokeLinecap="round"

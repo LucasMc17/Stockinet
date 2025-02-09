@@ -1,0 +1,23 @@
+.star-box {
+  display: flex;
+}
+
+.star-holder {
+  position: relative;
+
+  & > div.filled-stars {
+    overflow: hidden;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  & > div.unfilled-stars {
+    display: flex;
+  }
+
+  & svg {
+    stroke: black;
+  }
+}

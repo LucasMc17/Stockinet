@@ -17,6 +17,7 @@ import HeroImages from "./PatternScreen/HeroImages.jsx";
 import PatternOverview from "./PatternScreen/PatternOverview.jsx";
 import PatternDetails from "./PatternScreen/PatternDetails.jsx";
 import MaterialCard from "./PatternScreen/MaterialCard.jsx";
+import StarBox from "./PatternScreen/StarBox.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
@@ -45,4 +46,5 @@ export {
   HeroImages,
   PatternDetails,
   MaterialCard,
+  StarBox,
 };

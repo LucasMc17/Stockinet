@@ -15,15 +15,3 @@
     width: 100%;
   }
 }
-
-.rating-box {
-  & > div {
-    overflow: hidden;
-    display: flex;
-
-    & > svg {
-      stroke: black;
-      flex: 1 0 20px;
-    }
-  }
-}

@@ -11,6 +11,7 @@ const {
 const Yarn = require("../db/models/Yarn");
 const Needle = require("../db/models/Needle");
 const Size = require("../db/models/Size");
+const Review = require("../db/models/Review");
 
 router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
   try {
@@ -132,6 +133,9 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
         },
         {
           model: Size,
+        },
+        {
+          model: Review,
         },
       ],
     });

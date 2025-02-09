@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { Star } from "../../icons";
 import "./PatternOverview.module.scss";
+import StarBox from "./StarBox.jsx";
 
 export default function PatternOverview({
   title,
   author,
-  avgRating,
   ratings,
   description,
 }) {
@@ -19,18 +18,7 @@ export default function PatternOverview({
         <p>
           by <Link to={`/authors/${author.slug}`}>{author.username}</Link>
         </p>
-        <div className="rating-box">
-          <div style={{ width: avgRating * 20 + "px" }}>
-            <Star fill="black" />
-            <Star fill="black" />
-            <Star fill="black" />
-            <Star fill="black" />
-            <Star fill="black" />
-          </div>
-          <small>
-            {avgRating} ({ratings} Ratings)
-          </small>
-        </div>
+        <StarBox ratings={ratings} pixelWidth={100} />
         <p>{description}</p>
       </div>
       <div className="pattern-overview-button">
