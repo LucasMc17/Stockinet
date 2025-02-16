@@ -48112,54 +48112,48 @@ function HeroImages({
 }
 
 function StarBox({
-  ratings,
+  rating,
   pixelWidth
 }) {
-  const average = ratings.length ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length : NaN;
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
     className: "star-box",
+    style: {
+      width: pixelWidth + "px"
+    },
     children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "star-holder",
-      style: {
-        width: pixelWidth + "px"
-      },
-      children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "unfilled-stars",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "filled-stars",
-        style: {
-          width: average ? `${average * (pixelWidth / 5)}px` : "0px"
-        },
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          fill: "black",
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          fill: "black",
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          fill: "black",
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          fill: "black",
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
-          fill: "black",
-          flex: "1 0 " + pixelWidth / 5 + "px"
-        })]
+      className: "unfilled-stars",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        flex: "1 0 " + pixelWidth / 5 + "px"
       })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
-      children: average == NaN ? "No reviews yet!" : `${average} (${ratings.length} Reviews)`
+    }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "filled-stars",
+      style: {
+        width: `${rating * (pixelWidth / 5)}px`
+      },
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        fill: "black",
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        fill: "black",
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        fill: "black",
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        fill: "black",
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(Star, {
+        fill: "black",
+        flex: "1 0 " + pixelWidth / 5 + "px"
+      })]
     })]
   });
 }
@@ -48170,6 +48164,7 @@ function PatternOverview({
   ratings,
   description
 }) {
+  const average = ratings.length ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length : null;
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
     className: "pattern-overview",
     children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
@@ -48183,9 +48178,14 @@ function PatternOverview({
           to: `/authors/${author.slug}`,
           children: author.username
         })]
-      }), /*#__PURE__*/jsxRuntimeExports.jsx(StarBox, {
-        ratings: ratings,
-        pixelWidth: 100
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        className: "rating-box",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(StarBox, {
+          rating: average,
+          pixelWidth: 100
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("span", {
+          children: average === null ? "No reviews yet!" : `${average} (${ratings.length} Reviews)`
+        })]
       }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
         children: description
       })]
@@ -48303,6 +48303,32 @@ function PatternDetails({
         }, i))
       })]
     })]
+  });
+}
+
+function Review({
+  review
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "review",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(StarBox, {
+      rating: review.stars,
+      pixelWidth: 400
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+      children: review.text
+    })]
+  });
+}
+
+function PatternReviews({
+  reviews
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: "Reviews from Buyers"
+    }), reviews.map((review, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Review, {
+      review: review
+    }, i))]
   });
 }
 
@@ -48799,6 +48825,8 @@ function PatternScreen() {
         yarns: currentPattern.yarns,
         needles: currentPattern.needles,
         sizes: currentPattern.sizes
+      }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternReviews, {
+        reviews: currentPattern.reviews
       })]
     });
   }

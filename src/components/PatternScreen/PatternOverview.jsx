@@ -8,6 +8,9 @@ export default function PatternOverview({
   ratings,
   description,
 }) {
+  const average = ratings.length
+    ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length
+    : null;
   return (
     <section className="pattern-overview">
       <div className="pattern-overview-text">
@@ -18,7 +21,14 @@ export default function PatternOverview({
         <p>
           by <Link to={`/authors/${author.slug}`}>{author.username}</Link>
         </p>
-        <StarBox ratings={ratings} pixelWidth={100} />
+        <div className="rating-box">
+          <StarBox rating={average} pixelWidth={100} />
+          <span>
+            {average === null
+              ? "No reviews yet!"
+              : `${average} (${ratings.length} Reviews)`}
+          </span>
+        </div>
         <p>{description}</p>
       </div>
       <div className="pattern-overview-button">

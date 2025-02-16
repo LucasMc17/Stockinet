@@ -7,6 +7,7 @@ import {
   PatternOverview,
   HeroImages,
   PatternDetails,
+  PatternReviews,
 } from "../components";
 import {
   fetchOnePattern,
@@ -59,6 +60,7 @@ export default function PatternScreen() {
           needles={currentPattern.needles}
           sizes={currentPattern.sizes}
         />
+        <PatternReviews reviews={currentPattern.reviews} />
       </>
     );
   }

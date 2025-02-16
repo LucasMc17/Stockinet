@@ -18,6 +18,8 @@ import PatternOverview from "./PatternScreen/PatternOverview.jsx";
 import PatternDetails from "./PatternScreen/PatternDetails.jsx";
 import MaterialCard from "./PatternScreen/MaterialCard.jsx";
 import StarBox from "./PatternScreen/StarBox.jsx";
+import PatternReviews from "./PatternScreen/PatternReviews.jsx";
+import Review from "./PatternScreen/Review.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
@@ -47,4 +49,6 @@ export {
   PatternDetails,
   MaterialCard,
   StarBox,
+  PatternReviews,
+  Review,
 };
