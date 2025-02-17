@@ -7,6 +7,7 @@ export default function PatternOverview({
   author,
   ratings,
   description,
+  owned,
 }) {
   const average = ratings.length
     ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length
@@ -32,7 +33,7 @@ export default function PatternOverview({
         <p>{description}</p>
       </div>
       <div className="pattern-overview-button">
-        <button>Buy this Pattern</button>
+        <button>{owned ? "Open in Workspace" : "Buy this Pattern"}</button>
       </div>
     </section>
   );

@@ -35,7 +35,8 @@
 }
 
 .modal-image {
-  height: 70vh;
+  height: 75vh;
+  min-height: 200px;
 
   & > img {
     object-fit: contain;

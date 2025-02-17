@@ -6,10 +6,10 @@
 .material-card-holder {
   display: flex;
   gap: 1em;
-  overflow-y: scroll;
+  flex-wrap: wrap;
   padding: 1em 0;
 
   & > .material-card {
-    flex: 0 0 200px;
+    flex: 0 0 20%;
   }
 }

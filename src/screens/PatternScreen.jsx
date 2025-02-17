@@ -54,6 +54,7 @@ export default function PatternScreen() {
           author={currentPattern.author}
           description={currentPattern.description}
           ratings={currentPattern.reviews}
+          owned={currentPattern.owned}
         />
         <PatternDetails
           yarns={currentPattern.yarns}

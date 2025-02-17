@@ -5,6 +5,12 @@ import Slider from "../Slider.jsx";
 
 Modal.setAppElement("#root");
 
+const customStyles = {
+  content: {
+    overflowX: "hidden",
+  },
+};
+
 export default function HeroImages({ images, limit }) {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -26,7 +32,7 @@ export default function HeroImages({ images, limit }) {
           See All ({images.length})
         </button>
       </div>
-      <Modal isOpen={modalOpen}>
+      <Modal isOpen={modalOpen} style={customStyles}>
         <Slider>
           {images.map((image) => (
             <div className="modal-image">

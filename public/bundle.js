@@ -41424,8 +41424,14 @@ const Adapter = {
   async getOnePattern(slug) {
     const url = `${BASE_API_URL}/patterns/${slug}`;
     const res = await get$1(url);
-    const pattern = await res.json();
-    return pattern;
+    const {
+      pattern,
+      owned
+    } = await res.json();
+    return {
+      ...pattern,
+      owned
+    };
   },
   // Users
   async getUser(stytchId) {
@@ -48069,6 +48075,11 @@ function Slider({
 }
 
 Modal.setAppElement("#root");
+const customStyles = {
+  content: {
+    overflowX: "hidden"
+  }
+};
 function HeroImages({
   images,
   limit
@@ -48093,6 +48104,7 @@ function HeroImages({
       })
     }), /*#__PURE__*/jsxRuntimeExports.jsxs(Modal, {
       isOpen: modalOpen,
+      style: customStyles,
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
         children: images.map(image => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
           className: "modal-image",
@@ -48162,7 +48174,8 @@ function PatternOverview({
   title,
   author,
   ratings,
-  description
+  description,
+  owned
 }) {
   const average = ratings.length ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length : null;
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
@@ -48192,7 +48205,7 @@ function PatternOverview({
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "pattern-overview-button",
       children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        children: "Buy this Pattern"
+        children: owned ? "Open in Workspace" : "Buy this Pattern"
       })
     })]
   });
@@ -48820,7 +48833,8 @@ function PatternScreen() {
         title: currentPattern.title,
         author: currentPattern.author,
         description: currentPattern.description,
-        ratings: currentPattern.reviews
+        ratings: currentPattern.reviews,
+        owned: currentPattern.owned
       }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternDetails, {
         yarns: currentPattern.yarns,
         needles: currentPattern.needles,

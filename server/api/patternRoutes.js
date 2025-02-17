@@ -139,12 +139,16 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
         },
       ],
     });
-    // if (!pattern) {
-    //   const error = new Error("Not found");
-    //   error.status = 404;
-    //   throw error;
-    // }
-    res.json(pattern);
+    let owned = false;
+    if (req.user) {
+      const purchaser = await Purchaser.findOne({
+        where: { patternId: pattern.id, userId: req.user.id },
+      });
+      if (purchaser) {
+        owned = true;
+      }
+    }
+    res.json({ pattern, owned });
   } catch (err) {
     next(err);
   }
