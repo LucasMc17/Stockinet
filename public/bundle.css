@@ -89,6 +89,24 @@ button {
   direction: rtl;
 }
 
+.all-patterns-list {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1em;
+}
+.all-patterns-list > a {
+  flex: 0 1 18%;
+  margin-bottom: 1em;
+}
+
+#landing-screen > section:nth-child(odd) {
+  background-color: lightgray;
+}
+
+#landing-screen > section:nth-child(even) {
+  background-color: gray;
+}
+
 .section-header {
   background-color: palegoldenrod;
   border-radius: 9999px;
@@ -103,24 +121,21 @@ button {
   width: 20px;
 }
 
-.pattern-card {
+#site-header {
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1em;
-  text-align: center;
-  background-color: lightgray;
-  border-radius: 1em;
 }
-.pattern-card > img {
-  width: 100%;
+#site-header h2, #site-header h3, #site-header h4 {
+  margin: 0 10px;
+  display: inline;
 }
 
-.all-patterns-list {
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 1em;
-}
-.all-patterns-list > a {
-  flex: 0 1 18%;
-  margin-bottom: 1em;
+#header-logo {
+  color: yellow;
 }
 
 .slider-holder {
@@ -185,37 +200,22 @@ button {
   flex: 1 0 20%;
 }
 
-#site-header {
-  background-color: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.pattern-card {
   padding: 1em;
-}
-#site-header h2, #site-header h3, #site-header h4 {
-  margin: 0 10px;
-  display: inline;
-}
-
-#header-logo {
-  color: yellow;
-}
-
-#landing-screen > section:nth-child(odd) {
+  text-align: center;
   background-color: lightgray;
+  border-radius: 1em;
 }
-
-#landing-screen > section:nth-child(even) {
-  background-color: gray;
-}
-
-.interactive-grid {
+.pattern-card > img {
   width: 100%;
+}
+
+#landing-help {
+  padding: 1em;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
+  gap: 1em;
+  align-items: center;
 }
 
 .gauge-flex {
@@ -239,6 +239,14 @@ button {
   width: 100%;
 }
 
+.interactive-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
 .loading-screen {
   margin: auto;
   width: 80%;
@@ -247,6 +255,20 @@ button {
 .loading-screen .pinwheel {
   margin: auto;
   width: 100px;
+}
+
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
 }
 
 .landing-header {
@@ -265,26 +287,15 @@ button {
   width: 100%;
 }
 
-.landing-section {
-  border: 1px solid lightblue;
-  border-radius: 1rem;
-  padding: 1rem;
-  flex: 0.25;
-  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
-}
-.landing-section > section {
-  text-align: center;
-}
-.landing-section > div {
-  flex: 0.75;
+#landing-search {
+  padding: 1em;
 }
 
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
+#to-all-patterns {
+  text-align: right;
+}
+#to-all-patterns > a {
+  text-decoration: underline;
 }
 
 .pattern-detail {
@@ -300,6 +311,99 @@ button {
 }
 .material-card-holder > .material-card {
   flex: 0 0 20%;
+}
+
+#landing-patterns {
+  padding: 1em;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.75em;
+}
+#landing-patterns-list > a {
+  flex: 0 1 20%;
+}
+
+.pattern-overview {
+  display: flex;
+  padding: 4em 2em;
+  border-bottom: 2px solid black;
+}
+
+.pattern-overview-text {
+  flex: 1 0 85%;
+}
+
+.pattern-overview-button {
+  flex: 1 0 15%;
+}
+.pattern-overview-button > button {
+  width: 100%;
+}
+
+.rating-box {
+  display: flex;
+}
+
+.star-box {
+  position: relative;
+}
+.star-box > div.filled-stars {
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.star-box > div.unfilled-stars {
+  display: flex;
+}
+.star-box svg {
+  stroke: black;
+}
+
+.material-card {
+  border: 1px solid goldenrod;
+  border-radius: 2em;
+  padding: 0.5em;
+}
+
+.drop-down {
+  border-bottom: 2px solid black;
+  position: relative;
+}
+
+.dd-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dd-box > svg {
+  flex: 0 0 2em;
+}
+.dd-box .dd-label-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.dd-menu {
+  max-height: 0px;
+  overflow-y: scroll;
+  width: 100%;
+  position: absolute;
+  top: calc(100% + 2px);
+  background-color: white;
+  border-radius: 0.5em;
+  box-shadow: 10px 5px 10px rgba(103, 103, 103, 0.35);
+  z-index: 100;
+}
+.dd-menu li {
+  padding: 0 1em;
+}
+.dd-menu li:hover {
+  background-color: lightgray;
 }
 
 .hero-images {
@@ -348,110 +452,6 @@ button {
   position: absolute;
   top: 1em;
   right: 1em;
-}
-
-#landing-search {
-  padding: 1em;
-}
-
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
-}
-
-#landing-patterns {
-  padding: 1em;
-}
-
-#landing-patterns-list {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.75em;
-}
-#landing-patterns-list > a {
-  flex: 0 1 20%;
-}
-
-.pattern-overview {
-  display: flex;
-  padding: 4em 2em;
-  border-bottom: 2px solid black;
-}
-
-.pattern-overview-text {
-  flex: 1 0 85%;
-}
-
-.pattern-overview-button {
-  flex: 1 0 15%;
-}
-.pattern-overview-button > button {
-  width: 100%;
-}
-
-.rating-box {
-  display: flex;
-}
-
-.drop-down {
-  border-bottom: 2px solid black;
-  position: relative;
-}
-
-.dd-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dd-box > svg {
-  flex: 0 0 2em;
-}
-.dd-box .dd-label-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.dd-menu {
-  max-height: 0px;
-  overflow-y: scroll;
-  width: 100%;
-  position: absolute;
-  top: calc(100% + 2px);
-  background-color: white;
-  border-radius: 0.5em;
-  box-shadow: 10px 5px 10px rgba(103, 103, 103, 0.35);
-  z-index: 100;
-}
-.dd-menu li {
-  padding: 0 1em;
-}
-.dd-menu li:hover {
-  background-color: lightgray;
-}
-
-.star-box {
-  position: relative;
-}
-.star-box > div.filled-stars {
-  overflow: hidden;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.star-box > div.unfilled-stars {
-  display: flex;
-}
-.star-box svg {
-  stroke: black;
-}
-
-.material-card {
-  border: 1px solid goldenrod;
-  border-radius: 2em;
-  padding: 0.5em;
 }
 
 .gauge-square {

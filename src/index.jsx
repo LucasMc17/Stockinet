@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import {
   OwnedPatternsScreen,
   PatternScreen,
@@ -13,12 +13,19 @@ import { Provider } from "react-redux";
 import { store } from "./@redux/store";
 import "./Base.module.scss";
 import { StytchProvider } from "@stytch/react";
+import { useLoggedOutRedirect } from "./hooks";
 import { StytchUIClient } from "@stytch/vanilla-js";
 import { SiteHeader } from "./components";
 
 const stytch = new StytchUIClient(process.env.STYTCH_TEST_PUBLIC_TOKEN);
 
+function LogInCheck() {
+  useLoggedOutRedirect();
+  return <Outlet />;
+}
+
 const router = createBrowserRouter([
+  // root paths
   {
     path: "/",
     element: (
@@ -44,34 +51,49 @@ const router = createBrowserRouter([
     path: "reset-password",
     element: <LoginSignupScreen method="reset-password" />,
   },
+
   // pattern paths
+
   {
     path: "patterns",
     element: (
       <>
         <SiteHeader />
-        <AllPatternsScreen />
+        <Outlet />
       </>
     ),
+    children: [
+      {
+        path: "",
+        element: <AllPatternsScreen />,
+      },
+      {
+        path: "my-patterns",
+        element: <OwnedPatternsScreen />,
+      },
+      {
+        path: ":patternSlug",
+        element: <PatternScreen />,
+      },
+    ],
   },
+
+  // workspace paths
+
   {
-    path: "patterns/my-patterns",
-    element: (
-      <>
-        <SiteHeader />
-        <OwnedPatternsScreen />
-      </>
-    ),
+    path: "workspace",
+    element: <LogInCheck />,
+    children: [
+      { path: "", element: <>this is the workspace page</> },
+      {
+        path: ":patternSlug",
+        element: <>this is a pattern</>,
+      },
+    ],
   },
-  {
-    path: "patterns/:patternSlug",
-    element: (
-      <>
-        <SiteHeader />
-        <PatternScreen />
-      </>
-    ),
-  },
+
+  // author paths
+
   {
     path: "authors/:authorSlug",
     element: (
