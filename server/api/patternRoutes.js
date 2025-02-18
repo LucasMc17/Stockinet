@@ -1,17 +1,13 @@
 const router = require("express").Router();
 const {
   db,
-  models: { Pattern, Grid, Purchaser },
+  models: { Pattern, Purchaser, Yarn, Needle, Size, Review },
 } = require("../db");
 module.exports = router;
 const {
   rejectWithoutAuth,
   checkAuth,
 } = require("../backendUtils/stytchClient");
-const Yarn = require("../db/models/Yarn");
-const Needle = require("../db/models/Needle");
-const Size = require("../db/models/Size");
-const Review = require("../db/models/Review");
 
 router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
   try {
@@ -146,6 +142,7 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
       });
       if (purchaser) {
         owned = true;
+        await purchaser.update({ lastAccessed: new Date() });
       }
     }
     res.json({ pattern, owned });

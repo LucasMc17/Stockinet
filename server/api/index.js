@@ -13,6 +13,7 @@ module.exports = router;
 
 router.use("/patterns", require("./patternRoutes"));
 router.use("/user", require("./userRoutes"));
+router.use("/workspace", require("./workspaceRoutes"));
 
 router.use((req, res, next) => {
   const error = new Error("Not Found");

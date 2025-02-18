@@ -45,5 +45,6 @@ module.exports = {
     Yarn,
     Needle,
     Review,
+    Size,
   },
 };
