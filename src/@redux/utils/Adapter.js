@@ -54,6 +54,14 @@ const Adapter = {
     const { pattern, owned } = await res.json();
     return { ...pattern, owned };
   },
+  // Workspace
+  async getUserProjects() {
+    const url = `${BASE_API_URL}/workspace/projects-by-user`;
+
+    const res = await get(url);
+    const projects = await res.json();
+    return projects;
+  },
   // Users
   async getUser(stytchId) {
     const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;

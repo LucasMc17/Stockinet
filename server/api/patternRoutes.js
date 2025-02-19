@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   db,
-  models: { Pattern, Purchaser, Yarn, Needle, Size, Review },
+  models: { Pattern, Project, Yarn, Needle, Size, Review },
 } = require("../db");
 module.exports = router;
 const {
@@ -21,7 +21,7 @@ router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
         "description",
         "type",
       ],
-      order: [[db.col("purchaser.lastAccessed"), "DESC"]],
+      order: [[db.col("project.lastAccessed"), "DESC"]],
       limit: 3,
     });
     res.json(patterns);
@@ -69,7 +69,7 @@ router.get("/by-user", rejectWithoutAuth, async (req, res, next) => {
 //       const associated = await pattern.hasUser(req.user);
 //       if (associated) {
 //         // user is logged in, pattern been purchased
-//         const purchaser = await Purchaser.findOne({
+//         const purchaser = await Project.findOne({
 //           where: { patternId: pattern.id, userId: req.user.id },
 //         });
 //         if (purchaser) {
@@ -137,12 +137,12 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
     });
     let owned = false;
     if (req.user) {
-      const purchaser = await Purchaser.findOne({
+      const project = await Project.findOne({
         where: { patternId: pattern.id, userId: req.user.id },
       });
-      if (purchaser) {
+      if (project) {
         owned = true;
-        await purchaser.update({ lastAccessed: new Date() });
+        await project.update({ lastAccessed: new Date() });
       }
     }
     res.json({ pattern, owned });
@@ -184,7 +184,7 @@ router.get("/", async (req, res, next) => {
 
     patterns.type,
 
-    (SELECT COUNT(*) FROM purchasers WHERE "purchasers"."patternId" = patterns.id) AS user_count,
+    (SELECT COUNT(*) FROM projects WHERE "projects"."patternId" = patterns.id) AS user_count,
 
     (SELECT AVG(stars) FROM reviews WHERE "reviews"."patternId" = patterns.id) AS rating
 

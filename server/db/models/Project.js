@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
 
-const Purchaser = db.define("purchaser", {
+const Project = db.define("project", {
   id: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,
@@ -13,4 +13,4 @@ const Purchaser = db.define("purchaser", {
   },
 });
 
-module.exports = Purchaser;
+module.exports = Project;

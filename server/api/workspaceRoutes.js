@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   db,
-  models: { Pattern, Grid, Purchaser, Size },
+  models: { Pattern, Grid, Project, Size },
 } = require("../db");
 module.exports = router;
 const { rejectWithoutAuth } = require("../backendUtils/stytchClient");
@@ -18,7 +18,7 @@ router.get("/projects-by-user", rejectWithoutAuth, async (req, res, next) => {
         "description",
         "type",
       ],
-      order: [[db.col("purchaser.lastAccessed"), "DESC"]],
+      order: [[db.col("project.lastAccessed"), "DESC"]],
     });
     res.json(patterns);
   } catch (err) {

@@ -41376,7 +41376,7 @@ function handleThunkCaseReducerDefinition({
 function noop$1() {
 }
 
-var initialState$2 = {
+var initialState$3 = {
   loading: false,
   error: null,
   patternList: [],
@@ -41442,6 +41442,13 @@ const Adapter = {
       ...pattern,
       owned
     };
+  },
+  // Workspace
+  async getUserProjects() {
+    const url = `${BASE_API_URL}/workspace/projects-by-user`;
+    const res = await get$1(url);
+    const projects = await res.json();
+    return projects;
   },
   // Users
   async getUser(stytchId) {
@@ -41565,7 +41572,7 @@ const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payl
 });
 const patternSlice = createSlice({
   name: "patterns",
-  initialState: initialState$2,
+  initialState: initialState$3,
   reducers: {
     selectPattern: (state, action) => {
       state.currentPattern = action.payload;
@@ -44703,7 +44710,7 @@ const StytchProvider = ({ stytch, children }) => {
             React$1.createElement(StytchSessionContext.Provider, { value: session }, children))));
 };
 
-var initialState$1 = {
+var initialState$2 = {
   loading: false,
   error: null,
   id: null,
@@ -44736,7 +44743,7 @@ const signUp = createAsyncThunk("user/signUp", async (payload, {
 });
 const userSlice = createSlice({
   name: "user",
-  initialState: initialState$1,
+  initialState: initialState$2,
   reducers: {
     clearUser: (state, action) => {
       state.error = null;
@@ -48870,7 +48877,7 @@ function LandingScreen() {
   });
 }
 
-var initialState = {
+var initialState$1 = {
   loading: false,
   error: null,
   currentAuthor: null,
@@ -48890,7 +48897,7 @@ const fetchAuthor = createAsyncThunk("authors/fetchAuthor", async (payload, {
 });
 const authorSlice = createSlice({
   name: "authors",
-  initialState,
+  initialState: initialState$1,
   reducers: {
     clearAuthor: (state, action) => {
       state.currentAuthor = null;
@@ -48938,6 +48945,70 @@ function AuthorScreen() {
   }
 }
 
+var initialState = {
+  loading: false,
+  error: null,
+  projectList: [],
+  currentProject: null,
+  currentRequestId: null,
+  loadedProjects: {}
+};
+
+const fetchUserProjects = createAsyncThunk("workspace/fetchUserProjects", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const projects = await Adapter.getUserProjects();
+  if (projects?.errorStatus) {
+    return rejectWithValue(projects);
+  }
+  return projects;
+});
+const workspaceSlice = createSlice({
+  name: "workspace",
+  initialState,
+  reducers: {
+    selectProject: (state, action) => {
+      state.currentProject = action.payload;
+    }
+  },
+  extraReducers: builder => {
+    thunkBaseCases(builder, fetchUserProjects, {
+      fulfilledCallback: (state, action) => {
+        state.projectList = action.payload;
+      }
+    });
+  }
+});
+var WorkspaceSlice = workspaceSlice.reducer;
+
+function AllProjectsScreen() {
+  const dispatch = useDispatch();
+  const {
+    loading,
+    error,
+    projectList
+  } = useSelector(s => s.workspace);
+  reactExports.useEffect(() => {
+    dispatch(fetchUserProjects());
+    return () => {
+      // clear the list
+    };
+  }, []);
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+  }
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    children: projectList.map(project => /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: project.title
+    }))
+  });
+}
+
 var reduxLogger$1 = {exports: {}};
 
 var reduxLogger = reduxLogger$1.exports;
@@ -48959,7 +49030,8 @@ var logger$1 = /*@__PURE__*/getDefaultExportFromCjs$1(reduxLoggerExports);
 var reducer$1 = combineReducers({
   patterns: PatternSlice,
   user: UserSlice,
-  authors: AuthorSlice
+  authors: AuthorSlice,
+  workspace: WorkspaceSlice
 });
 
 const store = configureStore({
@@ -49031,9 +49103,7 @@ const router = createBrowserRouter([
   element: /*#__PURE__*/jsxRuntimeExports.jsx(LogInCheck, {}),
   children: [{
     path: "",
-    element: /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
-      children: "this is the workspace page"
-    })
+    element: /*#__PURE__*/jsxRuntimeExports.jsx(AllProjectsScreen, {})
   }, {
     path: ":patternSlug",
     element: /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {

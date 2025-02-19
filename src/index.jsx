@@ -8,6 +8,7 @@ import {
   AllPatternsScreen,
   LandingScreen,
   AuthorScreen,
+  AllProjectsScreen,
 } from "./screens";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
@@ -84,7 +85,7 @@ const router = createBrowserRouter([
     path: "workspace",
     element: <LogInCheck />,
     children: [
-      { path: "", element: <>this is the workspace page</> },
+      { path: "", element: <AllProjectsScreen /> },
       {
         path: ":patternSlug",
         element: <>this is a pattern</>,

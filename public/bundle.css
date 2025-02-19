@@ -89,6 +89,14 @@ button {
   direction: rtl;
 }
 
+#landing-screen > section:nth-child(odd) {
+  background-color: lightgray;
+}
+
+#landing-screen > section:nth-child(even) {
+  background-color: gray;
+}
+
 .all-patterns-list {
   justify-content: space-between;
   flex-wrap: wrap;
@@ -97,14 +105,6 @@ button {
 .all-patterns-list > a {
   flex: 0 1 18%;
   margin-bottom: 1em;
-}
-
-#landing-screen > section:nth-child(odd) {
-  background-color: lightgray;
-}
-
-#landing-screen > section:nth-child(even) {
-  background-color: gray;
 }
 
 .section-header {
@@ -119,6 +119,16 @@ button {
   stroke: black;
   display: inline;
   width: 20px;
+}
+
+.pattern-card {
+  padding: 1em;
+  text-align: center;
+  background-color: lightgray;
+  border-radius: 1em;
+}
+.pattern-card > img {
+  width: 100%;
 }
 
 #site-header {
@@ -136,6 +146,26 @@ button {
 
 #header-logo {
   color: yellow;
+}
+
+.pattern-search-menu {
+  width: 80%;
+  margin: auto;
+  border-radius: 1em;
+  background-color: white;
+}
+.pattern-search-menu > h4 {
+  text-align: center;
+}
+
+.pattern-search-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75em;
+  gap: 20px;
+}
+.pattern-search-filters > * {
+  flex: 1 0 20%;
 }
 
 .slider-holder {
@@ -180,73 +210,6 @@ button {
   border-right-width: 0;
 }
 
-.pattern-search-menu {
-  width: 80%;
-  margin: auto;
-  border-radius: 1em;
-  background-color: white;
-}
-.pattern-search-menu > h4 {
-  text-align: center;
-}
-
-.pattern-search-filters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75em;
-  gap: 20px;
-}
-.pattern-search-filters > * {
-  flex: 1 0 20%;
-}
-
-.pattern-card {
-  padding: 1em;
-  text-align: center;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-.pattern-card > img {
-  width: 100%;
-}
-
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
-}
-
-.gauge-flex {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: center;
-}
-.gauge-flex > .gauge-holder,
-.gauge-flex > .gauge-sts {
-  flex-basis: 66%;
-}
-.gauge-flex > div.gauge-rows {
-  flex-basis: 33%;
-  position: relative;
-}
-.gauge-flex > div.gauge-rows > p {
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  width: 100%;
-}
-
-.interactive-grid {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
-}
-
 .loading-screen {
   margin: auto;
   width: 80%;
@@ -287,32 +250,6 @@ button {
   width: 100%;
 }
 
-#landing-search {
-  padding: 1em;
-}
-
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
-}
-
-.material-card-holder {
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-  padding: 1em 0;
-}
-.material-card-holder > .material-card {
-  flex: 0 0 20%;
-}
-
 #landing-patterns {
   padding: 1em;
 }
@@ -326,25 +263,23 @@ button {
   flex: 0 1 20%;
 }
 
-.pattern-overview {
+#landing-help {
+  padding: 1em;
   display: flex;
-  padding: 4em 2em;
-  border-bottom: 2px solid black;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
 }
 
-.pattern-overview-text {
-  flex: 1 0 85%;
+#landing-search {
+  padding: 1em;
 }
 
-.pattern-overview-button {
-  flex: 1 0 15%;
+#to-all-patterns {
+  text-align: right;
 }
-.pattern-overview-button > button {
-  width: 100%;
-}
-
-.rating-box {
-  display: flex;
+#to-all-patterns > a {
+  text-decoration: underline;
 }
 
 .star-box {
@@ -362,48 +297,6 @@ button {
 }
 .star-box svg {
   stroke: black;
-}
-
-.material-card {
-  border: 1px solid goldenrod;
-  border-radius: 2em;
-  padding: 0.5em;
-}
-
-.drop-down {
-  border-bottom: 2px solid black;
-  position: relative;
-}
-
-.dd-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dd-box > svg {
-  flex: 0 0 2em;
-}
-.dd-box .dd-label-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.dd-menu {
-  max-height: 0px;
-  overflow-y: scroll;
-  width: 100%;
-  position: absolute;
-  top: calc(100% + 2px);
-  background-color: white;
-  border-radius: 0.5em;
-  box-shadow: 10px 5px 10px rgba(103, 103, 103, 0.35);
-  z-index: 100;
-}
-.dd-menu li {
-  padding: 0 1em;
-}
-.dd-menu li:hover {
-  background-color: lightgray;
 }
 
 .hero-images {
@@ -452,6 +345,113 @@ button {
   position: absolute;
   top: 1em;
   right: 1em;
+}
+
+.pattern-overview {
+  display: flex;
+  padding: 4em 2em;
+  border-bottom: 2px solid black;
+}
+
+.pattern-overview-text {
+  flex: 1 0 85%;
+}
+
+.pattern-overview-button {
+  flex: 1 0 15%;
+}
+.pattern-overview-button > button {
+  width: 100%;
+}
+
+.rating-box {
+  display: flex;
+}
+
+.gauge-flex {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+.gauge-flex > .gauge-holder,
+.gauge-flex > .gauge-sts {
+  flex-basis: 66%;
+}
+.gauge-flex > div.gauge-rows {
+  flex-basis: 33%;
+  position: relative;
+}
+.gauge-flex > div.gauge-rows > p {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.material-card {
+  border: 1px solid goldenrod;
+  border-radius: 2em;
+  padding: 0.5em;
+}
+
+.interactive-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
+}
+
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  padding: 1em 0;
+}
+.material-card-holder > .material-card {
+  flex: 0 0 20%;
+}
+
+.drop-down {
+  border-bottom: 2px solid black;
+  position: relative;
+}
+
+.dd-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dd-box > svg {
+  flex: 0 0 2em;
+}
+.dd-box .dd-label-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.dd-menu {
+  max-height: 0px;
+  overflow-y: scroll;
+  width: 100%;
+  position: absolute;
+  top: calc(100% + 2px);
+  background-color: white;
+  border-radius: 0.5em;
+  box-shadow: 10px 5px 10px rgba(103, 103, 103, 0.35);
+  z-index: 100;
+}
+.dd-menu li {
+  padding: 0 1em;
+}
+.dd-menu li:hover {
+  background-color: lightgray;
 }
 
 .gauge-square {
