@@ -41,7 +41,7 @@ export default function PatternScreen() {
   }
 
   if (error) {
-    return <ErrorScreen />;
+    return <ErrorScreen error={error} />;
   }
 
   if (currentPattern) {

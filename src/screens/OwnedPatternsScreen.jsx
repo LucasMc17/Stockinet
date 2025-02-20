@@ -23,7 +23,7 @@ export default function OwnedPatternsScreen() {
   }
 
   if (error) {
-    return <ErrorScreen />;
+    return <ErrorScreen error={error} />;
   }
 
   if (patternList) {

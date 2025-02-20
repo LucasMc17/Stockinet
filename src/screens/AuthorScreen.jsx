@@ -24,7 +24,7 @@ export default function AuthorScreen() {
   }
 
   if (error) {
-    return <ErrorScreen />;
+    return <ErrorScreen error={error} />;
   }
 
   if (currentAuthor) {

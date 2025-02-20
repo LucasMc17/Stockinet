@@ -41499,7 +41499,7 @@ const fulfilledBase = (state, action, callback) => {
 };
 const rejectedBase = (state, action, callback) => {
   state.loading = false;
-  state.error = action.error;
+  state.error = action.payload;
   state.currentRequestId = undefined;
   if (typeof callback === "function") {
     callback(state, action);
@@ -43001,9 +43001,19 @@ function SectionHeader({
   });
 }
 
-function ErrorScreen() {
-  return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
-    children: "OOPS!"
+function ErrorScreen({
+  error
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+      children: "Sorry, something went wrong..."
+    }), error && /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+        children: error.errorStatus
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: error.message
+      })]
+    })]
   });
 }
 
@@ -48448,7 +48458,9 @@ function AllPatternsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternSearch, {
         patternPage: true
-      }), loading ? /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {}) : error ? /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {}) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+      }), loading ? /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {}) : error ? /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+        error: error
+      }) : /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
         children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
           children: [/*#__PURE__*/jsxRuntimeExports.jsx("button", {
             disabled: currentPage <= 1,
@@ -48794,7 +48806,9 @@ function OwnedPatternsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+      error: error
+    });
   }
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
@@ -48838,7 +48852,9 @@ function PatternScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+      error: error
+    });
   }
   if (currentPattern) {
     const images = [currentPattern.leadImage, ...currentPattern.images];
@@ -48936,7 +48952,9 @@ function AuthorScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+      error: error
+    });
   }
   if (currentAuthor) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
@@ -48997,7 +49015,9 @@ function AllProjectsScreen() {
     };
   }, []);
   if (error) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {});
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+      error: error
+    });
   }
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});

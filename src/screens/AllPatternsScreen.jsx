@@ -61,7 +61,7 @@ export default function AllPatternsScreen() {
         {loading ? (
           <LoadingScreen />
         ) : error ? (
-          <ErrorScreen />
+          <ErrorScreen error={error} />
         ) : (
           <>
             <div>

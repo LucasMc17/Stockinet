@@ -19,7 +19,7 @@ export default function AllProjectsScreen() {
   }, []);
 
   if (error) {
-    return <ErrorScreen />;
+    return <ErrorScreen error={error} />;
   }
 
   if (loading) {

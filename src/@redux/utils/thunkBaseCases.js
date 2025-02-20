@@ -23,7 +23,7 @@ const fulfilledBase = (state, action, callback) => {
 
 const rejectedBase = (state, action, callback) => {
   state.loading = false;
-  state.error = action.error;
+  state.error = action.payload;
   state.currentRequestId = undefined;
   if (typeof callback === "function") {
     callback(state, action);
