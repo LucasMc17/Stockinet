@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"rollup -c --watch --environment NODE_ENV:development\" \"NODE_ENV=development nodemon server\"",
+    "start:prod": "concurrently \"rollup -c --watch --environment NODE_ENV:production\" \"NODE_ENV=production nodemon server\"",
+    "start:dev": "concurrently \"rollup -c --watch --environment NODE_ENV:development\" \"NODE_ENV=development nodemon server\"",
     "build:dev": "rollup -c --environment NODE_ENV:development",
     "build": "rollup -c --environment NODE_ENV:production",
     "test": "node scripts/test.js",
