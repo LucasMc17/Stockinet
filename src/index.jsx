@@ -9,6 +9,7 @@ import {
   LandingScreen,
   AuthorScreen,
   AllProjectsScreen,
+  ProjectScreen,
 } from "./screens";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
@@ -87,8 +88,8 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <AllProjectsScreen /> },
       {
-        path: ":patternSlug",
-        element: <>this is a pattern</>,
+        path: "project/:patternId",
+        element: <ProjectScreen />,
       },
     ],
   },

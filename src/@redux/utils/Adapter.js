@@ -62,6 +62,13 @@ const Adapter = {
     const projects = await res.json();
     return projects;
   },
+  async getOneProject(patternId) {
+    const url = `${BASE_API_URL}/workspace/project/${patternId}`;
+
+    const res = await get(url);
+    const project = await res.json();
+    return project;
+  },
   // Users
   async getUser(stytchId) {
     const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;

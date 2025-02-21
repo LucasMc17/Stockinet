@@ -16,6 +16,19 @@ const fetchUserProjects = createAsyncThunk(
   },
 );
 
+const fetchOneProject = createAsyncThunk(
+  "workspace/fetchOneProject",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const project = await Adapter.getOneProject(payload);
+
+    if (project?.errorStatus) {
+      return rejectWithValue();
+    }
+
+    return project;
+  },
+);
+
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
@@ -30,9 +43,15 @@ const workspaceSlice = createSlice({
         state.projectList = action.payload;
       },
     });
+    thunkBaseCases(builder, fetchOneProject, {
+      fulfilledCallback: (state, action) => {
+        state.currentProject = action.payload;
+        state.loadedProjects[action.payload.id] = action.payload;
+      },
+    });
   },
 });
 
 export const { selectProject } = workspaceSlice.actions;
-export { fetchUserProjects };
+export { fetchUserProjects, fetchOneProject };
 export default workspaceSlice.reducer;

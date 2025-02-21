@@ -41450,6 +41450,12 @@ const Adapter = {
     const projects = await res.json();
     return projects;
   },
+  async getOneProject(patternId) {
+    const url = `${BASE_API_URL}/workspace/project/${patternId}`;
+    const res = await get$1(url);
+    const project = await res.json();
+    return project;
+  },
   // Users
   async getUser(stytchId) {
     const url = `${BASE_API_URL}/user/by-stytch/${stytchId}`;
@@ -48983,6 +48989,17 @@ const fetchUserProjects = createAsyncThunk("workspace/fetchUserProjects", async 
   }
   return projects;
 });
+const fetchOneProject = createAsyncThunk("workspace/fetchOneProject", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const project = await Adapter.getOneProject(payload);
+  if (project?.errorStatus) {
+    return rejectWithValue();
+  }
+  return project;
+});
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
@@ -48997,8 +49014,17 @@ const workspaceSlice = createSlice({
         state.projectList = action.payload;
       }
     });
+    thunkBaseCases(builder, fetchOneProject, {
+      fulfilledCallback: (state, action) => {
+        state.currentProject = action.payload;
+        state.loadedProjects[action.payload.id] = action.payload;
+      }
+    });
   }
 });
+const {
+  selectProject
+} = workspaceSlice.actions;
 var WorkspaceSlice = workspaceSlice.reducer;
 
 function AllProjectsScreen() {
@@ -49023,9 +49049,47 @@ function AllProjectsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    children: projectList.map(project => /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-      children: project.title
+    children: projectList.map(project => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+      to: `/workspace/project/${project.id}`,
+      children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+        children: project.title
+      })
     }))
+  });
+}
+
+function ProjectScreen() {
+  const {
+    patternId
+  } = useParams();
+  const dispatch = useDispatch();
+  const {
+    loading,
+    error,
+    currentProject,
+    loadedProjects
+  } = useSelector(s => s.workspace);
+  reactExports.useEffect(() => {
+    const projectFromCache = loadedProjects[patternId];
+    if (projectFromCache) {
+      dispatch(selectProject(projectFromCache));
+    } else {
+      dispatch(fetchOneProject(patternId));
+    }
+    return () => {
+      dispatch(selectProject(null));
+    };
+  }, []);
+  if (error) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
+      error: error
+    });
+  }
+  if (loading) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    children: JSON.stringify(currentProject)
   });
 }
 
@@ -49125,10 +49189,8 @@ const router = createBrowserRouter([
     path: "",
     element: /*#__PURE__*/jsxRuntimeExports.jsx(AllProjectsScreen, {})
   }, {
-    path: ":patternSlug",
-    element: /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
-      children: "this is a pattern"
-    })
+    path: "project/:patternId",
+    element: /*#__PURE__*/jsxRuntimeExports.jsx(ProjectScreen, {})
   }]
 },
 // author paths

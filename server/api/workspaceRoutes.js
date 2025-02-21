@@ -35,6 +35,12 @@ router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
     if (!pattern.length) {
       throw new Error("pattern not found");
     }
+    const project = await Project.findOne({
+      where: { patternId, userId: req.user.id },
+    });
+    if (project) {
+      await project.update({ lastAccessed: new Date() });
+    }
     res.json(pattern[0]);
   } catch (err) {
     next(err);

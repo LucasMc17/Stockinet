@@ -5,6 +5,7 @@ import PatternScreen from "./PatternScreen.jsx";
 import LandingScreen from "./LandingScreen.jsx";
 import AuthorScreen from "./AuthorScreen.jsx";
 import AllProjectsScreen from "./AllProjectsScreen.jsx";
+import ProjectScreen from "./ProjectScreen.jsx";
 
 export {
   AllPatternsScreen,
@@ -14,4 +15,5 @@ export {
   LandingScreen,
   AuthorScreen,
   AllProjectsScreen,
+  ProjectScreen,
 };

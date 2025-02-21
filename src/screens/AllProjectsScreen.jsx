@@ -5,6 +5,7 @@ import {
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
 import { LoadingScreen, ErrorScreen } from "../components";
+import { Link } from "react-router-dom";
 // import "./AllProjectsScreen.module.scss";
 
 export default function AllProjectsScreen() {
@@ -29,7 +30,9 @@ export default function AllProjectsScreen() {
   return (
     <div>
       {projectList.map((project) => (
-        <h1>{project.title}</h1>
+        <Link to={`/workspace/project/${project.id}`}>
+          <h1>{project.title}</h1>
+        </Link>
       ))}
     </div>
   );
