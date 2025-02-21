@@ -25,3 +25,18 @@ router.get("/projects-by-user", rejectWithoutAuth, async (req, res, next) => {
     next(err);
   }
 });
+
+router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
+  try {
+    const { patternId } = req.params;
+    const pattern = await req.user.getPatterns({
+      where: { id: patternId },
+    });
+    if (!pattern.length) {
+      throw new Error("pattern not found");
+    }
+    res.json(pattern[0]);
+  } catch (err) {
+    next(err);
+  }
+});

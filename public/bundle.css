@@ -107,6 +107,26 @@ button {
   background-color: gray;
 }
 
+.pattern-search-menu {
+  width: 80%;
+  margin: auto;
+  border-radius: 1em;
+  background-color: white;
+}
+.pattern-search-menu > h4 {
+  text-align: center;
+}
+
+.pattern-search-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75em;
+  gap: 20px;
+}
+.pattern-search-filters > * {
+  flex: 1 0 20%;
+}
+
 .section-header {
   background-color: palegoldenrod;
   border-radius: 9999px;
@@ -190,39 +210,6 @@ button {
   border-right-width: 0;
 }
 
-.pattern-search-menu {
-  width: 80%;
-  margin: auto;
-  border-radius: 1em;
-  background-color: white;
-}
-.pattern-search-menu > h4 {
-  text-align: center;
-}
-
-.pattern-search-filters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75em;
-  gap: 20px;
-}
-.pattern-search-filters > * {
-  flex: 1 0 20%;
-}
-
-#landing-patterns {
-  padding: 1em;
-}
-
-#landing-patterns-list {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.75em;
-}
-#landing-patterns-list > a {
-  flex: 0 1 20%;
-}
-
 .interactive-grid {
   width: 100%;
   display: flex;
@@ -252,6 +239,19 @@ button {
   width: 100%;
 }
 
+#landing-patterns {
+  padding: 1em;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.75em;
+}
+#landing-patterns-list > a {
+  flex: 0 1 20%;
+}
+
 .loading-screen {
   margin: auto;
   width: 80%;
@@ -260,6 +260,73 @@ button {
 .loading-screen .pinwheel {
   margin: auto;
   width: 100px;
+}
+
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  align-items: center;
+}
+.landing-header > .landing-header-hero {
+  flex: 0.5;
+}
+.landing-header > .landing-header-image {
+  flex: 0.2;
+}
+.landing-header > .landing-header-image > img {
+  width: 100%;
+}
+
+#landing-search {
+  padding: 1em;
+}
+
+#to-all-patterns {
+  text-align: right;
+}
+#to-all-patterns > a {
+  text-decoration: underline;
+}
+
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  padding: 1em 0;
+}
+.material-card-holder > .material-card {
+  flex: 0 0 20%;
+}
+
+.star-box {
+  position: relative;
+}
+.star-box > div.filled-stars {
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.star-box > div.unfilled-stars {
+  display: flex;
+}
+.star-box svg {
+  stroke: black;
+}
+
+#landing-help {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
 }
 
 .hero-images {
@@ -310,22 +377,6 @@ button {
   right: 1em;
 }
 
-.landing-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
-  align-items: center;
-}
-.landing-header > .landing-header-hero {
-  flex: 0.5;
-}
-.landing-header > .landing-header-image {
-  flex: 0.2;
-}
-.landing-header > .landing-header-image > img {
-  width: 100%;
-}
-
 .landing-section {
   border: 1px solid lightblue;
   border-radius: 1rem;
@@ -338,17 +389,6 @@ button {
 }
 .landing-section > div {
   flex: 0.75;
-}
-
-#landing-search {
-  padding: 1em;
-}
-
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
 }
 
 .pattern-overview {
@@ -372,50 +412,10 @@ button {
   display: flex;
 }
 
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
-}
-
-.material-card-holder {
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-  padding: 1em 0;
-}
-.material-card-holder > .material-card {
-  flex: 0 0 20%;
-}
-
 .material-card {
   border: 1px solid goldenrod;
   border-radius: 2em;
   padding: 0.5em;
-}
-
-.star-box {
-  position: relative;
-}
-.star-box > div.filled-stars {
-  overflow: hidden;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.star-box > div.unfilled-stars {
-  display: flex;
-}
-.star-box svg {
-  stroke: black;
 }
 
 .drop-down {
@@ -454,12 +454,12 @@ button {
   background-color: lightgray;
 }
 
-.interactive-grid-row {
-  display: flex;
-}
-
 .gauge-square {
   border: 3px solid black;
+}
+
+.interactive-grid-row {
+  display: flex;
 }
 
 .interactive-grid-cell {
