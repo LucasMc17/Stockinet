@@ -29,8 +29,8 @@ export default function AllProjectsScreen() {
 
   return (
     <div>
-      {projectList.map((project) => (
-        <Link to={`/workspace/project/${project.id}`}>
+      {projectList.map((project, i) => (
+        <Link to={`/workspace/project/${project.id}`} key={i}>
           <h1>{project.title}</h1>
         </Link>
       ))}

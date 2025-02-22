@@ -54,7 +54,7 @@ const fetchOnePattern = createAsyncThunk(
       return rejectWithValue(pattern);
     }
 
-    return pattern;
+    return { ...pattern.pattern, owned: pattern.owned };
   },
 );
 

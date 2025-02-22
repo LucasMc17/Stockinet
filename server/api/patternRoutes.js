@@ -8,6 +8,7 @@ const {
   rejectWithoutAuth,
   checkAuth,
 } = require("../backendUtils/stytchClient");
+const { throw404 } = require("../backendUtils/errorHandling");
 
 router.get("/by-user/recents", rejectWithoutAuth, async (req, res, next) => {
   try {
@@ -135,6 +136,7 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
         },
       ],
     });
+    throw404(pattern);
     let owned = false;
     if (req.user) {
       const project = await Project.findOne({

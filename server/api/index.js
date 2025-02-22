@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const session = require("express-session");
+require("dotenv").config();
 
+// this is needed
 router.use(
   session({
-    secret: "some-secret-key",
+    secret: process.env.MY_SECRET,
     resave: false,
     saveUninitialized: true,
   }),

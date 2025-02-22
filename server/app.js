@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 // error handling endware
 app.use((err, req, res, next) => {
   console.error(err);
-  res.send({
+  res.json({
     errorStatus: err.status || 500,
     message: err.message || "Internal server error.",
   });

@@ -41434,14 +41434,8 @@ const Adapter = {
   async getOnePattern(slug) {
     const url = `${BASE_API_URL}/patterns/${slug}`;
     const res = await get$1(url);
-    const {
-      pattern,
-      owned
-    } = await res.json();
-    return {
-      ...pattern,
-      owned
-    };
+    const pattern = await res.json();
+    return pattern;
   },
   // Workspace
   async getUserProjects() {
@@ -41574,7 +41568,10 @@ const fetchOnePattern = createAsyncThunk("patterns/fetchOnePattern", async (payl
   if (pattern?.errorStatus) {
     return rejectWithValue(pattern);
   }
-  return pattern;
+  return {
+    ...pattern.pattern,
+    owned: pattern.owned
+  };
 });
 const patternSlice = createSlice({
   name: "patterns",
@@ -48996,7 +48993,7 @@ const fetchOneProject = createAsyncThunk("workspace/fetchOneProject", async (pay
 }) => {
   const project = await Adapter.getOneProject(payload);
   if (project?.errorStatus) {
-    return rejectWithValue();
+    return rejectWithValue(project);
   }
   return project;
 });
@@ -49049,12 +49046,12 @@ function AllProjectsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    children: projectList.map(project => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+    children: projectList.map((project, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
       to: `/workspace/project/${project.id}`,
       children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
         children: project.title
       })
-    }))
+    }, i))
   });
 }
 

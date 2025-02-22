@@ -22,7 +22,7 @@ const fetchOneProject = createAsyncThunk(
     const project = await Adapter.getOneProject(payload);
 
     if (project?.errorStatus) {
-      return rejectWithValue();
+      return rejectWithValue(project);
     }
 
     return project;

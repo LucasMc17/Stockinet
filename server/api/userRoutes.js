@@ -3,6 +3,7 @@ const {
   models: { User },
 } = require("../db");
 const { checkAuth } = require("../backendUtils/stytchClient");
+const { throw404 } = require("../backendUtils/errorHandling");
 
 module.exports = router;
 
@@ -30,11 +31,7 @@ router.get("/:slug", checkAuth, async (req, res, next) => {
         slug,
       },
     });
-    if (!author) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
-    }
+    throw404(author);
     if (req.user?.id === author.id) {
       const authorWithFlag = pattern.toJSON();
       authorWithFlag.self = true;

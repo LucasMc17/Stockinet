@@ -51,8 +51,8 @@ const Adapter = {
     const url = `${BASE_API_URL}/patterns/${slug}`;
 
     const res = await get(url);
-    const { pattern, owned } = await res.json();
-    return { ...pattern, owned };
+    const pattern = await res.json();
+    return pattern;
   },
   // Workspace
   async getUserProjects() {

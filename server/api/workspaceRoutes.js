@@ -5,6 +5,7 @@ const {
 } = require("../db");
 module.exports = router;
 const { rejectWithoutAuth } = require("../backendUtils/stytchClient");
+const { throw404 } = require("../backendUtils/errorHandling");
 
 router.get("/projects-by-user", rejectWithoutAuth, async (req, res, next) => {
   try {
@@ -29,19 +30,17 @@ router.get("/projects-by-user", rejectWithoutAuth, async (req, res, next) => {
 router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
   try {
     const { patternId } = req.params;
-    const pattern = await req.user.getPatterns({
+    const patterns = await req.user.getPatterns({
       where: { id: patternId },
     });
-    if (!pattern.length) {
-      throw new Error("pattern not found");
-    }
+    throw404(patterns[0]);
     const project = await Project.findOne({
       where: { patternId, userId: req.user.id },
     });
     if (project) {
       await project.update({ lastAccessed: new Date() });
     }
-    res.json(pattern[0]);
+    res.json(patterns[0]);
   } catch (err) {
     next(err);
   }
