@@ -42992,6 +42992,82 @@ function requireJsxRuntime () {
 
 var jsxRuntimeExports = requireJsxRuntime();
 
+function GridCell({
+  cell,
+  rowWidth
+}) {
+  const symbolMap = {
+      K: "",
+      P: "-"
+    },
+    baseWidth = 100 / rowWidth;
+  let width = baseWidth;
+  if (cell.width) {
+    width = width * cell.width;
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "cell-holder",
+    style: {
+      width: width + "%"
+    },
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "interactive-grid-cell-symbols",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: symbolMap[cell.type] || ""
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: cell.width > 1 && cell.width
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid-cell",
+      style: {
+        paddingTop: "calc(100% / " + cell.width + ")"
+      }
+    })]
+  });
+}
+
+function GridRow({
+  row,
+  rowWidth
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "interactive-grid-row",
+    children: row.map((cell, i) => {
+      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
+        cell: cell,
+        rowWidth: rowWidth
+      }, i);
+    })
+  });
+}
+
+function getRowWidth(row) {
+  return row.reduce((a, b) => a + b.width, 0);
+}
+function InteractiveGrid({
+  gridName,
+  data
+}) {
+  const maxWidth = data.reduce((a, b) => {
+    const width = getRowWidth(b);
+    return width > a ? width : a;
+  }, 1);
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "interactive-grid-holder",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: gridName
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid",
+      children: data.map((row, i) => {
+        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
+          row: row,
+          rowWidth: maxWidth
+        }, i);
+      })
+    })]
+  });
+}
+
 function SectionHeader({
   svg,
   name
@@ -48205,7 +48281,8 @@ function PatternOverview({
   author,
   ratings,
   description,
-  owned
+  owned,
+  id
 }) {
   const average = ratings.length ? ratings.reduce((a, b) => a + b.stars, 0) / ratings.length : null;
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
@@ -48234,8 +48311,11 @@ function PatternOverview({
       })]
     }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       className: "pattern-overview-button",
-      children: /*#__PURE__*/jsxRuntimeExports.jsx("button", {
-        children: owned ? "Open in Workspace" : "Buy this Pattern"
+      children: owned ? /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
+        to: `/workspace/project/${id}`,
+        children: "Open in Workspace"
+      }) : /*#__PURE__*/jsxRuntimeExports.jsx("button", {
+        children: "Buy this Pattern"
       })
     })]
   });
@@ -48870,7 +48950,8 @@ function PatternScreen() {
         author: currentPattern.author,
         description: currentPattern.description,
         ratings: currentPattern.reviews,
-        owned: currentPattern.owned
+        owned: currentPattern.owned,
+        id: currentPattern.id
       }), /*#__PURE__*/jsxRuntimeExports.jsx(PatternDetails, {
         yarns: currentPattern.yarns,
         needles: currentPattern.needles,
@@ -49085,9 +49166,14 @@ function ProjectScreen() {
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    children: JSON.stringify(currentProject)
-  });
+  if (currentProject) {
+    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      children: currentProject.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
+        gridName: grid.name,
+        data: JSON.parse(grid.data)
+      }))
+    });
+  }
 }
 
 var reduxLogger$1 = {exports: {}};

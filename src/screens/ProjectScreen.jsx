@@ -5,7 +5,7 @@ import {
   fetchOneProject,
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
-import { LoadingScreen, ErrorScreen } from "../components";
+import { LoadingScreen, ErrorScreen, InteractiveGrid } from "../components";
 // import "./ProjectsScreen.module.scss";
 
 export default function ProjectScreen() {
@@ -35,5 +35,13 @@ export default function ProjectScreen() {
     return <LoadingScreen />;
   }
 
-  return <div>{JSON.stringify(currentProject)}</div>;
+  if (currentProject) {
+    return (
+      <div>
+        {currentProject.grids.map((grid) => (
+          <InteractiveGrid gridName={grid.name} data={JSON.parse(grid.data)} />
+        ))}
+      </div>
+    );
+  }
 }

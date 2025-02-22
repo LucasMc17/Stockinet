@@ -32,6 +32,7 @@ router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
     const { patternId } = req.params;
     const patterns = await req.user.getPatterns({
       where: { id: patternId },
+      include: [{ model: Grid }],
     });
     throw404(patterns[0]);
     const project = await Project.findOne({
