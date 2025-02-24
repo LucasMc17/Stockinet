@@ -6,6 +6,9 @@ import {
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
 import { LoadingScreen, ErrorScreen, InteractiveGrid } from "../components";
+import ProjectHead from "../components/ProjectScreen/ProjectHead.jsx";
+import ProjectGridPanel from "../components/ProjectScreen/ProjectGridPanel.jsx";
+import ProjectStepsPanel from "../components/ProjectScreen/ProjectStepsPanel.jsx";
 // import "./ProjectsScreen.module.scss";
 
 export default function ProjectScreen() {
@@ -38,9 +41,11 @@ export default function ProjectScreen() {
   if (currentProject) {
     return (
       <div>
-        {currentProject.grids.map((grid) => (
-          <InteractiveGrid gridName={grid.name} data={JSON.parse(grid.data)} />
-        ))}
+        <ProjectHead />
+        <div>
+          <ProjectGridPanel />
+          <ProjectStepsPanel />
+        </div>
       </div>
     );
   }

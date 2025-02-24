@@ -42992,82 +42992,6 @@ function requireJsxRuntime () {
 
 var jsxRuntimeExports = requireJsxRuntime();
 
-function GridCell({
-  cell,
-  rowWidth
-}) {
-  const symbolMap = {
-      K: "",
-      P: "-"
-    },
-    baseWidth = 100 / rowWidth;
-  let width = baseWidth;
-  if (cell.width) {
-    width = width * cell.width;
-  }
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "cell-holder",
-    style: {
-      width: width + "%"
-    },
-    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      className: "interactive-grid-cell-symbols",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: symbolMap[cell.type] || ""
-      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
-        children: cell.width > 1 && cell.width
-      })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid-cell",
-      style: {
-        paddingTop: "calc(100% / " + cell.width + ")"
-      }
-    })]
-  });
-}
-
-function GridRow({
-  row,
-  rowWidth
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "interactive-grid-row",
-    children: row.map((cell, i) => {
-      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
-        cell: cell,
-        rowWidth: rowWidth
-      }, i);
-    })
-  });
-}
-
-function getRowWidth(row) {
-  return row.reduce((a, b) => a + b.width, 0);
-}
-function InteractiveGrid({
-  gridName,
-  data
-}) {
-  const maxWidth = data.reduce((a, b) => {
-    const width = getRowWidth(b);
-    return width > a ? width : a;
-  }, 1);
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-    className: "interactive-grid-holder",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: gridName
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "interactive-grid",
-      children: data.map((row, i) => {
-        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
-          row: row,
-          rowWidth: maxWidth
-        }, i);
-      })
-    })]
-  });
-}
-
 function SectionHeader({
   svg,
   name
@@ -48455,13 +48379,37 @@ function PatternReviews({
   });
 }
 
-function SiteHeader() {
+function GeneralHeader() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "My Patterns"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Learn"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Pattern Search"
+    })]
+  });
+}
+
+function WorkspaceHeader() {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "My Workspace"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "Make a Pattern"
+    })]
+  });
+}
+
+function SiteHeader({
+  workspace
+}) {
   const {
     username
   } = useSelector(s => s.user);
+  const loggedIn = useLoginStatus();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loggedIn = useLoginStatus();
   const stytch = useStytch$1();
   async function logOut() {
     await stytch.session.revoke();
@@ -48480,13 +48428,7 @@ function SiteHeader() {
       }), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
         children: ["Welcome back, ", username, "!"]
       })]
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
-      children: "My Patterns"
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
-      children: "Learn"
-    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
-      children: "Pattern Search"
-    }), loggedIn ? /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+    }), workspace ? /*#__PURE__*/jsxRuntimeExports.jsx(WorkspaceHeader, {}) : /*#__PURE__*/jsxRuntimeExports.jsx(GeneralHeader, {}), loggedIn ? /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
       onClick: logOut,
       children: "Log Out"
     }) : /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
@@ -49136,6 +49078,40 @@ function AllProjectsScreen() {
   });
 }
 
+function ProjectHead({
+  sizes
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: "Pattern Title"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+      name: "Size",
+      options: [{
+        name: "Small",
+        value: "small"
+      }, {
+        name: "Large",
+        value: "large"
+      }]
+      // onSelect={(selected) => {
+      //   setSearchState({ ...searchState, sortBy: selected });
+      // }}
+    })]
+  });
+}
+
+function ProjectGridPanel({
+  grids
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {});
+}
+
+function ProjectStepsPanel({
+  steps
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {});
+}
+
 function ProjectScreen() {
   const {
     patternId
@@ -49167,11 +49143,10 @@ function ProjectScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   if (currentProject) {
-    return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      children: currentProject.grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
-        gridName: grid.name,
-        data: JSON.parse(grid.data)
-      }))
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {}), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {})]
+      })]
     });
   }
 }
@@ -49222,7 +49197,9 @@ const router = createBrowserRouter([
 {
   path: "/",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(LandingScreen, {})]
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {
+      workspace: false
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(LandingScreen, {})]
   })
 }, {
   path: "login",
@@ -49250,7 +49227,9 @@ const router = createBrowserRouter([
 {
   path: "patterns",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(Outlet, {})]
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {
+      workspace: false
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(Outlet, {})]
   }),
   children: [{
     path: "",
@@ -49267,7 +49246,11 @@ const router = createBrowserRouter([
 
 {
   path: "workspace",
-  element: /*#__PURE__*/jsxRuntimeExports.jsx(LogInCheck, {}),
+  element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {
+      workspace: true
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(LogInCheck, {})]
+  }),
   children: [{
     path: "",
     element: /*#__PURE__*/jsxRuntimeExports.jsx(AllProjectsScreen, {})
@@ -49281,7 +49264,9 @@ const router = createBrowserRouter([
 {
   path: "authors/:authorSlug",
   element: /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {}), /*#__PURE__*/jsxRuntimeExports.jsx(AuthorScreen, {})]
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx(SiteHeader, {
+      workspace: false
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(AuthorScreen, {})]
   })
 }]);
 const root = ReactDOM.createRoot(document.getElementById("root"));

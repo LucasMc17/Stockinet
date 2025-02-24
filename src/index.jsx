@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <>
-        <SiteHeader />
+        <SiteHeader workspace={false} />
         <LandingScreen />
       </>
     ),
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     path: "patterns",
     element: (
       <>
-        <SiteHeader />
+        <SiteHeader workspace={false} />
         <Outlet />
       </>
     ),
@@ -84,7 +84,12 @@ const router = createBrowserRouter([
 
   {
     path: "workspace",
-    element: <LogInCheck />,
+    element: (
+      <>
+        <SiteHeader workspace={true} />
+        <LogInCheck />
+      </>
+    ),
     children: [
       { path: "", element: <AllProjectsScreen /> },
       {
@@ -100,7 +105,7 @@ const router = createBrowserRouter([
     path: "authors/:authorSlug",
     element: (
       <>
-        <SiteHeader />
+        <SiteHeader workspace={false} />
         <AuthorScreen />
       </>
     ),

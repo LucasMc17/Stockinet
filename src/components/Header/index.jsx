@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
-import { useLoginStatus } from "../hooks";
+import { useSelector, useDispatch } from "react-redux";
+import "./SiteHeader.module.scss";
+import GeneralHeader from "./GeneralHeader.jsx";
+import WorkspaceHeader from "./WorkspaceHeader.jsx";
+import { useLoginStatus } from "../../hooks";
 import { useStytch } from "@stytch/react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../@redux/reducers/User/UserSlice";
-import "./SiteHeader.module.scss";
+import { clearUser } from "../../@redux/reducers/User/UserSlice";
 
-export default function SiteHeader() {
+export default function SiteHeader({ workspace }) {
   const { username } = useSelector((s) => s.user);
+  const loggedIn = useLoginStatus();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loggedIn = useLoginStatus();
   const stytch = useStytch();
 
   async function logOut() {
@@ -27,9 +29,7 @@ export default function SiteHeader() {
         </h2>
         {loggedIn && <h4>Welcome back, {username}!</h4>}
       </div>
-      <h4>My Patterns</h4>
-      <h4>Learn</h4>
-      <h4>Pattern Search</h4>
+      {workspace ? <WorkspaceHeader /> : <GeneralHeader />}
       {loggedIn ? (
         <h3 onClick={logOut}>Log Out</h3>
       ) : (

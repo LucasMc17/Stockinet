@@ -23,7 +23,7 @@ import Review from "./PatternScreen/Review.jsx";
 
 import DropDown from "./Inputs/DropDown.jsx";
 
-import SiteHeader from "./SiteHeader.jsx";
+import SiteHeader from "./Header/index.jsx";
 import Slider from "./Slider.jsx";
 import PatternCard from "./PatternCard.jsx";
 import PatternSearch from "./PatternSearch.jsx";
