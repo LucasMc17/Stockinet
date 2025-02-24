@@ -5,11 +5,11 @@ import {
   fetchOneProject,
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
-import { LoadingScreen, ErrorScreen, InteractiveGrid } from "../components";
+import { LoadingScreen, ErrorScreen } from "../components";
 import ProjectHead from "../components/ProjectScreen/ProjectHead.jsx";
 import ProjectGridPanel from "../components/ProjectScreen/ProjectGridPanel.jsx";
 import ProjectStepsPanel from "../components/ProjectScreen/ProjectStepsPanel.jsx";
-// import "./ProjectsScreen.module.scss";
+import "./ProjectsScreen.module.scss";
 
 export default function ProjectScreen() {
   const { patternId } = useParams();
@@ -40,11 +40,38 @@ export default function ProjectScreen() {
 
   if (currentProject) {
     return (
-      <div>
+      <div id="project-screen">
         <ProjectHead />
-        <div>
-          <ProjectGridPanel />
-          <ProjectStepsPanel />
+        <div id="project-split">
+          <ProjectGridPanel grids={currentProject.grids} />
+          <ProjectStepsPanel
+            stepSections={[
+              {
+                name: "section 1",
+                steps: [
+                  { text: "do it" },
+                  { text: "do it right" },
+                  { text: "do it good" },
+                ],
+              },
+              {
+                name: "section 2",
+                steps: [
+                  { text: "do it" },
+                  { text: "do it right" },
+                  { text: "do it good" },
+                ],
+              },
+              {
+                name: "section 3",
+                steps: [
+                  { text: "do it" },
+                  { text: "do it right" },
+                  { text: "do it good" },
+                ],
+              },
+            ]}
+          />
         </div>
       </div>
     );

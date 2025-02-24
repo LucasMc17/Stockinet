@@ -42992,6 +42992,82 @@ function requireJsxRuntime () {
 
 var jsxRuntimeExports = requireJsxRuntime();
 
+function GridCell({
+  cell,
+  rowWidth
+}) {
+  const symbolMap = {
+      K: "",
+      P: "-"
+    },
+    baseWidth = 100 / rowWidth;
+  let width = baseWidth;
+  if (cell.width) {
+    width = width * cell.width;
+  }
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "cell-holder",
+    style: {
+      width: width + "%"
+    },
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "interactive-grid-cell-symbols",
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: symbolMap[cell.type] || ""
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: cell.width > 1 && cell.width
+      })]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid-cell",
+      style: {
+        paddingTop: "calc(100% / " + cell.width + ")"
+      }
+    })]
+  });
+}
+
+function GridRow({
+  row,
+  rowWidth
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "interactive-grid-row",
+    children: row.map((cell, i) => {
+      return /*#__PURE__*/jsxRuntimeExports.jsx(GridCell, {
+        cell: cell,
+        rowWidth: rowWidth
+      }, i);
+    })
+  });
+}
+
+function getRowWidth(row) {
+  return row.reduce((a, b) => a + b.width, 0);
+}
+function InteractiveGrid({
+  gridName,
+  data
+}) {
+  const maxWidth = data.reduce((a, b) => {
+    const width = getRowWidth(b);
+    return width > a ? width : a;
+  }, 1);
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+    className: "interactive-grid-holder",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: gridName
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "interactive-grid",
+      children: data.map((row, i) => {
+        return /*#__PURE__*/jsxRuntimeExports.jsx(GridRow, {
+          row: row,
+          rowWidth: maxWidth
+        }, i);
+      })
+    })]
+  });
+}
+
 function SectionHeader({
   svg,
   name
@@ -49103,13 +49179,32 @@ function ProjectHead({
 function ProjectGridPanel({
   grids
 }) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {});
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      children: grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
+        gridName: grid.name,
+        data: JSON.parse(grid.data)
+      }))
+    })
+  });
 }
 
 function ProjectStepsPanel({
-  steps
+  stepSections
 }) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {});
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      children: stepSections.map(section => /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+          children: section.name
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("ol", {
+          children: section.steps.map(step => /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: step.text
+          }))
+        })]
+      }))
+    })
+  });
 }
 
 function ProjectScreen() {
@@ -49144,8 +49239,41 @@ function ProjectScreen() {
   }
   if (currentProject) {
     return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      id: "project-screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {}), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {})]
+        id: "project-split",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {
+          grids: currentProject.grids
+        }), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {
+          stepSections: [{
+            name: "section 1",
+            steps: [{
+              text: "do it"
+            }, {
+              text: "do it right"
+            }, {
+              text: "do it good"
+            }]
+          }, {
+            name: "section 2",
+            steps: [{
+              text: "do it"
+            }, {
+              text: "do it right"
+            }, {
+              text: "do it good"
+            }]
+          }, {
+            name: "section 3",
+            steps: [{
+              text: "do it"
+            }, {
+              text: "do it right"
+            }, {
+              text: "do it good"
+            }]
+          }]
+        })]
       })]
     });
   }
