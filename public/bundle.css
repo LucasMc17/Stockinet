@@ -59,9 +59,8 @@ ol {
 
 .card {
   border-radius: 1rem;
-  border: 2px solid red;
+  border: 2px solid lightgray;
   padding: 0.5rem;
-  overflow: hidden;
 }
 
 .hidden {
@@ -119,6 +118,8 @@ button {
 #project-screen {
   display: flex;
   flex-direction: column;
+  gap: 1em;
+  padding: 1em;
 }
 #project-screen #project-split {
   flex-grow: 1;

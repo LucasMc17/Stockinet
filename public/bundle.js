@@ -48135,7 +48135,8 @@ var Modal = /*@__PURE__*/getDefaultExportFromCjs$1(libExports);
 
 function Slider({
   children,
-  startIndex = 0
+  startIndex = 0,
+  resetCount = 0
 }) {
   const [index, setIndex] = reactExports.useState(startIndex);
   const ref = reactExports.useRef(null);
@@ -48148,6 +48149,12 @@ function Slider({
     });
     setIndex(newIndex);
   }
+  reactExports.useEffect(() => {
+    setIndex(startIndex);
+  }, [resetCount]);
+  reactExports.useEffect(() => {
+    handleSlide(index);
+  }, [index]);
   return /*#__PURE__*/jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
     children: /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       className: "slider-holder",
@@ -48155,7 +48162,7 @@ function Slider({
         className: `slider-back ${index === 0 ? "hidden" : ""}`,
         onClick: () => {
           const newIndex = index - 1;
-          handleSlide(newIndex);
+          setIndex(newIndex);
         },
         children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronLeft, {
           stroke: "black"
@@ -48164,7 +48171,7 @@ function Slider({
         className: `slider-forward ${index === children.length - 1 ? "hidden" : ""}`,
         onClick: () => {
           const newIndex = index + 1;
-          handleSlide(newIndex);
+          setIndex(newIndex);
         },
         children: /*#__PURE__*/jsxRuntimeExports.jsx(ChevronRight, {
           stroke: "black"
@@ -49075,7 +49082,9 @@ var initialState = {
   projectList: [],
   currentProject: null,
   currentRequestId: null,
-  loadedProjects: {}
+  loadedProjects: {},
+  sizeInfo: {},
+  currentSize: null
 };
 
 const fetchUserProjects = createAsyncThunk("workspace/fetchUserProjects", async (payload, {
@@ -49106,6 +49115,21 @@ const workspaceSlice = createSlice({
   reducers: {
     selectProject: (state, action) => {
       state.currentProject = action.payload;
+    },
+    getSizeInfo: (state, action) => {
+      const result = {};
+      let sizeId;
+      action.payload.forEach((size, i) => {
+        result[size.id] = size;
+        if (i === 0) {
+          sizeId = size.id;
+        }
+      });
+      state.sizeInfo = result;
+      state.currentSize = sizeId;
+    },
+    selectCurrentSize: (state, action) => {
+      state.currentSize = action.payload;
     }
   },
   extraReducers: builder => {
@@ -49123,7 +49147,9 @@ const workspaceSlice = createSlice({
   }
 });
 const {
-  selectProject
+  selectProject,
+  getSizeInfo,
+  selectCurrentSize
 } = workspaceSlice.actions;
 var WorkspaceSlice = workspaceSlice.reducer;
 
@@ -49162,22 +49188,20 @@ function AllProjectsScreen() {
 function ProjectHead({
   sizes
 }) {
+  const dispatch = useDispatch();
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
     className: "card",
     children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
       children: "Pattern Title"
     }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
       name: "Size",
-      options: [{
-        name: "Small",
-        value: "small"
-      }, {
-        name: "Large",
-        value: "large"
-      }]
-      // onSelect={(selected) => {
-      //   setSearchState({ ...searchState, sortBy: selected });
-      // }}
+      options: sizes.map(size => ({
+        name: size.name,
+        value: size.id
+      })),
+      onSelect: size => {
+        dispatch(selectCurrentSize(size.value));
+      }
     })]
   });
 }
@@ -49199,9 +49223,17 @@ function ProjectGridPanel({
 function ProjectStepsPanel({
   stepSections
 }) {
+  const {
+    currentSize
+  } = useSelector(s => s.workspace);
+  const [resetCount, setResetCount] = reactExports.useState(0);
+  reactExports.useEffect(() => {
+    setResetCount(resetCount + 1);
+  }, [currentSize]);
   return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
     className: "card project-panel steps-panel",
     children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      resetCount: resetCount,
       children: stepSections.map(section => /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
           children: section.name
@@ -49224,7 +49256,9 @@ function ProjectScreen() {
     loading,
     error,
     currentProject,
-    loadedProjects
+    loadedProjects,
+    sizeInfo,
+    currentSize
   } = useSelector(s => s.workspace);
   reactExports.useEffect(() => {
     const projectFromCache = loadedProjects[patternId];
@@ -49237,6 +49271,11 @@ function ProjectScreen() {
       dispatch(selectProject(null));
     };
   }, []);
+  reactExports.useEffect(() => {
+    if (currentProject?.sizes) {
+      dispatch(getSizeInfo(currentProject.sizes));
+    }
+  }, [currentProject]);
   if (error) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
       error: error
@@ -49249,39 +49288,14 @@ function ProjectScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       id: "project-screen",
       className: "screen",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {
+        sizes: currentProject.sizes
+      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         id: "project-split",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {
           grids: currentProject.grids
         }), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {
-          stepSections: [{
-            name: "section 1",
-            steps: [{
-              text: "do it"
-            }, {
-              text: "do it right"
-            }, {
-              text: "do it good"
-            }]
-          }, {
-            name: "section 2",
-            steps: [{
-              text: "do it"
-            }, {
-              text: "do it right"
-            }, {
-              text: "do it good"
-            }]
-          }, {
-            name: "section 3",
-            steps: [{
-              text: "do it"
-            }, {
-              text: "do it right"
-            }, {
-              text: "do it good"
-            }]
-          }]
+          stepSections: sizeInfo && currentSize ? sizeInfo[currentSize].sections : []
         })]
       })]
     });

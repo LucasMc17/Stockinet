@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import anime from "animejs";
 import "./Slider.module.scss";
 import { ChevronLeft, ChevronRight } from "../icons";
 
-export default function Slider({ children, startIndex = 0 }) {
+export default function Slider({ children, startIndex = 0, resetCount = 0 }) {
   const [index, setIndex] = useState(startIndex);
   const ref = useRef(null);
 
@@ -17,6 +17,14 @@ export default function Slider({ children, startIndex = 0 }) {
     setIndex(newIndex);
   }
 
+  useEffect(() => {
+    setIndex(startIndex);
+  }, [resetCount]);
+
+  useEffect(() => {
+    handleSlide(index);
+  }, [index]);
+
   return (
     <>
       <div className="slider-holder">
@@ -24,7 +32,7 @@ export default function Slider({ children, startIndex = 0 }) {
           className={`slider-back ${index === 0 ? "hidden" : ""}`}
           onClick={() => {
             const newIndex = index - 1;
-            handleSlide(newIndex);
+            setIndex(newIndex);
           }}
         >
           <ChevronLeft stroke="black" />
@@ -35,7 +43,7 @@ export default function Slider({ children, startIndex = 0 }) {
           }`}
           onClick={() => {
             const newIndex = index + 1;
-            handleSlide(newIndex);
+            setIndex(newIndex);
           }}
         >
           <ChevronRight stroke="black" />

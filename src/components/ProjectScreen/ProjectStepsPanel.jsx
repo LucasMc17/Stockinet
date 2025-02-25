@@ -1,10 +1,19 @@
 import { Slider } from "../";
 import "./ProjectStepsPanel.module.scss";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function ProjectStepsPanel({ stepSections }) {
+  const { currentSize } = useSelector((s) => s.workspace);
+  const [resetCount, setResetCount] = useState(0);
+
+  useEffect(() => {
+    setResetCount(resetCount + 1);
+  }, [currentSize]);
+
   return (
     <section className="card project-panel steps-panel">
-      <Slider>
+      <Slider resetCount={resetCount}>
         {stepSections.map((section) => (
           <div>
             <h1>{section.name}</h1>

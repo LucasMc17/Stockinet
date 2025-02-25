@@ -5,4 +5,6 @@ export default {
   currentProject: null,
   currentRequestId: null,
   loadedProjects: {},
+  sizeInfo: {},
+  currentSize: null,
 };

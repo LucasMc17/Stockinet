@@ -332,38 +332,73 @@ async function createPattern(data, steps = false) {
   if (data.sizes) {
     for (let i = 0; i < data.sizes.length; i++) {
       const dbSize = await Size.create({ name: data.sizes[i] });
-      const section1 = await Section.create({
-        name: "Section One",
-        index: 1,
-      });
-      const StepOneOne = await Step.create({
-        text: "Eat a banana",
-        index: 1,
-      });
-      const StepOneTwo = await Step.create({
-        text: ": - )",
-        index: 2,
-      });
-      const section2 = await Section.create({
-        name: "Section Two",
-        index: 2,
-      });
-      const StepTwoOne = await Step.create({
-        text: "Eat a banana",
-        index: 1,
-      });
-      const StepTwoTwo = await Step.create({
-        text: ": - )",
-        index: 2,
-      });
-      await StepOneOne.setSection(section1);
-      await StepOneTwo.setSection(section1);
+      if (i === 0) {
+        const section1 = await Section.create({
+          name: "Section One",
+          index: 1,
+        });
+        const StepOneOne = await Step.create({
+          text: "Eat a banana",
+          index: 1,
+        });
+        const StepOneTwo = await Step.create({
+          text: ": - )",
+          index: 2,
+        });
+        const section2 = await Section.create({
+          name: "Section Two",
+          index: 2,
+        });
+        const StepTwoOne = await Step.create({
+          text: "Eat an oreo",
+          index: 1,
+        });
+        const StepTwoTwo = await Step.create({
+          text: "; - 0",
+          index: 2,
+        });
+        await StepOneOne.setSection(section1);
+        await StepOneTwo.setSection(section1);
 
-      await StepTwoOne.setSection(section2);
-      await StepTwoTwo.setSection(section2);
-      await section1.setSize(dbSize);
-      await section2.setSize(dbSize);
-      await dbSize.setPattern(dbPattern);
+        await StepTwoOne.setSection(section2);
+        await StepTwoTwo.setSection(section2);
+        await section1.setSize(dbSize);
+        await section2.setSize(dbSize);
+        await dbSize.setPattern(dbPattern);
+      } else {
+        const section1 = await Section.create({
+          name: "Section One",
+          index: 1,
+        });
+        const StepOneOne = await Step.create({
+          text: "Eat some Granola",
+          index: 1,
+        });
+        const StepOneTwo = await Step.create({
+          text: "profit",
+          index: 2,
+        });
+        const section2 = await Section.create({
+          name: "Section Two",
+          index: 2,
+        });
+        const StepTwoOne = await Step.create({
+          text: "Eat some 'gurt",
+          index: 1,
+        });
+        const StepTwoTwo = await Step.create({
+          text: "YOWZA",
+          index: 2,
+        });
+        await StepOneOne.setSection(section1);
+        await StepOneTwo.setSection(section1);
+
+        await StepTwoOne.setSection(section2);
+        await StepTwoTwo.setSection(section2);
+        await section1.setSize(dbSize);
+        await section2.setSize(dbSize);
+        await dbSize.setPattern(dbPattern);
+      }
       sizes.push(dbSize);
     }
   }

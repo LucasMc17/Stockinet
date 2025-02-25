@@ -36,6 +36,21 @@ const workspaceSlice = createSlice({
     selectProject: (state, action) => {
       state.currentProject = action.payload;
     },
+    getSizeInfo: (state, action) => {
+      const result = {};
+      let sizeId;
+      action.payload.forEach((size, i) => {
+        result[size.id] = size;
+        if (i === 0) {
+          sizeId = size.id;
+        }
+      });
+      state.sizeInfo = result;
+      state.currentSize = sizeId;
+    },
+    selectCurrentSize: (state, action) => {
+      state.currentSize = action.payload;
+    },
   },
   extraReducers: (builder) => {
     thunkBaseCases(builder, fetchUserProjects, {
@@ -52,6 +67,7 @@ const workspaceSlice = createSlice({
   },
 });
 
-export const { selectProject } = workspaceSlice.actions;
+export const { selectProject, getSizeInfo, selectCurrentSize } =
+  workspaceSlice.actions;
 export { fetchUserProjects, fetchOneProject };
 export default workspaceSlice.reducer;
