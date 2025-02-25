@@ -28,6 +28,6 @@ export default function AuthorScreen() {
   }
 
   if (currentAuthor) {
-    return <div>{currentAuthor.username}</div>;
+    return <div className="screen">{currentAuthor.username}</div>;
   }
 }

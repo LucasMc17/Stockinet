@@ -48556,7 +48556,8 @@ function AllPatternsScreen() {
     }
   }
   if (patternList) {
-    return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(PatternSearch, {
         patternPage: true
       }), loading ? /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {}) : error ? /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
@@ -48735,7 +48736,7 @@ function LoginSignupScreen({
   switch (method) {
     case "reset-password":
       return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "card",
+        className: "card screen",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
           children: "Reset your Stockinette password"
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
@@ -48771,7 +48772,7 @@ function LoginSignupScreen({
       });
     case "login":
       return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "card",
+        className: "card screen",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
           children: "Log in to get the most out of your Stockinette account"
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
@@ -48812,7 +48813,7 @@ function LoginSignupScreen({
       });
     case "signup":
       return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "card",
+        className: "card screen",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
           children: "Sign up to start using Stockinette"
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
@@ -48860,7 +48861,7 @@ function LoginSignupScreen({
       });
     case "reset-start":
       return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        className: "card",
+        className: "card screen",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
           children: "Reset your password"
         }), /*#__PURE__*/jsxRuntimeExports.jsxs("form", {
@@ -48913,7 +48914,7 @@ function OwnedPatternsScreen() {
   }
   if (patternList) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      className: "card",
+      className: "card screen",
       children: patternList.map((pattern, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
         to: `/patterns/${pattern.slug}`,
         children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
@@ -48959,7 +48960,8 @@ function PatternScreen() {
   }
   if (currentPattern) {
     const images = [currentPattern.leadImage, ...currentPattern.images];
-    return /*#__PURE__*/jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+      className: "screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(HeroImages, {
         images: images,
         limit: 3
@@ -48991,6 +48993,7 @@ function LandingScreen() {
   const loggedIn = useLoginStatus();
   return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
     id: "landing-screen",
+    className: "screen",
     children: [/*#__PURE__*/jsxRuntimeExports.jsx(LandingHeader, {}), loggedIn && /*#__PURE__*/jsxRuntimeExports.jsx(LandingPatterns, {}), /*#__PURE__*/jsxRuntimeExports.jsx(LandingSearch, {}), /*#__PURE__*/jsxRuntimeExports.jsx(LandingHelp, {})]
   });
 }
@@ -49060,6 +49063,7 @@ function AuthorScreen() {
   }
   if (currentAuthor) {
     return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      className: "screen",
       children: currentAuthor.username
     });
   }
@@ -49145,6 +49149,7 @@ function AllProjectsScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    className: "screen",
     children: projectList.map((project, i) => /*#__PURE__*/jsxRuntimeExports.jsx(Link$1, {
       to: `/workspace/project/${project.id}`,
       children: /*#__PURE__*/jsxRuntimeExports.jsx("h1", {
@@ -49158,6 +49163,7 @@ function ProjectHead({
   sizes
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "card",
     children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
       children: "Pattern Title"
     }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
@@ -49180,6 +49186,7 @@ function ProjectGridPanel({
   grids
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    className: "card project-panel grid-panel",
     children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
       children: grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
         gridName: grid.name,
@@ -49193,6 +49200,7 @@ function ProjectStepsPanel({
   stepSections
 }) {
   return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    className: "card project-panel steps-panel",
     children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
       children: stepSections.map(section => /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
@@ -49240,6 +49248,7 @@ function ProjectScreen() {
   if (currentProject) {
     return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
       id: "project-screen",
+      className: "screen",
       children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {}), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         id: "project-split",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {
@@ -49404,6 +49413,7 @@ root.render(/*#__PURE__*/jsxRuntimeExports.jsx(React$1.StrictMode, {
     children: /*#__PURE__*/jsxRuntimeExports.jsx(Provider_default, {
       store: store,
       children: /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+        id: "screen-root",
         children: /*#__PURE__*/jsxRuntimeExports.jsx(RouterProvider2, {
           router: router
         })

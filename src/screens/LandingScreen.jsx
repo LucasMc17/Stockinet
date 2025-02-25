@@ -10,7 +10,7 @@ import "./LandingScreen.module.scss";
 export default function LandingScreen() {
   const loggedIn = useLoginStatus();
   return (
-    <div id="landing-screen">
+    <div id="landing-screen" className="screen">
       <LandingHeader />
       {loggedIn && <LandingPatterns />}
       <LandingSearch />

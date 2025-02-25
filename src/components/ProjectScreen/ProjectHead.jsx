@@ -2,7 +2,7 @@ import DropDown from "../Inputs/DropDown.jsx";
 
 export default function ProjectHead({ sizes }) {
   return (
-    <section>
+    <section className="card">
       <h2>Pattern Title</h2>
       <DropDown
         name="Size"

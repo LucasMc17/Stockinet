@@ -171,7 +171,7 @@ export default function LoginSignupScreen({ method }) {
   switch (method) {
     case "reset-password":
       return (
-        <div className="card">
+        <div className="card screen">
           <h2>Reset your Stockinette password</h2>
           <form onSubmit={onSubmit} onChange={onChange}>
             <label>New Password:</label>
@@ -193,7 +193,7 @@ export default function LoginSignupScreen({ method }) {
       );
     case "login":
       return (
-        <div className="card">
+        <div className="card screen">
           <h2>Log in to get the most out of your Stockinette account</h2>
           <form onSubmit={onSubmit} onChange={onChange}>
             <label>Email:</label>
@@ -214,7 +214,7 @@ export default function LoginSignupScreen({ method }) {
       );
     case "signup":
       return (
-        <div className="card">
+        <div className="card screen">
           <h2>Sign up to start using Stockinette</h2>
           <form onSubmit={onSubmit} onChange={onChange}>
             <label>Email:</label>
@@ -240,7 +240,7 @@ export default function LoginSignupScreen({ method }) {
       );
     case "reset-start":
       return (
-        <div className="card">
+        <div className="card screen">
           <h2>Reset your password</h2>
           <form onSubmit={onSubmit} onChange={onChange}>
             <label>Email:</label>

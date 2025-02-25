@@ -56,7 +56,7 @@ export default function AllPatternsScreen() {
 
   if (patternList) {
     return (
-      <>
+      <div className="screen">
         <PatternSearch patternPage={true} />
         {loading ? (
           <LoadingScreen />
@@ -90,7 +90,7 @@ export default function AllPatternsScreen() {
             </div>
           </>
         )}
-      </>
+      </div>
     );
   }
 }

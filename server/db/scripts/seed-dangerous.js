@@ -6,9 +6,8 @@ const { client } = require("../../backendUtils/stytchClient");
 
 const {
   db,
-  models: { Pattern, Grid, User, Needle, Yarn, Review },
+  models: { Pattern, Grid, User, Needle, Yarn, Review, Size, Step, Section },
 } = require("..");
-const Size = require("../models/Size");
 
 const exampleNeedleOne = {
   type: "STRAIGHT",
@@ -327,12 +326,43 @@ const testData = [
   },
 ];
 
-async function createPattern(data) {
+async function createPattern(data, steps = false) {
   const sizes = [];
   const dbPattern = await Pattern.create(data);
   if (data.sizes) {
     for (let i = 0; i < data.sizes.length; i++) {
       const dbSize = await Size.create({ name: data.sizes[i] });
+      const section1 = await Section.create({
+        name: "Section One",
+        index: 1,
+      });
+      const StepOneOne = await Step.create({
+        text: "Eat a banana",
+        index: 1,
+      });
+      const StepOneTwo = await Step.create({
+        text: ": - )",
+        index: 2,
+      });
+      const section2 = await Section.create({
+        name: "Section Two",
+        index: 2,
+      });
+      const StepTwoOne = await Step.create({
+        text: "Eat a banana",
+        index: 1,
+      });
+      const StepTwoTwo = await Step.create({
+        text: ": - )",
+        index: 2,
+      });
+      await StepOneOne.setSection(section1);
+      await StepOneTwo.setSection(section1);
+
+      await StepTwoOne.setSection(section2);
+      await StepTwoTwo.setSection(section2);
+      await section1.setSize(dbSize);
+      await section2.setSize(dbSize);
       await dbSize.setPattern(dbPattern);
       sizes.push(dbSize);
     }

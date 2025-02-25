@@ -94,3 +94,13 @@ button {
 .right-button {
   direction: rtl;
 }
+
+#screen-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  & > .screen {
+    flex-grow: 1;
+  }
+}

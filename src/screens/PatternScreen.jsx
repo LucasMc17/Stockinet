@@ -47,7 +47,7 @@ export default function PatternScreen() {
   if (currentPattern) {
     const images = [currentPattern.leadImage, ...currentPattern.images];
     return (
-      <>
+      <div className="screen">
         <HeroImages images={images} limit={3} />
         <PatternOverview
           title={currentPattern.title}
@@ -63,7 +63,7 @@ export default function PatternScreen() {
           sizes={currentPattern.sizes}
         />
         <PatternReviews reviews={currentPattern.reviews} />
-      </>
+      </div>
     );
   }
 

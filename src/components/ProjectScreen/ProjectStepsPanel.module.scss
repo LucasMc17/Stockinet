@@ -1,0 +1,7 @@
+.steps-panel {
+  overflow-y: scroll;
+
+  & > .slider-holder {
+    height: 100%;
+  }
+}

@@ -8,6 +8,8 @@ const Project = require("./models/Project.js");
 const Yarn = require("./models/Yarn.js");
 const Needle = require("./models/Needle.js");
 const Review = require("./models/Review.js");
+const Section = require("./models/Section.js");
+const Step = require("./models/Step.js");
 
 Pattern.hasMany(Grid);
 Grid.belongsTo(Pattern);
@@ -17,6 +19,12 @@ Size.belongsTo(Pattern);
 
 Size.hasMany(Grid);
 Grid.belongsToMany(Size, { through: "sizeGrids" });
+
+Size.hasMany(Section);
+Section.belongsTo(Size);
+
+Section.hasMany(Step);
+Step.belongsTo(Section);
 
 Pattern.belongsTo(User, { as: "author" });
 
@@ -46,5 +54,7 @@ module.exports = {
     Needle,
     Review,
     Size,
+    Section,
+    Step,
   },
 };

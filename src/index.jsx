@@ -117,7 +117,7 @@ root.render(
   <React.StrictMode>
     <StytchProvider stytch={stytch}>
       <Provider store={store}>
-        <div>
+        <div id="screen-root">
           <RouterProvider router={router} />
         </div>
       </Provider>

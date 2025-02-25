@@ -40,7 +40,7 @@ export default function ProjectScreen() {
 
   if (currentProject) {
     return (
-      <div id="project-screen">
+      <div id="project-screen" className="screen">
         <ProjectHead />
         <div id="project-split">
           <ProjectGridPanel grids={currentProject.grids} />

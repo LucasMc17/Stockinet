@@ -1,8 +1,9 @@
 import { Slider } from "../";
+import "./ProjectStepsPanel.module.scss";
 
 export default function ProjectStepsPanel({ stepSections }) {
   return (
-    <section>
+    <section className="card project-panel steps-panel">
       <Slider>
         {stepSections.map((section) => (
           <div>
