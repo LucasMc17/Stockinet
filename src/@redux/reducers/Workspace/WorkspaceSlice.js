@@ -29,6 +29,19 @@ const fetchOneProject = createAsyncThunk(
   },
 );
 
+const selectCurrentSize = createAsyncThunk(
+  "workspace/selectCurrentSize",
+  async (payload, { getState, requestId, rejectWithValue }) => {
+    const sizeId = await Adapter.changeProjectSize(payload);
+
+    if (sizeId?.errorStatus) {
+      return rejectWithValue(sizeId);
+    }
+
+    return sizeId;
+  },
+);
+
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
@@ -36,16 +49,9 @@ const workspaceSlice = createSlice({
     selectProject: (state, action) => {
       state.currentProject = action.payload;
     },
-    getSizeInfo: (state, action) => {
-      const result = {};
-      action.payload.forEach((size) => {
-        result[size.id] = size;
-      });
-      state.sizeInfo = result;
-    },
-    selectCurrentSize: (state, action) => {
-      state.currentSize = action.payload;
-    },
+    // selectCurrentSize: (state, action) => {
+    //   state.currentSize = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     thunkBaseCases(builder, fetchUserProjects, {
@@ -57,14 +63,24 @@ const workspaceSlice = createSlice({
       fulfilledCallback: (state, action) => {
         const { pattern, currentSize } = action.payload;
         state.currentProject = pattern;
+        const sizeInfo = {};
+        pattern.sizes.forEach((size) => {
+          sizeInfo[size.id] = size;
+        });
+        state.sizeInfo = sizeInfo;
         state.loadedProjects[action.payload.id] = pattern;
         state.currentSize = currentSize || null;
+      },
+    });
+    thunkBaseCases(builder, selectCurrentSize, {
+      fulfilledCallback: (state, action) => {
+        console.log("ACTION: ", action);
+        state.currentSize = action.payload;
       },
     });
   },
 });
 
-export const { selectProject, getSizeInfo, selectCurrentSize } =
-  workspaceSlice.actions;
-export { fetchUserProjects, fetchOneProject };
+export const { selectProject } = workspaceSlice.actions;
+export { fetchUserProjects, fetchOneProject, selectCurrentSize };
 export default workspaceSlice.reducer;

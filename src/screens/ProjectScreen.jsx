@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
   fetchOneProject,
-  getSizeInfo,
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
 import { LoadingScreen, ErrorScreen } from "../components";
@@ -37,12 +36,6 @@ export default function ProjectScreen() {
     };
   }, []);
 
-  useEffect(() => {
-    if (currentProject?.sizes) {
-      dispatch(getSizeInfo(currentProject.sizes));
-    }
-  }, [currentProject]);
-
   if (error) {
     return <ErrorScreen error={error} />;
   }
@@ -52,12 +45,12 @@ export default function ProjectScreen() {
   }
 
   if (currentProject && sizeInfo) {
-    console.log(sizeInfo);
-    console.log(currentSize);
     if (currentSize) {
       return (
         <div id="project-screen" className="screen">
           <ProjectHead
+            title={currentProject.title}
+            projectId={currentProject.project.id}
             size={{
               name: sizeInfo[currentSize].name,
               value: sizeInfo[currentSize],
@@ -75,7 +68,12 @@ export default function ProjectScreen() {
         </div>
       );
     } else {
-      return <ProjectInitiation sizes={currentProject.sizes} />;
+      return (
+        <ProjectInitiation
+          projectId={currentProject.project.id}
+          sizes={currentProject.sizes}
+        />
+      );
     }
   }
 }

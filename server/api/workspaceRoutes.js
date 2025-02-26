@@ -59,3 +59,19 @@ router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
     next(err);
   }
 });
+
+router.put(
+  "/change-project-size",
+  rejectWithoutAuth,
+  async (req, res, next) => {
+    console.log(req.body);
+    try {
+      const { projectId, sizeId } = req.body;
+      const project = await Project.findByPk(projectId);
+      await project.update({ sizeId });
+      res.json({ sizeId });
+    } catch (err) {
+      next(err);
+    }
+  },
+);

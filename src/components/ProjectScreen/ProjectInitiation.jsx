@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { selectCurrentSize } from "../../@redux/reducers/Workspace/WorkspaceSlice";
 
-export default function ProjectInitiation({ sizes }) {
+export default function ProjectInitiation({ sizes, projectId }) {
   const dispatch = useDispatch();
 
   return (
@@ -9,7 +9,7 @@ export default function ProjectInitiation({ sizes }) {
       {sizes.map((size) => (
         <div
           onClick={() => {
-            dispatch(selectCurrentSize(size.id));
+            dispatch(selectCurrentSize({ sizeId: size.id, projectId }));
           }}
         >
           {size.name}

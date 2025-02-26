@@ -41404,6 +41404,7 @@ const fetchApi = method => (url, headers = {}, body = null) => fetch(url, {
 });
 const get$1 = fetchApi("get");
 const post = fetchApi("post");
+const put = fetchApi("put");
 let BASE_API_URL;
 {
   BASE_API_URL = "http://localhost:8000/api";
@@ -41438,6 +41439,14 @@ const Adapter = {
     return pattern;
   },
   // Workspace
+  async changeProjectSize(payload) {
+    const url = `${BASE_API_URL}/workspace/change-project-size`;
+    const res = await put(url, {}, JSON.stringify(payload));
+    const {
+      sizeId
+    } = await res.json();
+    return sizeId;
+  },
   async getUserProjects() {
     const url = `${BASE_API_URL}/workspace/projects-by-user`;
     const res = await get$1(url);
@@ -49110,23 +49119,27 @@ const fetchOneProject = createAsyncThunk("workspace/fetchOneProject", async (pay
   }
   return project;
 });
+const selectCurrentSize = createAsyncThunk("workspace/selectCurrentSize", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const sizeId = await Adapter.changeProjectSize(payload);
+  if (sizeId?.errorStatus) {
+    return rejectWithValue(sizeId);
+  }
+  return sizeId;
+});
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
   reducers: {
     selectProject: (state, action) => {
       state.currentProject = action.payload;
-    },
-    getSizeInfo: (state, action) => {
-      const result = {};
-      action.payload.forEach(size => {
-        result[size.id] = size;
-      });
-      state.sizeInfo = result;
-    },
-    selectCurrentSize: (state, action) => {
-      state.currentSize = action.payload;
     }
+    // selectCurrentSize: (state, action) => {
+    //   state.currentSize = action.payload;
+    // },
   },
   extraReducers: builder => {
     thunkBaseCases(builder, fetchUserProjects, {
@@ -49141,16 +49154,25 @@ const workspaceSlice = createSlice({
           currentSize
         } = action.payload;
         state.currentProject = pattern;
+        const sizeInfo = {};
+        pattern.sizes.forEach(size => {
+          sizeInfo[size.id] = size;
+        });
+        state.sizeInfo = sizeInfo;
         state.loadedProjects[action.payload.id] = pattern;
         state.currentSize = currentSize || null;
+      }
+    });
+    thunkBaseCases(builder, selectCurrentSize, {
+      fulfilledCallback: (state, action) => {
+        console.log("ACTION: ", action);
+        state.currentSize = action.payload;
       }
     });
   }
 });
 const {
-  selectProject,
-  getSizeInfo,
-  selectCurrentSize
+  selectProject
 } = workspaceSlice.actions;
 var WorkspaceSlice = workspaceSlice.reducer;
 
@@ -49188,13 +49210,15 @@ function AllProjectsScreen() {
 
 function ProjectHead({
   sizes,
-  size
+  size,
+  projectId,
+  title
 }) {
   const dispatch = useDispatch();
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
     className: "card",
     children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: "Pattern Title"
+      children: title
     }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
       name: "Size",
       options: sizes.map(size => ({
@@ -49203,7 +49227,11 @@ function ProjectHead({
       })),
       defaultValue: size,
       onSelect: size => {
-        dispatch(selectCurrentSize(size.value));
+        console.log(size);
+        dispatch(selectCurrentSize({
+          sizeId: size.value,
+          projectId
+        }));
       }
     })]
   });
@@ -49251,13 +49279,17 @@ function ProjectStepsPanel({
 }
 
 function ProjectInitiation({
-  sizes
+  sizes,
+  projectId
 }) {
   const dispatch = useDispatch();
   return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
     children: sizes.map(size => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
       onClick: () => {
-        dispatch(selectCurrentSize(size.id));
+        dispatch(selectCurrentSize({
+          sizeId: size.id,
+          projectId
+        }));
       },
       children: size.name
     }))
@@ -49288,11 +49320,6 @@ function ProjectScreen() {
       dispatch(selectProject(null));
     };
   }, []);
-  reactExports.useEffect(() => {
-    if (currentProject?.sizes) {
-      dispatch(getSizeInfo(currentProject.sizes));
-    }
-  }, [currentProject]);
   if (error) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(ErrorScreen, {
       error: error
@@ -49302,13 +49329,13 @@ function ProjectScreen() {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
   if (currentProject && sizeInfo) {
-    console.log(sizeInfo);
-    console.log(currentSize);
     if (currentSize) {
       return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
         id: "project-screen",
         className: "screen",
         children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {
+          title: currentProject.title,
+          projectId: currentProject.project.id,
           size: {
             name: sizeInfo[currentSize].name,
             value: sizeInfo[currentSize]
@@ -49325,6 +49352,7 @@ function ProjectScreen() {
       });
     } else {
       return /*#__PURE__*/jsxRuntimeExports.jsx(ProjectInitiation, {
+        projectId: currentProject.project.id,
         sizes: currentProject.sizes
       });
     }

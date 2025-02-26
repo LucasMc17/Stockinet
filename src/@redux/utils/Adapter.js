@@ -55,6 +55,13 @@ const Adapter = {
     return pattern;
   },
   // Workspace
+  async changeProjectSize(payload) {
+    const url = `${BASE_API_URL}/workspace/change-project-size`;
+
+    const res = await put(url, {}, JSON.stringify(payload));
+    const { sizeId } = await res.json();
+    return sizeId;
+  },
   async getUserProjects() {
     const url = `${BASE_API_URL}/workspace/projects-by-user`;
 
