@@ -31,6 +31,8 @@ Pattern.belongsTo(User, { as: "author" });
 Pattern.belongsToMany(User, { through: Project });
 User.belongsToMany(Pattern, { through: Project });
 
+Project.belongsTo(Size);
+
 Pattern.hasMany(Yarn);
 Yarn.belongsTo(Pattern);
 

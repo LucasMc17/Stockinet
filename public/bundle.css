@@ -115,6 +115,20 @@ button {
   background-color: gray;
 }
 
+.section-header {
+  background-color: palegoldenrod;
+  border-radius: 9999px;
+  width: fit-content;
+  padding: 0.75em;
+  display: flex;
+  gap: 10px;
+}
+.section-header > svg {
+  stroke: black;
+  display: inline;
+  width: 20px;
+}
+
 #project-screen {
   display: flex;
   flex-direction: column;
@@ -130,30 +144,6 @@ button {
   flex: 1 1 50%;
   display: flex;
   flex-direction: column;
-}
-
-.section-header {
-  background-color: palegoldenrod;
-  border-radius: 9999px;
-  width: fit-content;
-  padding: 0.75em;
-  display: flex;
-  gap: 10px;
-}
-.section-header > svg {
-  stroke: black;
-  display: inline;
-  width: 20px;
-}
-
-.pattern-card {
-  padding: 1em;
-  text-align: center;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-.pattern-card > img {
-  width: 100%;
 }
 
 .slider-holder {
@@ -219,12 +209,14 @@ button {
   flex: 1 0 20%;
 }
 
-.interactive-grid {
+.pattern-card {
+  padding: 1em;
+  text-align: center;
+  background-color: lightgray;
+  border-radius: 1em;
+}
+.pattern-card > img {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1px 0 0 1px;
 }
 
 .gauge-flex {
@@ -248,20 +240,12 @@ button {
   width: 100%;
 }
 
-.landing-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
-  align-items: center;
-}
-.landing-header > .landing-header-hero {
-  flex: 0.5;
-}
-.landing-header > .landing-header-image {
-  flex: 0.2;
-}
-.landing-header > .landing-header-image > img {
+.interactive-grid {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1px 0 0 1px;
 }
 
 .loading-screen {
@@ -285,26 +269,20 @@ button {
   text-decoration: underline;
 }
 
-#landing-help {
-  padding: 1em;
+.landing-header {
   display: flex;
-  flex-direction: column;
-  gap: 1em;
+  justify-content: space-between;
+  padding: 1em;
   align-items: center;
 }
-
-.landing-section {
-  border: 1px solid lightblue;
-  border-radius: 1rem;
-  padding: 1rem;
-  flex: 0.25;
-  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+.landing-header > .landing-header-hero {
+  flex: 0.5;
 }
-.landing-section > section {
-  text-align: center;
+.landing-header > .landing-header-image {
+  flex: 0.2;
 }
-.landing-section > div {
-  flex: 0.75;
+.landing-header > .landing-header-image > img {
+  width: 100%;
 }
 
 .pattern-overview {
@@ -326,6 +304,56 @@ button {
 
 .rating-box {
   display: flex;
+}
+
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  padding: 1em 0;
+}
+.material-card-holder > .material-card {
+  flex: 0 0 20%;
+}
+
+#landing-patterns {
+  padding: 1em;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.75em;
+}
+#landing-patterns-list > a {
+  flex: 0 1 20%;
+}
+
+#landing-help {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+
+.landing-section {
+  border: 1px solid lightblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  flex: 0.25;
+  box-shadow: 10px 5px 10px rgba(173, 216, 230, 0.35);
+}
+.landing-section > section {
+  text-align: center;
+}
+.landing-section > div {
+  flex: 0.75;
 }
 
 .hero-images {
@@ -374,34 +402,6 @@ button {
   position: absolute;
   top: 1em;
   right: 1em;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
-}
-
-.material-card-holder {
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-  padding: 1em 0;
-}
-.material-card-holder > .material-card {
-  flex: 0 0 20%;
-}
-
-#landing-patterns {
-  padding: 1em;
-}
-
-#landing-patterns-list {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.75em;
-}
-#landing-patterns-list > a {
-  flex: 0 1 20%;
 }
 
 .star-box {
@@ -480,6 +480,17 @@ button {
   color: yellow;
 }
 
+.grid-panel {
+  justify-content: center;
+}
+
+.steps-panel {
+  overflow-y: scroll;
+}
+.steps-panel > .slider-holder {
+  height: 100%;
+}
+
 .gauge-square {
   border: 3px solid black;
 }
@@ -513,15 +524,4 @@ button {
   width: 100%;
   margin: auto;
   text-align: center;
-}
-
-.grid-panel {
-  justify-content: center;
-}
-
-.steps-panel {
-  overflow-y: scroll;
-}
-.steps-panel > .slider-holder {
-  height: 100%;
 }

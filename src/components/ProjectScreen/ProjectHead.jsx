@@ -2,7 +2,7 @@ import DropDown from "../Inputs/DropDown.jsx";
 import { selectCurrentSize } from "../../@redux/reducers/Workspace/WorkspaceSlice.js";
 import { useDispatch } from "react-redux";
 
-export default function ProjectHead({ sizes }) {
+export default function ProjectHead({ sizes, size }) {
   const dispatch = useDispatch();
 
   return (
@@ -11,6 +11,7 @@ export default function ProjectHead({ sizes }) {
       <DropDown
         name="Size"
         options={sizes.map((size) => ({ name: size.name, value: size.id }))}
+        defaultValue={size}
         onSelect={(size) => {
           dispatch(selectCurrentSize(size.value));
         }}

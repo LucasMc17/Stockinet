@@ -8,9 +8,12 @@ export default function DropDown({
   name,
   options,
   defaultIndex = 0,
+  defaultValue = null,
   onSelect,
 }) {
-  const [selected, setSelected] = useState(options[defaultIndex]);
+  const [selected, setSelected] = useState(
+    defaultValue || options[defaultIndex],
+  );
   const [open, setOpen] = useState(false);
   const ref = useRef(),
     animRef = useRef();

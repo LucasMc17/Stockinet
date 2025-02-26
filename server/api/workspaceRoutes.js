@@ -49,11 +49,12 @@ router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
     throw404(patterns[0]);
     const project = await Project.findOne({
       where: { patternId, userId: req.user.id },
+      include: [{ model: Size }],
     });
     if (project) {
       await project.update({ lastAccessed: new Date() });
     }
-    res.json(patterns[0]);
+    res.json({ pattern: patterns[0], currentSize: project.size?.id });
   } catch (err) {
     next(err);
   }

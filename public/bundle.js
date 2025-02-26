@@ -44924,9 +44924,10 @@ function DropDown({
   name,
   options,
   defaultIndex = 0,
+  defaultValue = null,
   onSelect
 }) {
-  const [selected, setSelected] = reactExports.useState(options[defaultIndex]);
+  const [selected, setSelected] = reactExports.useState(defaultValue || options[defaultIndex]);
   const [open, setOpen] = reactExports.useState(false);
   const ref = reactExports.useRef(),
     animRef = reactExports.useRef();
@@ -49118,15 +49119,10 @@ const workspaceSlice = createSlice({
     },
     getSizeInfo: (state, action) => {
       const result = {};
-      let sizeId;
-      action.payload.forEach((size, i) => {
+      action.payload.forEach(size => {
         result[size.id] = size;
-        if (i === 0) {
-          sizeId = size.id;
-        }
       });
       state.sizeInfo = result;
-      state.currentSize = sizeId;
     },
     selectCurrentSize: (state, action) => {
       state.currentSize = action.payload;
@@ -49140,8 +49136,13 @@ const workspaceSlice = createSlice({
     });
     thunkBaseCases(builder, fetchOneProject, {
       fulfilledCallback: (state, action) => {
-        state.currentProject = action.payload;
-        state.loadedProjects[action.payload.id] = action.payload;
+        const {
+          pattern,
+          currentSize
+        } = action.payload;
+        state.currentProject = pattern;
+        state.loadedProjects[action.payload.id] = pattern;
+        state.currentSize = currentSize || null;
       }
     });
   }
@@ -49186,7 +49187,8 @@ function AllProjectsScreen() {
 }
 
 function ProjectHead({
-  sizes
+  sizes,
+  size
 }) {
   const dispatch = useDispatch();
   return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
@@ -49199,6 +49201,7 @@ function ProjectHead({
         name: size.name,
         value: size.id
       })),
+      defaultValue: size,
       onSelect: size => {
         dispatch(selectCurrentSize(size.value));
       }
@@ -49247,6 +49250,20 @@ function ProjectStepsPanel({
   });
 }
 
+function ProjectInitiation({
+  sizes
+}) {
+  const dispatch = useDispatch();
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    children: sizes.map(size => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      onClick: () => {
+        dispatch(selectCurrentSize(size.id));
+      },
+      children: size.name
+    }))
+  });
+}
+
 function ProjectScreen() {
   const {
     patternId
@@ -49284,21 +49301,33 @@ function ProjectScreen() {
   if (loading) {
     return /*#__PURE__*/jsxRuntimeExports.jsx(LoadingScreen, {});
   }
-  if (currentProject) {
-    return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-      id: "project-screen",
-      className: "screen",
-      children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {
-        sizes: currentProject.sizes
-      }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        id: "project-split",
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {
-          grids: currentProject.grids
-        }), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {
-          stepSections: sizeInfo && currentSize ? sizeInfo[currentSize].sections : []
+  if (currentProject && sizeInfo) {
+    console.log(sizeInfo);
+    console.log(currentSize);
+    if (currentSize) {
+      return /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        id: "project-screen",
+        className: "screen",
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectHead, {
+          size: {
+            name: sizeInfo[currentSize].name,
+            value: sizeInfo[currentSize]
+          },
+          sizes: currentProject.sizes
+        }), /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+          id: "project-split",
+          children: [/*#__PURE__*/jsxRuntimeExports.jsx(ProjectGridPanel, {
+            grids: currentProject.grids
+          }), /*#__PURE__*/jsxRuntimeExports.jsx(ProjectStepsPanel, {
+            stepSections: sizeInfo && currentSize ? sizeInfo[currentSize]?.sections : []
+          })]
         })]
-      })]
-    });
+      });
+    } else {
+      return /*#__PURE__*/jsxRuntimeExports.jsx(ProjectInitiation, {
+        sizes: currentProject.sizes
+      });
+    }
   }
 }
 

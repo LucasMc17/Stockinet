@@ -10,6 +10,7 @@ import { LoadingScreen, ErrorScreen } from "../components";
 import ProjectHead from "../components/ProjectScreen/ProjectHead.jsx";
 import ProjectGridPanel from "../components/ProjectScreen/ProjectGridPanel.jsx";
 import ProjectStepsPanel from "../components/ProjectScreen/ProjectStepsPanel.jsx";
+import ProjectInitiation from "../components/ProjectScreen/ProjectInitiation.jsx";
 import "./ProjectsScreen.module.scss";
 
 export default function ProjectScreen() {
@@ -50,19 +51,31 @@ export default function ProjectScreen() {
     return <LoadingScreen />;
   }
 
-  if (currentProject) {
-    return (
-      <div id="project-screen" className="screen">
-        <ProjectHead sizes={currentProject.sizes} />
-        <div id="project-split">
-          <ProjectGridPanel grids={currentProject.grids} />
-          <ProjectStepsPanel
-            stepSections={
-              sizeInfo && currentSize ? sizeInfo[currentSize].sections : []
-            }
+  if (currentProject && sizeInfo) {
+    console.log(sizeInfo);
+    console.log(currentSize);
+    if (currentSize) {
+      return (
+        <div id="project-screen" className="screen">
+          <ProjectHead
+            size={{
+              name: sizeInfo[currentSize].name,
+              value: sizeInfo[currentSize],
+            }}
+            sizes={currentProject.sizes}
           />
+          <div id="project-split">
+            <ProjectGridPanel grids={currentProject.grids} />
+            <ProjectStepsPanel
+              stepSections={
+                sizeInfo && currentSize ? sizeInfo[currentSize]?.sections : []
+              }
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <ProjectInitiation sizes={currentProject.sizes} />;
+    }
   }
 }

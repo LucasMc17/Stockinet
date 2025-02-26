@@ -38,15 +38,10 @@ const workspaceSlice = createSlice({
     },
     getSizeInfo: (state, action) => {
       const result = {};
-      let sizeId;
-      action.payload.forEach((size, i) => {
+      action.payload.forEach((size) => {
         result[size.id] = size;
-        if (i === 0) {
-          sizeId = size.id;
-        }
       });
       state.sizeInfo = result;
-      state.currentSize = sizeId;
     },
     selectCurrentSize: (state, action) => {
       state.currentSize = action.payload;
@@ -60,8 +55,10 @@ const workspaceSlice = createSlice({
     });
     thunkBaseCases(builder, fetchOneProject, {
       fulfilledCallback: (state, action) => {
-        state.currentProject = action.payload;
-        state.loadedProjects[action.payload.id] = action.payload;
+        const { pattern, currentSize } = action.payload;
+        state.currentProject = pattern;
+        state.loadedProjects[action.payload.id] = pattern;
+        state.currentSize = currentSize || null;
       },
     });
   },
