@@ -1,7 +1,7 @@
 import "./PatternDetails.module.scss";
 import { Squares, Bars } from "../../icons";
 import SectionHeader from "../SectionHeader.jsx";
-import MaterialCard from "./MaterialCard.jsx";
+import MaterialCard from "../MaterialCard.jsx";
 
 export default function PatternDetails({ yarns, needles, sizes }) {
   return (

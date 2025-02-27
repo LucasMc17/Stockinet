@@ -5,11 +5,14 @@ import {
   fetchOneProject,
   selectProject,
 } from "../@redux/reducers/Workspace/WorkspaceSlice.js";
-import { LoadingScreen, ErrorScreen } from "../components";
-import ProjectHead from "../components/ProjectScreen/ProjectHead.jsx";
-import ProjectGridPanel from "../components/ProjectScreen/ProjectGridPanel.jsx";
-import ProjectStepsPanel from "../components/ProjectScreen/ProjectStepsPanel.jsx";
-import ProjectInitiation from "../components/ProjectScreen/ProjectInitiation.jsx";
+import {
+  LoadingScreen,
+  ErrorScreen,
+  ProjectHead,
+  ProjectGridPanel,
+  ProjectStepsPanel,
+  ProjectInitiation,
+} from "../components";
 import "./ProjectsScreen.module.scss";
 
 export default function ProjectScreen() {
@@ -68,12 +71,7 @@ export default function ProjectScreen() {
         </div>
       );
     } else {
-      return (
-        <ProjectInitiation
-          projectId={currentProject.project.id}
-          sizes={currentProject.sizes}
-        />
-      );
+      return <ProjectInitiation currentProject={currentProject} />;
     }
   }
 }

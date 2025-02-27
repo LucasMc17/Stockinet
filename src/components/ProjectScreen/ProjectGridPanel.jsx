@@ -1,5 +1,5 @@
 import Slider from "../Slider.jsx";
-import { InteractiveGrid } from "../";
+import InteractiveGrid from "../InteractiveGrid/index.jsx";
 import "./ProjectGridPanel.module.scss";
 
 export default function ProjectGridPanel({ grids }) {

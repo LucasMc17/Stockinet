@@ -115,20 +115,6 @@ button {
   background-color: gray;
 }
 
-.section-header {
-  background-color: palegoldenrod;
-  border-radius: 9999px;
-  width: fit-content;
-  padding: 0.75em;
-  display: flex;
-  gap: 10px;
-}
-.section-header > svg {
-  stroke: black;
-  display: inline;
-  width: 20px;
-}
-
 #project-screen {
   display: flex;
   flex-direction: column;
@@ -144,6 +130,20 @@ button {
   flex: 1 1 50%;
   display: flex;
   flex-direction: column;
+}
+
+.section-header {
+  background-color: palegoldenrod;
+  border-radius: 9999px;
+  width: fit-content;
+  padding: 0.75em;
+  display: flex;
+  gap: 10px;
+}
+.section-header > svg {
+  stroke: black;
+  display: inline;
+  width: 20px;
 }
 
 .slider-holder {
@@ -189,6 +189,16 @@ button {
   border-right-width: 0;
 }
 
+.pattern-card {
+  padding: 1em;
+  text-align: center;
+  background-color: lightgray;
+  border-radius: 1em;
+}
+.pattern-card > img {
+  width: 100%;
+}
+
 .pattern-search-menu {
   width: 80%;
   margin: auto;
@@ -207,16 +217,6 @@ button {
 }
 .pattern-search-filters > * {
   flex: 1 0 20%;
-}
-
-.pattern-card {
-  padding: 1em;
-  text-align: center;
-  background-color: lightgray;
-  border-radius: 1em;
-}
-.pattern-card > img {
-  width: 100%;
 }
 
 .gauge-flex {
@@ -248,27 +248,6 @@ button {
   margin: 1px 0 0 1px;
 }
 
-.loading-screen {
-  margin: auto;
-  width: 80%;
-  min-width: 600px;
-}
-.loading-screen .pinwheel {
-  margin: auto;
-  width: 100px;
-}
-
-#landing-search {
-  padding: 1em;
-}
-
-#to-all-patterns {
-  text-align: right;
-}
-#to-all-patterns > a {
-  text-decoration: underline;
-}
-
 .landing-header {
   display: flex;
   justify-content: space-between;
@@ -285,61 +264,25 @@ button {
   width: 100%;
 }
 
-.pattern-overview {
-  display: flex;
-  padding: 4em 2em;
-  border-bottom: 2px solid black;
-}
-
-.pattern-overview-text {
-  flex: 1 0 85%;
-}
-
-.pattern-overview-button {
-  flex: 1 0 15%;
-}
-.pattern-overview-button > button {
-  width: 100%;
-}
-
-.rating-box {
-  display: flex;
-}
-
-.pattern-detail {
-  padding: 2em;
-  border-bottom: 2px solid black;
-}
-
-.material-card-holder {
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
-  padding: 1em 0;
-}
-.material-card-holder > .material-card {
-  flex: 0 0 20%;
-}
-
-#landing-patterns {
+#landing-search {
   padding: 1em;
 }
 
-#landing-patterns-list {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.75em;
+#to-all-patterns {
+  text-align: right;
 }
-#landing-patterns-list > a {
-  flex: 0 1 20%;
+#to-all-patterns > a {
+  text-decoration: underline;
 }
 
-#landing-help {
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
+.loading-screen {
+  margin: auto;
+  width: 80%;
+  min-width: 600px;
+}
+.loading-screen .pinwheel {
+  margin: auto;
+  width: 100px;
 }
 
 .landing-section {
@@ -404,6 +347,33 @@ button {
   right: 1em;
 }
 
+#landing-patterns {
+  padding: 1em;
+}
+
+#landing-patterns-list {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.75em;
+}
+#landing-patterns-list > a {
+  flex: 0 1 20%;
+}
+
+#landing-help {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+
+.material-card {
+  border: 1px solid goldenrod;
+  border-radius: 2em;
+  padding: 0.5em;
+}
+
 .star-box {
   position: relative;
 }
@@ -421,10 +391,19 @@ button {
   stroke: black;
 }
 
-.material-card {
-  border: 1px solid goldenrod;
-  border-radius: 2em;
-  padding: 0.5em;
+.pattern-detail {
+  padding: 2em;
+  border-bottom: 2px solid black;
+}
+
+.material-card-holder {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  padding: 1em 0;
+}
+.material-card-holder > .material-card {
+  flex: 0 0 20%;
 }
 
 .drop-down {
@@ -461,6 +440,27 @@ button {
 }
 .dd-menu li:hover {
   background-color: lightgray;
+}
+
+.pattern-overview {
+  display: flex;
+  padding: 4em 2em;
+  border-bottom: 2px solid black;
+}
+
+.pattern-overview-text {
+  flex: 1 0 85%;
+}
+
+.pattern-overview-button {
+  flex: 1 0 15%;
+}
+.pattern-overview-button > button {
+  width: 100%;
+}
+
+.rating-box {
+  display: flex;
 }
 
 #site-header {
@@ -524,4 +524,10 @@ button {
   width: 100%;
   margin: auto;
   text-align: center;
+}
+
+.material-card {
+  border: 1px solid goldenrod;
+  border-radius: 2em;
+  padding: 0.5em;
 }

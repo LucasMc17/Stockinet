@@ -7,6 +7,10 @@ const Size = db.define("size", {
     defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
   },
+  description: {
+    type: Sequelize.STRING,
+    defaultValue: "",
+  },
   name: {
     type: Sequelize.STRING,
     allowNull: false,

@@ -1,4 +1,4 @@
-import { Slider } from "../";
+import Slider from "../Slider.jsx";
 import "./ProjectStepsPanel.module.scss";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";

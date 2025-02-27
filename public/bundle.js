@@ -43089,6 +43089,17 @@ function SectionHeader({
   });
 }
 
+function MaterialCard({
+  children,
+  onClick
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+    onClick: onClick,
+    className: "material-card",
+    children: children
+  });
+}
+
 function ErrorScreen({
   error
 }) {
@@ -48338,15 +48349,6 @@ function PatternOverview({
   });
 }
 
-function MaterialCard({
-  children
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    className: "material-card",
-    children: children
-  });
-}
-
 function PatternDetails({
   yarns,
   needles,
@@ -48530,6 +48532,225 @@ function SiteHeader({
         children: "Log in"
       })
     })]
+  });
+}
+
+var initialState$1 = {
+  loading: false,
+  error: null,
+  projectList: [],
+  currentProject: null,
+  currentRequestId: null,
+  loadedProjects: {},
+  sizeInfo: {},
+  currentSize: null
+};
+
+const fetchUserProjects = createAsyncThunk("workspace/fetchUserProjects", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const projects = await Adapter.getUserProjects();
+  if (projects?.errorStatus) {
+    return rejectWithValue(projects);
+  }
+  return projects;
+});
+const fetchOneProject = createAsyncThunk("workspace/fetchOneProject", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const project = await Adapter.getOneProject(payload);
+  if (project?.errorStatus) {
+    return rejectWithValue(project);
+  }
+  return project;
+});
+const selectCurrentSize = createAsyncThunk("workspace/selectCurrentSize", async (payload, {
+  getState,
+  requestId,
+  rejectWithValue
+}) => {
+  const sizeId = await Adapter.changeProjectSize(payload);
+  if (sizeId?.errorStatus) {
+    return rejectWithValue(sizeId);
+  }
+  return sizeId;
+});
+const workspaceSlice = createSlice({
+  name: "workspace",
+  initialState: initialState$1,
+  reducers: {
+    selectProject: (state, action) => {
+      state.currentProject = action.payload;
+    }
+    // selectCurrentSize: (state, action) => {
+    //   state.currentSize = action.payload;
+    // },
+  },
+  extraReducers: builder => {
+    thunkBaseCases(builder, fetchUserProjects, {
+      fulfilledCallback: (state, action) => {
+        state.projectList = action.payload;
+      }
+    });
+    thunkBaseCases(builder, fetchOneProject, {
+      fulfilledCallback: (state, action) => {
+        const {
+          pattern,
+          currentSize
+        } = action.payload;
+        state.currentProject = pattern;
+        const sizeInfo = {};
+        pattern.sizes.forEach(size => {
+          sizeInfo[size.id] = size;
+        });
+        state.sizeInfo = sizeInfo;
+        state.loadedProjects[action.payload.id] = pattern;
+        state.currentSize = currentSize || null;
+      }
+    });
+    thunkBaseCases(builder, selectCurrentSize, {
+      fulfilledCallback: (state, action) => {
+        console.log("ACTION: ", action);
+        state.currentSize = action.payload;
+      }
+    });
+  }
+});
+const {
+  selectProject
+} = workspaceSlice.actions;
+var WorkspaceSlice = workspaceSlice.reducer;
+
+function ProjectHead({
+  sizes,
+  size,
+  projectId,
+  title
+}) {
+  const dispatch = useDispatch();
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    className: "card",
+    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+      children: title
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
+      name: "Size",
+      options: sizes.map(size => ({
+        name: size.name,
+        value: size.id
+      })),
+      defaultValue: size,
+      onSelect: size => {
+        console.log(size);
+        dispatch(selectCurrentSize({
+          sizeId: size.value,
+          projectId
+        }));
+      }
+    })]
+  });
+}
+
+function ProjectGridPanel({
+  grids
+}) {
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    className: "card project-panel grid-panel",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      children: grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
+        gridName: grid.name,
+        data: JSON.parse(grid.data)
+      }))
+    })
+  });
+}
+
+function ProjectInitiation({
+  currentProject
+}) {
+  const dispatch = useDispatch();
+  console.log(currentProject);
+  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
+    children: [/*#__PURE__*/jsxRuntimeExports.jsxs("h1", {
+      children: ["Let's start ", currentProject.title, "!"]
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+      children: "First, make sure you have what you need:"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+      svg: Bars,
+      name: "Needles"
+    }), currentProject.needles.map((needle, i) => /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+      children: needle.customDescription ? /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+        children: needle.customDescription
+      }) : /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
+        children: ["Size ", needle.size, " ", needle.material, " ", needle.type, " needles"]
+      })
+    }, i)), /*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+      svg: Bars,
+      name: "Yarn"
+    }), currentProject.yarns.map((yarn, i) => /*#__PURE__*/jsxRuntimeExports.jsx(MaterialCard, {
+      children: yarn.customDescription ? /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+        children: yarn.customDescription
+      }) : /*#__PURE__*/jsxRuntimeExports.jsxs("h4", {
+        children: ["Weight ", yarn.weight, " ", yarn.color, " yarn, ", yarn.yardage, " yards"]
+      })
+    }, i)), /*#__PURE__*/jsxRuntimeExports.jsx("h3", {
+      children: "Next, let's choose a size to make!"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx("h4", {
+      children: "(Don't worry, you can change this later if you want)"
+    }), /*#__PURE__*/jsxRuntimeExports.jsx(SectionHeader, {
+      svg: Squares,
+      name: "Sizes"
+    }), currentProject.sizes.map((size, i) => /*#__PURE__*/jsxRuntimeExports.jsxs(MaterialCard, {
+      onClick: () => {
+        dispatch(selectCurrentSize({
+          sizeId: size.id,
+          projectId: currentProject.project.id
+        }));
+      },
+      children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
+        children: size.name
+      }), /*#__PURE__*/jsxRuntimeExports.jsx("p", {
+        children: size.description
+      })]
+    }, i)), currentProject.sizes.map(size => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
+      onClick: () => {
+        dispatch(selectCurrentSize({
+          sizeId: size.id,
+          projectId: currentProject.project.id
+        }));
+      },
+      children: size.name
+    }))]
+  });
+}
+
+function ProjectStepsPanel({
+  stepSections
+}) {
+  const {
+    currentSize
+  } = useSelector(s => s.workspace);
+  const [resetCount, setResetCount] = reactExports.useState(0);
+  reactExports.useEffect(() => {
+    setResetCount(resetCount + 1);
+  }, [currentSize]);
+  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
+    className: "card project-panel steps-panel",
+    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
+      resetCount: resetCount,
+      children: stepSections.map(section => /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
+        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
+          children: section.name
+        }), /*#__PURE__*/jsxRuntimeExports.jsx("ol", {
+          children: section.steps.map(step => /*#__PURE__*/jsxRuntimeExports.jsx("li", {
+            children: step.text
+          }))
+        })]
+      }))
+    })
   });
 }
 
@@ -49015,7 +49236,7 @@ function LandingScreen() {
   });
 }
 
-var initialState$1 = {
+var initialState = {
   loading: false,
   error: null,
   currentAuthor: null,
@@ -49035,7 +49256,7 @@ const fetchAuthor = createAsyncThunk("authors/fetchAuthor", async (payload, {
 });
 const authorSlice = createSlice({
   name: "authors",
-  initialState: initialState$1,
+  initialState,
   reducers: {
     clearAuthor: (state, action) => {
       state.currentAuthor = null;
@@ -49086,96 +49307,6 @@ function AuthorScreen() {
   }
 }
 
-var initialState = {
-  loading: false,
-  error: null,
-  projectList: [],
-  currentProject: null,
-  currentRequestId: null,
-  loadedProjects: {},
-  sizeInfo: {},
-  currentSize: null
-};
-
-const fetchUserProjects = createAsyncThunk("workspace/fetchUserProjects", async (payload, {
-  getState,
-  requestId,
-  rejectWithValue
-}) => {
-  const projects = await Adapter.getUserProjects();
-  if (projects?.errorStatus) {
-    return rejectWithValue(projects);
-  }
-  return projects;
-});
-const fetchOneProject = createAsyncThunk("workspace/fetchOneProject", async (payload, {
-  getState,
-  requestId,
-  rejectWithValue
-}) => {
-  const project = await Adapter.getOneProject(payload);
-  if (project?.errorStatus) {
-    return rejectWithValue(project);
-  }
-  return project;
-});
-const selectCurrentSize = createAsyncThunk("workspace/selectCurrentSize", async (payload, {
-  getState,
-  requestId,
-  rejectWithValue
-}) => {
-  const sizeId = await Adapter.changeProjectSize(payload);
-  if (sizeId?.errorStatus) {
-    return rejectWithValue(sizeId);
-  }
-  return sizeId;
-});
-const workspaceSlice = createSlice({
-  name: "workspace",
-  initialState,
-  reducers: {
-    selectProject: (state, action) => {
-      state.currentProject = action.payload;
-    }
-    // selectCurrentSize: (state, action) => {
-    //   state.currentSize = action.payload;
-    // },
-  },
-  extraReducers: builder => {
-    thunkBaseCases(builder, fetchUserProjects, {
-      fulfilledCallback: (state, action) => {
-        state.projectList = action.payload;
-      }
-    });
-    thunkBaseCases(builder, fetchOneProject, {
-      fulfilledCallback: (state, action) => {
-        const {
-          pattern,
-          currentSize
-        } = action.payload;
-        state.currentProject = pattern;
-        const sizeInfo = {};
-        pattern.sizes.forEach(size => {
-          sizeInfo[size.id] = size;
-        });
-        state.sizeInfo = sizeInfo;
-        state.loadedProjects[action.payload.id] = pattern;
-        state.currentSize = currentSize || null;
-      }
-    });
-    thunkBaseCases(builder, selectCurrentSize, {
-      fulfilledCallback: (state, action) => {
-        console.log("ACTION: ", action);
-        state.currentSize = action.payload;
-      }
-    });
-  }
-});
-const {
-  selectProject
-} = workspaceSlice.actions;
-var WorkspaceSlice = workspaceSlice.reducer;
-
 function AllProjectsScreen() {
   const dispatch = useDispatch();
   const {
@@ -49205,94 +49336,6 @@ function AllProjectsScreen() {
         children: project.title
       })
     }, i))
-  });
-}
-
-function ProjectHead({
-  sizes,
-  size,
-  projectId,
-  title
-}) {
-  const dispatch = useDispatch();
-  return /*#__PURE__*/jsxRuntimeExports.jsxs("section", {
-    className: "card",
-    children: [/*#__PURE__*/jsxRuntimeExports.jsx("h2", {
-      children: title
-    }), /*#__PURE__*/jsxRuntimeExports.jsx(DropDown, {
-      name: "Size",
-      options: sizes.map(size => ({
-        name: size.name,
-        value: size.id
-      })),
-      defaultValue: size,
-      onSelect: size => {
-        console.log(size);
-        dispatch(selectCurrentSize({
-          sizeId: size.value,
-          projectId
-        }));
-      }
-    })]
-  });
-}
-
-function ProjectGridPanel({
-  grids
-}) {
-  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
-    className: "card project-panel grid-panel",
-    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-      children: grids.map(grid => /*#__PURE__*/jsxRuntimeExports.jsx(InteractiveGrid, {
-        gridName: grid.name,
-        data: JSON.parse(grid.data)
-      }))
-    })
-  });
-}
-
-function ProjectStepsPanel({
-  stepSections
-}) {
-  const {
-    currentSize
-  } = useSelector(s => s.workspace);
-  const [resetCount, setResetCount] = reactExports.useState(0);
-  reactExports.useEffect(() => {
-    setResetCount(resetCount + 1);
-  }, [currentSize]);
-  return /*#__PURE__*/jsxRuntimeExports.jsx("section", {
-    className: "card project-panel steps-panel",
-    children: /*#__PURE__*/jsxRuntimeExports.jsx(Slider, {
-      resetCount: resetCount,
-      children: stepSections.map(section => /*#__PURE__*/jsxRuntimeExports.jsxs("div", {
-        children: [/*#__PURE__*/jsxRuntimeExports.jsx("h1", {
-          children: section.name
-        }), /*#__PURE__*/jsxRuntimeExports.jsx("ol", {
-          children: section.steps.map(step => /*#__PURE__*/jsxRuntimeExports.jsx("li", {
-            children: step.text
-          }))
-        })]
-      }))
-    })
-  });
-}
-
-function ProjectInitiation({
-  sizes,
-  projectId
-}) {
-  const dispatch = useDispatch();
-  return /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-    children: sizes.map(size => /*#__PURE__*/jsxRuntimeExports.jsx("div", {
-      onClick: () => {
-        dispatch(selectCurrentSize({
-          sizeId: size.id,
-          projectId
-        }));
-      },
-      children: size.name
-    }))
   });
 }
 
@@ -49352,8 +49395,7 @@ function ProjectScreen() {
       });
     } else {
       return /*#__PURE__*/jsxRuntimeExports.jsx(ProjectInitiation, {
-        projectId: currentProject.project.id,
-        sizes: currentProject.sizes
+        currentProject: currentProject
       });
     }
   }

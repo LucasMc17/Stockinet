@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   db,
-  models: { Pattern, Grid, Project, Size, Section, Step },
+  models: { Pattern, Grid, Project, Size, Section, Step, Yarn, Needle },
 } = require("../db");
 module.exports = router;
 const { rejectWithoutAuth } = require("../backendUtils/stytchClient");
@@ -33,6 +33,8 @@ router.get("/project/:patternId", rejectWithoutAuth, async (req, res, next) => {
     const patterns = await req.user.getPatterns({
       where: { id: patternId },
       include: [
+        { model: Yarn },
+        { model: Needle },
         { model: Grid },
         {
           model: Size,
