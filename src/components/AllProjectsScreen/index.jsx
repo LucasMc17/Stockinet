@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import {
   fetchUserProjects,
   selectProject,
-} from "../@redux/reducers/Workspace/WorkspaceSlice.js";
-import { LoadingScreen, ErrorScreen } from "../components";
+} from "../../@redux/reducers/Workspace/WorkspaceSlice.js";
+import { LoadingScreen, ErrorScreen } from "../UtilityScreens/index.js";
 import { Link } from "react-router-dom";
 // import "./AllProjectsScreen.module.scss";
 

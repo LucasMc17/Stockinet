@@ -7,7 +7,6 @@ import PatternCard from "../PatternCard.jsx";
 
 export default function ProjectInitiation({ currentProject }) {
   const dispatch = useDispatch();
-  console.log(currentProject);
 
   return (
     <section>
@@ -59,20 +58,6 @@ export default function ProjectInitiation({ currentProject }) {
           <h2>{size.name}</h2>
           <p>{size.description}</p>
         </MaterialCard>
-      ))}
-      {currentProject.sizes.map((size) => (
-        <div
-          onClick={() => {
-            dispatch(
-              selectCurrentSize({
-                sizeId: size.id,
-                projectId: currentProject.project.id,
-              }),
-            );
-          }}
-        >
-          {size.name}
-        </div>
       ))}
     </section>
   );

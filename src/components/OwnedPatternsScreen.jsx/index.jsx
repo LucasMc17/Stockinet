@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import {
   selectPattern,
   fetchPatternsByUser,
-} from "../@redux/reducers/Patterns/PatternSlice.js";
+} from "../../@redux/reducers/Patterns/PatternSlice.js";
 import { Link } from "react-router-dom";
-import { useLoggedOutRedirect } from "../hooks";
-import { LoadingScreen, ErrorScreen } from "../components";
+import { useLoggedOutRedirect } from "../../hooks/index.js";
+import { LoadingScreen, ErrorScreen } from "../UtilityScreens";
 
 export default function OwnedPatternsScreen() {
   useLoggedOutRedirect();

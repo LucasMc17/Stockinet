@@ -62,8 +62,9 @@ export default function DropDown({
       </div>
       <menu className={`dd-menu ${!open && ""}`} ref={animRef}>
         <ul>
-          {options.map((op) => (
+          {options.map((op, i) => (
             <li
+              key={i}
               onClick={() => {
                 setSelected(op);
                 if (typeof onSelect === "function") {

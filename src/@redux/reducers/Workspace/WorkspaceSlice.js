@@ -49,9 +49,6 @@ const workspaceSlice = createSlice({
     selectProject: (state, action) => {
       state.currentProject = action.payload;
     },
-    // selectCurrentSize: (state, action) => {
-    //   state.currentSize = action.payload;
-    // },
   },
   extraReducers: (builder) => {
     thunkBaseCases(builder, fetchUserProjects, {
@@ -74,7 +71,6 @@ const workspaceSlice = createSlice({
     });
     thunkBaseCases(builder, selectCurrentSize, {
       fulfilledCallback: (state, action) => {
-        console.log("ACTION: ", action);
         state.currentSize = action.payload;
       },
     });

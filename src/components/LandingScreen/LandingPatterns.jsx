@@ -23,8 +23,9 @@ export default function LandingPatterns() {
         </p>
       </header>
       <div id="landing-patterns-list">
-        {recentPatterns.map((pattern) => (
+        {recentPatterns.map((pattern, i) => (
           <PatternCard
+            key={i}
             title={pattern.title}
             image={pattern.leadImage}
             description={pattern.description}

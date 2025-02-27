@@ -13,7 +13,6 @@ export default function ProjectHead({ sizes, size, projectId, title }) {
         options={sizes.map((size) => ({ name: size.name, value: size.id }))}
         defaultValue={size}
         onSelect={(size) => {
-          console.log(size);
           dispatch(selectCurrentSize({ sizeId: size.value, projectId }));
         }}
       />

@@ -66,7 +66,6 @@ router.put(
   "/change-project-size",
   rejectWithoutAuth,
   async (req, res, next) => {
-    console.log(req.body);
     try {
       const { projectId, sizeId } = req.body;
       const project = await Project.findByPk(projectId);

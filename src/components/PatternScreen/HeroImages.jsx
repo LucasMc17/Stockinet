@@ -17,8 +17,8 @@ export default function HeroImages({ images, limit }) {
   return (
     <section className="hero-images">
       <div className="hero-image-holder">
-        {images.slice(0, limit).map((image) => (
-          <div>
+        {images.slice(0, limit).map((image, i) => (
+          <div key={i}>
             <img src={image} />
           </div>
         ))}
@@ -34,8 +34,8 @@ export default function HeroImages({ images, limit }) {
       </div>
       <Modal isOpen={modalOpen} style={customStyles}>
         <Slider>
-          {images.map((image) => (
-            <div className="modal-image">
+          {images.map((image, i) => (
+            <div className="modal-image" key={i}>
               <img src={image} />
             </div>
           ))}

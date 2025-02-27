@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LoadingScreen, ErrorScreen } from "../components";
+import { LoadingScreen, ErrorScreen } from "../UtilityScreens";
 import {
   fetchAuthor,
   clearAuthor,
-} from "../@redux/reducers/Authors/AuthorSlice.js";
+} from "../../@redux/reducers/Authors/AuthorSlice.js";
 
 export default function AuthorScreen() {
   const dispatch = useDispatch();

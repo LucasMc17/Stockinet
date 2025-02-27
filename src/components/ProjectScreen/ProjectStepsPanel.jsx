@@ -14,12 +14,12 @@ export default function ProjectStepsPanel({ stepSections }) {
   return (
     <section className="card project-panel steps-panel">
       <Slider resetCount={resetCount}>
-        {stepSections.map((section) => (
-          <div>
+        {stepSections.map((section, i) => (
+          <div key={i}>
             <h1>{section.name}</h1>
             <ol>
-              {section.steps.map((step) => (
-                <li>{step.text}</li>
+              {section.steps.map((step, i) => (
+                <li key={i}>{step.text}</li>
               ))}
             </ol>
           </div>

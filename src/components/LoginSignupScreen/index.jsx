@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useStytch } from "@stytch/react";
-import { fetchUser, signUp } from "../@redux/reducers/User/UserSlice";
+import { fetchUser, signUp } from "../../@redux/reducers/User/UserSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginSignupScreen({ method }) {

@@ -1,18 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  LoadingScreen,
-  ErrorScreen,
-  PatternOverview,
-  HeroImages,
-  PatternDetails,
-  PatternReviews,
-} from "../components";
+import { LoadingScreen, ErrorScreen } from "../UtilityScreens";
+import PatternOverview from "./PatternOverview.jsx";
+import HeroImages from "./HeroImages.jsx";
+import PatternDetails from "./PatternDetails.jsx";
+import PatternReviews from "./PatternReviews.jsx";
 import {
   fetchOnePattern,
   selectPattern,
-} from "../@redux/reducers/Patterns/PatternSlice.js";
+} from "../../@redux/reducers/Patterns/PatternSlice.js";
 
 export default function PatternScreen() {
   const dispatch = useDispatch();
@@ -66,10 +63,4 @@ export default function PatternScreen() {
       </div>
     );
   }
-
-  // if (currentPattern?.owned) {
-  //   return <FullPattern currentPattern={currentPattern} />;
-  // } else if (currentPattern) {
-  //   return <PreviewPattern currentPattern={currentPattern} />;
-  // }
 }

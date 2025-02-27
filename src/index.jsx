@@ -2,15 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import {
-  OwnedPatternsScreen,
+  ProjectScreen,
+  LandingScreen,
   PatternScreen,
   LoginSignupScreen,
   AllPatternsScreen,
-  LandingScreen,
-  AuthorScreen,
+  OwnedPatternsScreen,
   AllProjectsScreen,
-  ProjectScreen,
-} from "./screens";
+  AuthorScreen,
+} from "./components";
 import { Provider } from "react-redux";
 import { store } from "./@redux/store";
 import "./Base.module.scss";

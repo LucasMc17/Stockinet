@@ -4,16 +4,13 @@ import { useEffect } from "react";
 import {
   fetchOneProject,
   selectProject,
-} from "../@redux/reducers/Workspace/WorkspaceSlice.js";
-import {
-  LoadingScreen,
-  ErrorScreen,
-  ProjectHead,
-  ProjectGridPanel,
-  ProjectStepsPanel,
-  ProjectInitiation,
-} from "../components";
-import "./ProjectsScreen.module.scss";
+} from "../../@redux/reducers/Workspace/WorkspaceSlice.js";
+import { ErrorScreen, LoadingScreen } from "../UtilityScreens";
+import ProjectHead from "./ProjectHead.jsx";
+import ProjectGridPanel from "./ProjectGridPanel.jsx";
+import ProjectStepsPanel from "./ProjectStepsPanel.jsx";
+import ProjectInitiation from "./ProjectInitiation.jsx";
+import "./index.module.scss";
 
 export default function ProjectScreen() {
   const { patternId } = useParams();

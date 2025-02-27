@@ -5,14 +5,11 @@ import {
   selectPattern,
   clearPages,
   setPage,
-} from "../@redux/reducers/Patterns/PatternSlice.js";
-import {
-  LoadingScreen,
-  ErrorScreen,
-  PatternCard,
-  PatternSearch,
-} from "../components";
-import "./AllPatternsScreen.module.scss";
+} from "../../@redux/reducers/Patterns/PatternSlice.js";
+import { LoadingScreen, ErrorScreen } from "../UtilityScreens";
+import PatternCard from "../PatternCard.jsx";
+import PatternSearch from "../PatternSearch.jsx";
+import "./index.module.scss";
 
 export default function AllPatternsScreen() {
   const dispatch = useDispatch();
